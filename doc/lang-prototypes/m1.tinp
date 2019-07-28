@@ -1,0 +1,36 @@
+// language prototype maybe 1
+
+// variable assignment
+var a <- 3
+
+// if then else
+se a >= 2 entao
+  imprima(“a é grande!”)
+senao
+  imprima(a)
+fimse
+
+// loop while
+enquanto a > 0 faca
+  imprima(a)
+  a = a + 1
+fimenquanto
+
+// loop for
+para i <- 1 ate 10 compasso 2 faca
+  a = a + i
+fimpara
+
+// loop do-while
+faca
+  a = a - 5
+enquanto a > 0
+
+// function definition
+funcao somar(a, b)
+  devolva a + b
+fimfuncao
+
+// function call
+const resultado <- somar(a <- 4, b <- 5)
+imprima(resultado)
