@@ -2,6 +2,8 @@
 
 // variable assignment
 var a <- 3
+const b <- falso
+const v <- [1, 2, 3]
 
 // if then else
 se a >= 2 entao
