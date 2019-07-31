@@ -1,0 +1,39 @@
+// language prototype maybe 1
+
+// variable assignment
+numero n <- 9
+texto s <- "Hello World!"
+bool b <- verdadeiro
+lista l <- [1, 2, 3, 4, 5]
+
+// if then else
+se a >= 2 entao
+  escreva(“a é grande!”)
+senao
+  escreva(a)
+fimse
+
+// loop while
+enquanto a > 0 faca
+  escreva(a)
+  a <- a + 1
+fimenquanto
+
+// loop for
+para i de 1 ate 10 |passo 2| faca
+  a <- a + i
+fimpara
+
+// loop do-while
+faca
+  a <- a - 5
+enquanto a > 0
+
+// function definition
+metodo somar | entrada: numero a, numero b | saida: numero
+  retorne a + b
+fimmetodo
+
+// function call
+const resultado <- somar(a: 4, b: 5)
+escreva(resultado)
