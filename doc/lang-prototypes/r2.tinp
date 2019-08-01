@@ -1,0 +1,46 @@
+// language prototype maybe 1
+
+// variable assignment
+Variavel a = 10
+Variavel b = verdadeiro
+Constante c = "Isso é um texto"
+Constante d = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+// if then else
+se a == 10 entao
+  // expression
+se a == 11 entao
+  // expression
+senao
+  // expression
+fim se
+
+// loop while
+enquanto a < 10 faca
+
+fim enquanto
+
+// loop for
+para i de 1 ate 10 faca |passo 1|
+  // expression
+fim para
+
+// loop do-while
+faca 
+  //expression
+enquanto a < 10
+
+// function definition
+funcao_de_soma(a, b)
+  retorna a + b
+fim funcao_de_soma
+
+// function call
+
+Constante a = 1
+Constante b = 2
+
+Constante c = funcao_de_soma(a, b)
+imprime(c)
+
+
