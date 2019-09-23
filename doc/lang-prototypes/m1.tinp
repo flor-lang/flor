@@ -15,17 +15,17 @@ fimse
 // loop while
 enquanto a > 0 faca
   imprima(a)
-  a = a + 1
+  a <- a + 1
 fimenquanto
 
 // loop for
 para i <- 1 ate 10 compasso 2 faca
-  a = a + i
+  a <- a + i
 fimpara
 
 // loop do-while
 faca
-  a = a - 5
+  a <- a - 5
 enquanto a > 0
 
 // function definition
