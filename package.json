@@ -26,5 +26,9 @@
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@types/parsimmon": "^1.10.0",
+    "parsimmon": "^1.13.0"
   }
 }
