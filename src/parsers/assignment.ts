@@ -1,4 +1,5 @@
 import * as P from 'parsimmon'
+import '../utils/parsimmon-extension'
 
 import { Assign } from './operators'
 import { Literal } from './literals'
@@ -7,7 +8,7 @@ export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 
 export const Identifier = P
-  .regexp(/[a-zA-Z_][a-zA-Z0-9_]*/)
+  .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
   .node('identifier')
 
 // do parse file to relational and arithmetic operators
@@ -15,10 +16,10 @@ export const Identifier = P
 
 export const Assignment: AssignmentParser = P
   .seqObj(
-    Identifier,
+    ['identifier' as never, Identifier.map((i): string => i.value) as never],
     P.optWhitespace,
     Assign,
     P.optWhitespace,
-    Literal
+    Literal.namedParser('value')
   )
   .node('assignment')
