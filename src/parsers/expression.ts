@@ -8,6 +8,7 @@ export const LeftParenthesis = P.string('(')
 export const RightParenthesis = P.string(')')
 
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
+export type UnaryParser = P.Parser<P.Node<'unary', {}>>
 export type TermParser = P.Parser<P.Node<'term', {}>>
 export type AddParser = P.Parser<P.Node<'add', {}>>
 
@@ -16,17 +17,25 @@ export const Factor: FactorParser = P
     P.seqObj(
       LeftParenthesis, P.optWhitespace,
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.lazy((): AddParser => Add).namedParser('add-between-parenthesis'),
+      P.lazy((): AddParser => Add).namedParser('between-parenthesis'),
       P.optWhitespace, RightParenthesis
     ),
     NumberLiteral
   )
   .node('factor')
 
-const TermLine = P.seqObj(FactorOperator.namedParser('operator'), P.optWhitespace, Factor.namedParser('factor'))
+const UnaryLine = AddOperator
+export const Unary: UnaryParser = P
+  .seqObj(
+    P.alt(UnaryLine, P.optWhitespace).namedParser('unaryline'),
+    Factor.namedParser('factor')
+  )
+  .node('unary')
+
+const TermLine = P.seqObj(FactorOperator.namedParser('operator'), P.optWhitespace, Unary.namedParser('unary'))
 export const Term: TermParser = P
   .seqObj(
-    Factor.namedParser('factor'),
+    Unary.namedParser('unary'),
     P.optWhitespace,
     P.alt(TermLine, P.optWhitespace).namedParser('termline')
   )
