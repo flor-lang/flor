@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { NumberLiteral } from './literals'
-import { AddOperator, FactorOperator } from './operators'
+import { AddOperator, TermOperator } from './operators'
 
 export const LeftParenthesis = P.string('(')
 export const RightParenthesis = P.string(')')
@@ -32,7 +32,7 @@ export const Unary: UnaryParser = P
   )
   .node('unary')
 
-const TermLine = P.seqObj(FactorOperator.namedParser('operator'), P.optWhitespace, Unary.namedParser('unary'))
+const TermLine = P.seqObj(TermOperator.namedParser('operator'), P.optWhitespace, Unary.namedParser('unary'))
 export const Term: TermParser = P
   .seqObj(
     Unary.namedParser('unary'),

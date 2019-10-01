@@ -12,7 +12,8 @@ export const StringLiteral: StringLiteralParser = P
   .node('string')
 
 export const NumberLiteral: NumberLiteralParser = P
-  .digits
+  .regexp(/[0-9]+/)
+  // .digits
   .map(Number)
   .node('number')
 
