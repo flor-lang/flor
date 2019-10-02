@@ -1,9 +1,7 @@
-// Sample code
-import { inspect } from 'util'
+// Playground code
 import { Add } from './parsers/expression'
+import { logAst } from './utils/logger'
 
 // const ast = Add.parse('-1 / -(4 + 2)')
-const ast = Add.parse('2-*5')
-console.log(inspect(ast, false, null, true))
-
-export const sum = (...a: number[]): number => a.reduce((acc, val): number => acc + val, 0)
+const ast = Add.parse('2-5')
+logAst(ast, true)
