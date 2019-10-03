@@ -25,6 +25,11 @@ export const NullLiteral: NullLiteralParser = P
   .string('nulo')
   .node('null')
 
+/**
+ * Parser to literals
+ *
+ * literal -> string | number | boolean | null
+*/
 export const Literal: LiteralParser = P
   .alt(
     StringLiteral,

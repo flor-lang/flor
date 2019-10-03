@@ -19,7 +19,14 @@ export const LessEqual = P.string('<=') // P.seq(Less, Equal)
 export const EqualOperator = P.string('==')
 export const NotEqualOperator = P.string('!=') // P.seq(NotOperator, Equal)
 
+/** addoperator -> + | - */
 export const AddOperator = P.alt(PlusOperator, MinusOperator)
+
+/** termoperator -> * | / | % */
 export const TermOperator = P.alt(AsteriskOperator, SlashOperator, PercentOperator)
+
+/** reloperator -> <= | < | >= | > */
 export const RelOperator = P.alt(LessEqual, Less, GreaterEqual, Greater)
+
+/** equalityoperator -> == | != */
 export const EqualityOperator = P.alt(EqualOperator, NotEqualOperator)
