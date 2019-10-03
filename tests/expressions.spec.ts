@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Rel } from '../src/parsers/expression'
+import { Factor, Unary, Term, Add, Rel, Equality } from '../src/parsers/expression'
 import { canParse, cantParse } from './utils'
 
 
@@ -22,7 +22,7 @@ test('parse unary', (): void => {
   const canParseUnary = canParse(Unary)
   const cantParseUnary = cantParse(Unary)
 
-  canParseUnary(['5', '-5', '+5', '-(-5)', ])
+  canParseUnary(['5', '-5', '+5', '-(-5)'])
   cantParseUnary(['- 5', '-+5', '*5', ''])
 
   expect(Unary.parse('-5')).toMatchObject({
@@ -40,7 +40,7 @@ test('parse term', (): void => {
   const canParseTerm = canParse(Term)
   const cantParseTerm = cantParse(Term)
 
-  canParseTerm(['5*10', '-5*0', '1/5', '2 / (-5)', '2 * -1', '2 % 2'])
+  canParseTerm(['5*10', '-5*0', '1/5', '2 / (-5)', '2 * -1', '2 % 2', '1 * 1 * 1'])
   cantParseTerm(['1/2/', '2+1', '2 - 1', '*5', '%1'])
 
   expect(Term.parse('2 * 5')).toMatchObject({
@@ -61,7 +61,7 @@ test('parse add', (): void => {
   const canParseAdd = canParse(Add)
   const cantParseAdd = cantParse(Add)
 
-  canParseAdd(['5+10', '-5+0', '1-5', '2/(2-5)', '2 - -1', '5'])
+  canParseAdd(['5+10', '-5+0', '1-5', '2/(2-5)', '2 - -1', '5', '2 + 2 + 2'])
   cantParseAdd(['1+2-', '2-*5'])
 
   expect(Add.parse('2 * 5')).toMatchObject({
@@ -119,6 +119,56 @@ test('can parse relation operation', (): void => {
               value: {
                 unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 3 } } } }, 
                 termline: ''
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+})
+
+test('can parse equality operation', (): void => {
+  const canParseEquality = canParse(Equality)
+  const cantParseEquality = cantParse(Equality)
+
+  canParseEquality(['1==1', '2!=-1', '-10 == 0', '8 != -(87+1)', '1 == 1 == 1'])
+  cantParseEquality(['1 !== 1', '20 === 1', '!=1', ''])
+
+  expect(Equality.parse('1 != 1')).toMatchObject({
+    status: true,
+    value: {
+      name: 'equality',
+      value: {
+        rel: {
+          name: 'rel',
+          value: {
+            name: 'add',
+            value: {
+              term: {
+                name: 'term',
+                value: {
+                  unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 1 } } } }, 
+                  termline: ''
+                }
+              }
+            }
+          }
+        },
+        equalityline: {
+          operator: '!=',
+          rel: {
+            name: 'rel',
+            value: {
+              name: 'add',
+              value: {
+                term: {
+                  name: 'term',
+                  value: {
+                    unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 1 } } } }, 
+                    termline: ''
+                  }
+                }
               }
             }
           }

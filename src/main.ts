@@ -1,7 +1,7 @@
 // Playground code
-import { Add } from './parsers/expression'
+import { Equality } from './parsers/expression'
 import { logAst } from './utils/logger'
 
-const ast = Add.parse('-1 / -(4 + 2)')
-// const ast = Add.parse('2-5')
+// const ast = Add.parse('-1 / -(4 + 2)')
+const ast = Equality.parse('1 != 1')
 logAst(ast, true)

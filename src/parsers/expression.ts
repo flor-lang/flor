@@ -2,13 +2,15 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { NumberLiteral } from './literals'
-import { AddOperator, TermOperator, LeftParenthesis, RightParenthesis, RelOperator } from './operators'
+import { AddOperator, TermOperator, LeftParenthesis, RightParenthesis, RelOperator, EqualityOperator } from './operators'
 
+export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
 export type UnaryParser = P.Parser<P.Node<'unary', {}>>
 export type TermParser = P.Parser<P.Node<'term', {}>>
 export type AddParser = P.Parser<P.Node<'add', {}>>
 export type RelParser = P.Parser<P.Node<'rel', {}>>
+export type EqualityParser = P.Parser<P.Node<'equality', {}>>
 
 export const Factor: FactorParser = P
   .alt(
@@ -30,30 +32,66 @@ export const Unary: UnaryParser = P
   )
   .node('unary')
 
-const TermLine = P.seqObj(TermOperator.named('operator'), P.optWhitespace, Unary.named('unary'))
+const TermLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      TermOperator.named('operator'), P.optWhitespace,
+      Unary.named('unary'), P.optWhitespace,
+      P.lazy((): ObjectParser => TermLine).named('termline')
+    ),
+    P.optWhitespace
+  )
 export const Term: TermParser = P
   .seqObj(
     Unary.named('unary'),
     P.optWhitespace,
-    P.alt(TermLine, P.optWhitespace).named('termline')
+    TermLine.named('termline')
   )
   .node('term')
 
-export const AddLine = P.seqObj(AddOperator.named('operator'), P.optWhitespace, Term.named('term'))
+const AddLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      AddOperator.named('operator'), P.optWhitespace,
+      Term.named('term'), P.optWhitespace,
+      P.lazy((): ObjectParser => AddLine).named('addline')
+    ),
+    P.optWhitespace
+  )
 export const Add: AddParser = P
   .seqObj(
     Term.named('term'),
     P.optWhitespace,
-    P.alt(AddLine, P.optWhitespace).named('addline')
+    AddLine.named('addline')
   )
   .node('add')
 
-export const Rel = P
+const Inequality: ObjectParser = P
   .seqObj(
-    Add.named('lhs'),
-    P.optWhitespace,
-    RelOperator.named('operator'),
-    P.optWhitespace,
+    Add.named('lhs'), P.optWhitespace,
+    RelOperator.named('operator'), P.optWhitespace,
     Add.named('rhs')
   )
+export const Rel: RelParser = P
+  .alt(
+    Inequality,
+    Add
+  )
   .node('rel')
+
+export const EqualityLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      EqualityOperator.named('operator'), P.optWhitespace,
+      Rel.named('rel'), P.optWhitespace,
+      P.lazy((): ObjectParser => EqualityLine).named('equalityline')
+    ),
+    P.optWhitespace
+  )
+export const Equality: EqualityParser = P
+  .seqObj(
+    Rel.named('rel'),
+    P.optWhitespace,
+    EqualityLine.named('equalityline')
+  )
+  .node('equality')
