@@ -2,12 +2,13 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { NumberLiteral } from './literals'
-import { AddOperator, TermOperator, LeftParenthesis, RightParenthesis } from './operators'
+import { AddOperator, TermOperator, LeftParenthesis, RightParenthesis, RelOperator } from './operators'
 
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
 export type UnaryParser = P.Parser<P.Node<'unary', {}>>
 export type TermParser = P.Parser<P.Node<'term', {}>>
 export type AddParser = P.Parser<P.Node<'add', {}>>
+export type RelParser = P.Parser<P.Node<'rel', {}>>
 
 export const Factor: FactorParser = P
   .alt(
@@ -46,3 +47,13 @@ export const Add: AddParser = P
     P.alt(AddLine, P.optWhitespace).named('addline')
   )
   .node('add')
+
+export const Rel = P
+  .seqObj(
+    Add.named('lhs'),
+    P.optWhitespace,
+    RelOperator.named('operator'),
+    P.optWhitespace,
+    Add.named('rhs')
+  )
+  .node('rel')
