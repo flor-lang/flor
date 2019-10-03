@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { NumberLiteral } from './literals'
-import { AddOperator, TermOperator, LeftParenthesis, RightParenthesis, RelOperator, EqualityOperator } from './operators'
+import { AddOperator, TermOperator, LeftParenthesis, RightParenthesis, RelOperator, EqualityOperator, AndOperator } from './operators'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -11,6 +11,7 @@ export type TermParser = P.Parser<P.Node<'term', {}>>
 export type AddParser = P.Parser<P.Node<'add', {}>>
 export type RelParser = P.Parser<P.Node<'rel', {}>>
 export type EqualityParser = P.Parser<P.Node<'equality', {}>>
+export type JoinParser = P.Parser<P.Node<'join', {}>>
 
 /**
  * Parse Integers Numbers and Expressions between parenthesis
@@ -125,3 +126,20 @@ export const Equality: EqualityParser = P
     EqualityLine.named('equalityline')
   )
   .node('equality')
+
+const JoinLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      AndOperator, P.optWhitespace,
+      Equality.named('equality'), P.optWhitespace,
+      P.lazy((): ObjectParser => JoinLine).named('joinline')
+    ),
+    P.optWhitespace
+  )
+export const Join: JoinParser = P
+  .seqObj(
+    Equality.named('equality'),
+    P.optWhitespace,
+    JoinLine.named('joinline')
+  )
+  .node('join')

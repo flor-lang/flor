@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Rel, Equality } from '../src/parsers/expression'
+import { Factor, Unary, Term, Add, Rel, Equality, Join } from '../src/parsers/expression'
 import { canParse, cantParse } from './utils'
 
 
@@ -167,6 +167,70 @@ test('can parse equality operation', (): void => {
                   value: {
                     unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 1 } } } }, 
                     termline: ''
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+})
+
+test('can parse join operation', (): void => {
+  const canParseJoin = canParse(Join)
+  const cantParseJoin = cantParse(Join)
+
+  canParseJoin(['2 e 2', '1 e 5', '10 e 0 e 8'])
+  cantParseJoin(['1e', 'e1', '', 'e 1'])
+
+  expect(Join.parse('1 e 1')).toMatchObject({
+    status: true,
+    value: {
+      name: 'join',
+      value: {
+        equality: {
+          name: 'equality',
+          value: {
+            equalityline: '',
+            rel: {
+              name: 'rel',
+              value: {
+                name: 'add',
+                value: {
+                  addline: '',
+                  term: {
+                    name: 'term',
+                    value: {
+                      unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 1 } } } }, 
+                      termline: '' 
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        joinline: {
+          joinline: '',
+          equality: {
+            name: 'equality',
+            value: {
+              equalityline: '',
+              rel: {
+                name: 'rel',
+                value: {
+                  name: 'add',
+                  value: {
+                    addline: '',
+                    term: {
+                      name: 'term',
+                      value: {
+                        unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 1 } } } }, 
+                        termline: '' 
+                      }
+                    }
                   }
                 }
               }

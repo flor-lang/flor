@@ -19,6 +19,9 @@ export const LessEqual = P.string('<=') // P.seq(Less, Equal)
 export const EqualOperator = P.string('==')
 export const NotEqualOperator = P.string('!=') // P.seq(NotOperator, Equal)
 
+export const AndOperator = P.string('e')
+export const OrOperator = P.string('ou')
+
 /** addoperator -> + | - */
 export const AddOperator = P.alt(PlusOperator, MinusOperator)
 

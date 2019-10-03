@@ -1,7 +1,7 @@
 // Playground code
-import { Equality } from './parsers/expression'
+import { Join } from './parsers/expression'
 import { logAst } from './utils/logger'
 
 // const ast = Add.parse('-1 / -(4 + 2)')
-const ast = Equality.parse('1 != 1')
+const ast = Join.parse('1 e 1')
 logAst(ast, true)
