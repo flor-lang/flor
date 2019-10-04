@@ -1,6 +1,13 @@
-import { Assignment } from '../src/parsers/assignment'
+import { Assignment, Loc } from '../src/parsers/assignment'
 import { canParse, cantParse } from './utils'
 
+test('parse loc', (): void => {
+  const canParseLoc = canParse(Loc)
+  const cantParseLoc = cantParse(Loc)
+
+  canParseLoc(['array[0]', 'arr[1][0]', 'arr[0]', 'arr[1]'])
+  cantParseLoc(['array[]', '[]', '[][]', '[0]id'])
+})
 
 test('parse assignment operation', (): void => {
   const canParseAssignment = canParse(Assignment)
@@ -21,9 +28,7 @@ test('parse assignment operation', (): void => {
     '"string" = nulo'
   ])
 
-  expect(
-    Assignment.parse('message = "Hello World!"')
-  ).toMatchObject({
+  expect(Assignment.parse('message = "Hello World!"')).toMatchObject({
     status: true,
     value: {
       name: 'assignment',

@@ -23,7 +23,8 @@ const Locline: ObjectParser = P
     P.seqObj(
       LeftBracket, P.optWhitespace,
       P.lazy((): AddParser => Add).named('add'),
-      P.optWhitespace, RightBracket
+      P.optWhitespace, RightBracket,
+      P.lazy((): ObjectParser => Locline).named('locline')
     ),
     P.optWhitespace
   )
