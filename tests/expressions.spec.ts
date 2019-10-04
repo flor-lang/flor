@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Rel, Equality, Join, Bool } from '../src/parsers/expression'
+import { Factor, Unary, Term, Add, Rel, Equality, Join, Expression } from '../src/parsers/expression'
 import { canParse, cantParse } from './utils'
 
 
@@ -242,17 +242,17 @@ test('can parse join operation', (): void => {
   })
 })
 
-test('can parse bool operation', (): void => {
-  const canParseBool = canParse(Bool)
-  const cantParseBool = cantParse(Bool)
+test('can parse expression', (): void => {
+  const canParseExpression = canParse(Expression)
+  const cantParseExpression = cantParse(Expression)
 
-  canParseBool(['2 ou 2', '1 ou 5', '10 e 0 ou 8'])
-  cantParseBool(['1ou', 'ou1', '', 'ou 1'])
+  canParseExpression(['2 ou 2', '1 ou 5', '10 e 0 ou 8'])
+  cantParseExpression(['1ou', 'ou1', '', 'ou 1'])
 
-  expect(Bool.parse('1 ou 1')).toMatchObject({
+  expect(Expression.parse('1 ou 1')).toMatchObject({
     status: true,
     value: {
-      name: 'bool',
+      name: 'expression',
       value: {
         join: {
           name: 'join',
@@ -281,7 +281,7 @@ test('can parse bool operation', (): void => {
             },
           }
         },
-        booline: {
+        exprline: {
           join: {
             name: 'join',
             value: {
@@ -309,7 +309,7 @@ test('can parse bool operation', (): void => {
               },
             }
           },
-          booline: ''
+          exprline: ''
         }
       }
     }

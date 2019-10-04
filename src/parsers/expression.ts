@@ -21,7 +21,8 @@ export type AddParser = P.Parser<P.Node<'add', {}>>
 export type RelParser = P.Parser<P.Node<'rel', {}>>
 export type EqualityParser = P.Parser<P.Node<'equality', {}>>
 export type JoinParser = P.Parser<P.Node<'join', {}>>
-export type BoolParser = P.Parser<P.Node<'bool', {}>>
+// export type BoolParser = P.Parser<P.Node<'bool', {}>>
+export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 
 /**
  * Parse Integers Numbers and Expressions between parenthesis
@@ -154,19 +155,21 @@ export const Join: JoinParser = P
   )
   .node('join')
 
-const Booline: ObjectParser = P
+const Exprline: ObjectParser = P
+  // const Booline: ObjectParser = P
   .alt(
     P.seqObj(
       OrOperator, P.optWhitespace,
       Join.named('join'), P.optWhitespace,
-      P.lazy((): ObjectParser => Booline).named('booline')
+      P.lazy((): ObjectParser => Exprline).named('exprline') // .named('booline')
     ),
     P.optWhitespace
   )
-export const Bool: BoolParser = P
+export const Expression: ExpressionParser = P
+// export const Bool: BoolParser = P
   .seqObj(
     Join.named('join'),
     P.optWhitespace,
-    Booline.named('booline')
+    Exprline.named('exprline') // .named('booline')
   )
-  .node('bool')
+  .node('expression') // .named('bool')
