@@ -31,7 +31,7 @@ const Locline: ObjectParser = P
 /**
  * Loc parser - list acess or identifier
  *
- * loc -> loc[ expr ] | identifier
+ * loc -> loc[ add ] | identifier
 */
 export const Loc: LocParser = P
   .seqObj(
