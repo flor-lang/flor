@@ -132,8 +132,8 @@ test('can parse equality operation', (): void => {
   const canParseEquality = canParse(Equality)
   const cantParseEquality = cantParse(Equality)
 
-  canParseEquality(['1==1', '2!=-1', '-10 == 0', '8 != -(87+1)', '1 == 1 == 1'])
-  cantParseEquality(['1 !== 1', '20 === 1', '!=1', ''])
+  canParseEquality(['1==1', '2!=-1', '-10 == 0', '8 != -(87+1)', '1 == 1 == 1', '1 igual a 1', '2 diferente de 1'])
+  cantParseEquality(['1 !== 1', '20 === 1', '!=1', '', '2 igual 5', '2 diferente 1'])
 
   expect(Equality.parse('1 != 1')).toMatchObject({
     status: true,
