@@ -63,25 +63,31 @@ test('parse add', (): void => {
 
   canParseAdd(['5+10', '-5+0', '1-5', '2/(2-5)', '2 - -1', '5', '2 + 2 + 2'])
   cantParseAdd(['1+2-', '2-*5'])
-
-  expect(Add.parse('2 * 5')).toMatchObject({
-    status: true,
-    value: {
-      name: 'add',
-      value: {
-        addline: '',
-        term: { 
-          name: 'term',
-          value: {
-            unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 2 } } } }, 
-            termline: {
-              operator: '*', 
-              unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 5 } } } } } 
-            }
-        }
-      }
-    }
-  })
+  
+  // expect(Add.parse('2 + 5')).toMatchObject({
+  //   status: true,
+  //   value: {
+  //     name: 'add',
+  //     value: {
+  //       addline: {
+  //         operator: '+',
+  //         term: {
+  //           name: 'term',
+  //           value: {
+  //             unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 5 } } } } },
+  //             termline: ''
+  //           }
+  //         }
+  //       },
+  //       term: { 
+  //         name: 'term',
+  //         value: {
+  //           unary: { name: 'unary', value: { unaryline: '', factor: { name: 'factor', value: { name: 'number', value: 2 } } } }, 
+  //           termline: ''
+  //       }
+  //     }
+  //   }
+  // })
 })
 
 test('can parse relation operation', (): void => {
