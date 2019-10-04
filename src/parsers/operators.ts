@@ -2,6 +2,8 @@ import * as P from 'parsimmon'
 
 export const LeftParenthesis = P.string('(')
 export const RightParenthesis = P.string(')')
+export const LeftBracket = P.string('[')
+export const RightBracket = P.string(']')
 
 export const NotOperator = P.string('!')
 export const PlusOperator = P.string('+')

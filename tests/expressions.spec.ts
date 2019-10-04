@@ -6,7 +6,7 @@ test('parse factor', (): void => {
   const canParseFactor = canParse(Factor)
   const cantParseFactor = cantParse(Factor)
 
-  canParseFactor(['5', '(5)', '(-5 * 8)'])
+  canParseFactor(['5', '(5)', '(-5 * 8)', '(1 ou 1)'])
   cantParseFactor(['"5"', '5 - 1', '9 + - 3', '5 -1'])
 
   expect(Factor.parse('5')).toMatchObject({
@@ -88,8 +88,8 @@ test('can parse relation operation', (): void => {
   const canParseRel = canParse(Rel)
   const cantParseRel = cantParse(Rel)
 
-  canParseRel(['5>2', '2 < 1', '5>=5', '2<=2', '5 >= (5+2)', '(1*1) <= (1/1)'])
-  cantParseRel(['5>>2', '2=2', '3==3', '', '>', '<3<3', '5 < 4 < 3', '(1<=1)>(2>=1)'])
+  canParseRel(['5>2', '2 < 1', '5>=5', '2<=2', '5 >= (5+2)', '(1*1) <= (1/1)', '(1<=1)>(2>=1)'])
+  cantParseRel(['5>>2', '2=2', '3==3', '', '>', '<3<3', '5 < 4 < 3'])
 
   expect(Rel.parse('2>=3')).toMatchObject({
     status: true,

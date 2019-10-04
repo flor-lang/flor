@@ -1,7 +1,8 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
-import { NumberLiteral } from './literals'
+import { Literal, NumberLiteral } from './literals'
+import { Loc } from './assignment'
 import {
   AddOperator,
   TermOperator,
@@ -27,17 +28,19 @@ export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 /**
  * Parse Integers Numbers and Expressions between parenthesis
  *
- * factor -> (add) | number
+ * factor -> (expr) | loc | literal
 */
 export const Factor: FactorParser = P
   .alt(
     P.seqObj(
       LeftParenthesis, P.optWhitespace,
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.lazy((): AddParser => Add).named('between-parenthesis'),
+      P.lazy((): ExpressionParser => Expression).named('between-parenthesis'),
       P.optWhitespace, RightParenthesis
     ),
     NumberLiteral
+    // Loc,
+    // Literal
   )
   .node('factor')
 
