@@ -21,7 +21,7 @@ export type AddParser = P.Parser<P.Node<'add', {}>>
 export type RelParser = P.Parser<P.Node<'rel', {}>>
 export type EqualityParser = P.Parser<P.Node<'equality', {}>>
 export type JoinParser = P.Parser<P.Node<'join', {}>>
-// export type BoolParser = P.Parser<P.Node<'bool', {}>>
+export type BoolParser = P.Parser<P.Node<'bool', {}>>
 export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 
 /**
@@ -147,6 +147,11 @@ const JoinLine: ObjectParser = P
     ),
     P.optWhitespace
   )
+/**
+ * Parse and relations ( e ) between expressions
+ *
+ * join -> join && equality | equality
+*/
 export const Join: JoinParser = P
   .seqObj(
     Equality.named('equality'),
@@ -155,21 +160,30 @@ export const Join: JoinParser = P
   )
   .node('join')
 
-const Exprline: ObjectParser = P
-  // const Booline: ObjectParser = P
+const Booline: ObjectParser = P
   .alt(
     P.seqObj(
       OrOperator, P.optWhitespace,
       Join.named('join'), P.optWhitespace,
-      P.lazy((): ObjectParser => Exprline).named('exprline') // .named('booline')
+      P.lazy((): ObjectParser => Booline).named('booline')
     ),
     P.optWhitespace
   )
-export const Expression: ExpressionParser = P
-// export const Bool: BoolParser = P
+/**
+ * Parse or relations ( e ) between expressions
+ *
+ * join -> join && equality | equality
+*/
+export const Bool: BoolParser = P
   .seqObj(
     Join.named('join'),
     P.optWhitespace,
-    Exprline.named('exprline') // .named('booline')
+    Booline.named('booline')
   )
-  .node('expression') // .named('bool')
+  .node('bool')
+
+export const Expression: ExpressionParser = P
+  .alt(
+    Bool
+  )
+  .node('expression')
