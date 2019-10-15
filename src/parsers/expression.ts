@@ -38,9 +38,8 @@ export const Factor: FactorParser = P
       P.lazy((): ExpressionParser => Expression).named('between-parenthesis'),
       P.optWhitespace, RightParenthesis
     ),
-    NumberLiteral
     // Loc,
-    // Literal
+    Literal
   )
   .node('factor')
 
