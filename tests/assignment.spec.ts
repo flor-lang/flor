@@ -1,5 +1,6 @@
-import { Assignment, Loc } from '../src/parsers/assignment'
+import { Assignment, Loc, Identifier } from '../src/parsers/assignment'
 import { canParse, cantParse } from './utils'
+import { Literal } from '../src/parsers/literals'
 
 test('parse loc', (): void => {
   const canParseLoc = canParse(Loc)
@@ -24,17 +25,25 @@ test('parse assignment operation', (): void => {
     '_ = "something"',
     '_ = _',
     'identifier = identifier',
-    // 'nulo = nulo',
+    'nulo = nulo',
     '"string" = nulo'
   ])
+})
 
-  expect(Assignment.parse('message = "Hello World!"')).toMatchObject({
-    status: true,
-    value: {
-      name: 'assignment',
-      value: { identifier: 'message',  value: { 
-        name: 'literal', value: { name: 'string', value: 'Hello World!' }
-      }}
-    }
-  })
+test('parse identifier', (): void => {
+  const canParseIdentifier = canParse(Identifier)
+  const cantParseIdentifier = cantParse(Identifier)
+
+  canParseIdentifier(['a','_variavel','x1','snake_case'])
+  cantParseIdentifier([
+    '1',
+    '&teste',
+    'test§',
+    '"meu nome"',
+    'teste teste',
+    'espaço',
+    'verdadeiro',
+    'falso',
+    'nulo'
+  ])
 })

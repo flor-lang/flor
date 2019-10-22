@@ -9,6 +9,12 @@ export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
 export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 
+export const reservedList: string[] = [
+  'verdadeiro',
+  'falso', 
+  'nulo'
+]
+
 /**
  * Identifier parser
  *
@@ -16,6 +22,7 @@ export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 */
 export const Identifier: IdentifierParser = P
   .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
+  .assert((s: string) => !reservedList.includes(s), 'forbidden name of variable identifier')
   .node('identifier')
 
 const Locline: ObjectParser = P
