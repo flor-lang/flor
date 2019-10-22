@@ -22,7 +22,7 @@ export const reservedList: string[] = [
 */
 export const Identifier: IdentifierParser = P
   .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
-  .assert((s: string) => !reservedList.includes(s), 'erro')
+  .assert((s: string) => !reservedList.includes(s), 'forbidden name of variable identifier')
   .node('identifier')
 
 const Locline: ObjectParser = P
