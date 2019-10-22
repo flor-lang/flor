@@ -27,14 +27,4 @@ test('parse assignment operation', (): void => {
     // 'nulo = nulo',
     '"string" = nulo'
   ])
-
-  expect(Assignment.parse('message = "Hello World!"')).toMatchObject({
-    status: true,
-    value: {
-      name: 'assignment',
-      value: { identifier: 'message',  value: { 
-        name: 'literal', value: { name: 'string', value: 'Hello World!' }
-      }}
-    }
-  })
 })
