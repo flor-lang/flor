@@ -16,6 +16,14 @@ export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 */
 export const Identifier: IdentifierParser = P
   .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
+  .chain(
+    function(s: string) {
+      if(['verdadeiro', 'falso', 'nulo'].indexOf(s) === -1) {
+        return P.of(s)
+      }
+      return P.fail('erro');
+    }
+  )
   .node('identifier')
 
 const Locline: ObjectParser = P
