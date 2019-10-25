@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket } from './operators'
-import { ObjectParser, AddParser, Add, Expression } from './expression'
+import { ObjectParser, AddParser, Add, Expression, ExpressionParser } from './expression'
 import { Literal } from './literals'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
@@ -11,7 +11,7 @@ export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 
 export const reservedList: string[] = [
   'verdadeiro',
-  'falso', 
+  'falso',
   'nulo'
 ]
 
@@ -22,14 +22,14 @@ export const reservedList: string[] = [
 */
 export const Identifier: IdentifierParser = P
   .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
-  .assert((s: string) => !reservedList.includes(s), 'forbidden name of variable identifier')
+  .assert((s: string): boolean => !reservedList.includes(s), 'Syntax Error: Invalid Syntax')
   .node('identifier')
 
 const Locline: ObjectParser = P
   .alt(
     P.seqObj(
       LeftBracket, P.optWhitespace,
-      P.lazy((): AddParser => Add).named('add'),
+      P.lazy((): ExpressionParser => Expression).named('add'),
       P.optWhitespace, RightBracket,
       P.lazy((): ObjectParser => Locline).named('locline')
     ),

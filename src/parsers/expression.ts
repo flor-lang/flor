@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Literal, NumberLiteral } from './literals'
-import { Loc } from './assignment'
+import { Loc, LocParser } from './assignment'
 import {
   AddOperator,
   TermOperator,
@@ -38,7 +38,7 @@ export const Factor: FactorParser = P
       P.lazy((): ExpressionParser => Expression).named('between-parenthesis'),
       P.optWhitespace, RightParenthesis
     ),
-    // Loc,
+    P.lazy((): LocParser => Loc),
     Literal
   )
   .node('factor')

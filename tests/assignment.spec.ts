@@ -6,7 +6,7 @@ test('parse loc', (): void => {
   const canParseLoc = canParse(Loc)
   const cantParseLoc = cantParse(Loc)
 
-  canParseLoc(['array[0]', 'arr[1][0]', 'arr[0 / 0]', 'arr[1 + 1]'])
+  canParseLoc(['array[0]', 'arr[1][0]', 'arr[0 / 0]', 'arr[1 + 1]', 'arr["troll"]', 'arr[falso]'])
   cantParseLoc(['array[]', '[]', '[][]', '[0]id'])
 })
 
