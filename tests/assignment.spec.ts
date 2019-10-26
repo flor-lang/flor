@@ -18,7 +18,9 @@ test('parse assignment operation', (): void => {
     'a = 20',
     'b=verdadeiro',
     '_c = "string"',
-    'op=nulo'
+    'op=nulo',
+    'arr[0] =falso',
+    'a[0][0]= 0'
   ])
 
   cantParseAssignment([
@@ -26,7 +28,9 @@ test('parse assignment operation', (): void => {
     '_ = _',
     'identifier = identifier',
     'nulo = nulo',
-    '"string" = nulo'
+    '"string" = nulo',
+    '[0] = 5',
+    'arr[] = "something"'
   ])
 })
 

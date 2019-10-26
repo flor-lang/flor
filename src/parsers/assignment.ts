@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket } from './operators'
-import { ObjectParser, AddParser, Add, Expression, ExpressionParser } from './expression'
+import { ObjectParser, Expression, ExpressionParser } from './expression'
 import { Literal } from './literals'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
@@ -55,8 +55,7 @@ export const Loc: LocParser = P
 */
 export const Assignment: AssignmentParser = P
   .seqObj(
-    // Loc.named('loc'),
-    ['identifier' as never, Identifier.map((i): string => i.value) as never],
+    Loc.named('loc'),
     P.optWhitespace,
     Equal,
     P.optWhitespace,
