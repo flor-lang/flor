@@ -13,13 +13,13 @@ export const SlashOperator = P.string('/')
 export const PercentOperator = P.string('%')
 
 export const Equal = P.string('=')
-export const Greater = P.string('>') // se foo igual a verdadeiro entao faca foo = falso fimse
+export const Greater = P.string('>')
 export const Less = P.string('<')
-export const GreaterEqual = P.string('>=') // P.seq(Greater, Equal)
-export const LessEqual = P.string('<=') // P.seq(Less, Equal)
+export const GreaterEqual = P.string('>=')
+export const LessEqual = P.string('<=')
 
 export const EqualOperator = P.string('==')
-export const NotEqualOperator = P.string('!=') // P.seq(NotOperator, Equal)
+export const NotEqualOperator = P.string('!=')
 export const EqualExprOperator = P.string('igual a')
 export const NotEqualExprOperator = P.string('diferente de')
 
