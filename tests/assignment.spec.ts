@@ -20,13 +20,14 @@ test('parse assignment operation', (): void => {
     '_c = "string"',
     'op=nulo',
     'arr[0] =falso',
-    'a[0][0]= 0'
+    'a[0][0]= 0',
+    'identifier = identifier',
+    'foo = !((bar * 5) >= arr[index])'
   ])
 
   cantParseAssignment([
     '_ = "something"',
     '_ = _',
-    'identifier = identifier',
     'nulo = nulo',
     '"string" = nulo',
     '[0] = 5',

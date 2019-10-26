@@ -3,7 +3,6 @@ import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket } from './operators'
 import { ObjectParser, Expression, ExpressionParser } from './expression'
-import { Literal } from './literals'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
@@ -22,14 +21,14 @@ export const reservedList: string[] = [
 */
 export const Identifier: IdentifierParser = P
   .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
-  .assert((s: string): boolean => !reservedList.includes(s), 'Syntax Error: Invalid Syntax')
+  .assert((s: string): boolean => !reservedList.includes(s), `Erro de sintaxe: Identificador reservado`)
   .node('identifier')
 
 const Locline: ObjectParser = P
   .alt(
     P.seqObj(
       LeftBracket, P.optWhitespace,
-      P.lazy((): ExpressionParser => Expression).named('add'),
+      P.lazy((): ExpressionParser => Expression).named('expression'),
       P.optWhitespace, RightBracket,
       P.lazy((): ObjectParser => Locline).named('locline')
     ),
@@ -59,7 +58,6 @@ export const Assignment: AssignmentParser = P
     P.optWhitespace,
     Equal,
     P.optWhitespace,
-    Literal.named('value')
-    // Expression.named('expression')
+    P.lazy((): ExpressionParser => Expression).named('expression')
   )
   .node('assignment')
