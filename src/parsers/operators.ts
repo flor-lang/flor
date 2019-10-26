@@ -13,7 +13,7 @@ export const SlashOperator = P.string('/')
 export const PercentOperator = P.string('%')
 
 export const Equal = P.string('=')
-export const Greater = P.string('>')
+export const Greater = P.string('>') // se foo igual a verdadeiro entao faca foo = falso fimse
 export const Less = P.string('<')
 export const GreaterEqual = P.string('>=') // P.seq(Greater, Equal)
 export const LessEqual = P.string('<=') // P.seq(Less, Equal)
@@ -26,11 +26,14 @@ export const NotEqualExprOperator = P.string('diferente de')
 export const AndOperator = P.string('e')
 export const OrOperator = P.string('ou')
 
-/** addoperator -> + | - */
-export const AddOperator = P.alt(PlusOperator, MinusOperator)
+/** unaryoperator -> ! | + | - */
+export const UnaryOperator = P.alt(NotOperator, PlusOperator, MinusOperator)
 
 /** termoperator -> * | / | % */
 export const TermOperator = P.alt(AsteriskOperator, SlashOperator, PercentOperator)
+
+/** addoperator -> + | - */
+export const AddOperator = P.alt(PlusOperator, MinusOperator)
 
 /** reloperator -> <= | < | >= | > */
 export const RelOperator = P.alt(LessEqual, Less, GreaterEqual, Greater)

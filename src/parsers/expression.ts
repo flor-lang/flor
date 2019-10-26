@@ -1,7 +1,7 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
-import { Literal, NumberLiteral } from './literals'
+import { Literal } from './literals'
 import { Loc, LocParser } from './assignment'
 import {
   AddOperator,
@@ -11,7 +11,8 @@ import {
   RelOperator,
   EqualityOperator,
   AndOperator,
-  OrOperator
+  OrOperator,
+  UnaryOperator
 } from './operators'
 
 export type ObjectParser = P.Parser<{}>
@@ -43,7 +44,7 @@ export const Factor: FactorParser = P
   )
   .node('factor')
 
-const UnaryLine = AddOperator
+const UnaryLine = UnaryOperator
 /**
  * Parse Unary Numbers with + or - operators
  *

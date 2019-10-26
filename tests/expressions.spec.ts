@@ -14,8 +14,8 @@ test('parse unary', (): void => {
   const canParseUnary = canParse(Unary)
   const cantParseUnary = cantParse(Unary)
 
-  canParseUnary(['5', '-5', '+5', '-(-5)', '-foo', '-foo[bar]'])
-  cantParseUnary(['- 5', '-+5', '*5', ''])
+  canParseUnary(['5', '-5', '+5', '-(-5)', '-foo', '-foo[bar]', '!(5 > 4)', '!verdadeiro'])
+  cantParseUnary(['- 5', '-+5', '*5', '', 'foo!'])
 })
 
 test('parse term', (): void => {
