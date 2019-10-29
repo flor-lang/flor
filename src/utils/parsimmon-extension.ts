@@ -2,12 +2,13 @@ import * as P from 'parsimmon'
 
 declare module 'parsimmon' {
   export interface Parser<T> {
-    namedParser(name: string): [never, P.Parser<never>];
+    named(name: string): [never, P.Parser<never>];
+    assert(condition: (result: T) => boolean, errorMessage: string): Parser<T>;
   }
 }
 
-function namedParser (name: string): [never, P.Parser<never>] {
+function named (name: string): [never, P.Parser<never>] {
   return [name as never, this as P.Parser<never>]
 }
 
-P.Parser.prototype.namedParser = namedParser
+P.Parser.prototype.named = named

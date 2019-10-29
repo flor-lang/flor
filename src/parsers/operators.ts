@@ -1,7 +1,42 @@
 import * as P from 'parsimmon'
 
-export type AssignParser = P.Parser<P.Node<'assign', string>>
+export const LeftParenthesis = P.string('(')
+export const RightParenthesis = P.string(')')
+export const LeftBracket = P.string('[')
+export const RightBracket = P.string(']')
 
-export const Assign: AssignParser = P
-  .regexp(/=/)
-  .node('assign')
+export const NotOperator = P.string('!')
+export const PlusOperator = P.string('+')
+export const MinusOperator = P.string('-')
+export const AsteriskOperator = P.string('*')
+export const SlashOperator = P.string('/')
+export const PercentOperator = P.string('%')
+
+export const Equal = P.string('=')
+export const Greater = P.string('>')
+export const Less = P.string('<')
+export const GreaterEqual = P.string('>=')
+export const LessEqual = P.string('<=')
+
+export const EqualOperator = P.string('==')
+export const NotEqualOperator = P.string('!=')
+export const EqualExprOperator = P.string('igual a')
+export const NotEqualExprOperator = P.string('diferente de')
+
+export const AndOperator = P.string('e')
+export const OrOperator = P.string('ou')
+
+/** unaryoperator -> ! | + | - */
+export const UnaryOperator = P.alt(NotOperator, PlusOperator, MinusOperator)
+
+/** termoperator -> * | / | % */
+export const TermOperator = P.alt(AsteriskOperator, SlashOperator, PercentOperator)
+
+/** addoperator -> + | - */
+export const AddOperator = P.alt(PlusOperator, MinusOperator)
+
+/** reloperator -> <= | < | >= | > */
+export const RelOperator = P.alt(LessEqual, Less, GreaterEqual, Greater)
+
+/** equalityoperator -> == | != */
+export const EqualityOperator = P.alt(EqualOperator, NotEqualOperator, EqualExprOperator, NotEqualExprOperator)

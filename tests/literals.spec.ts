@@ -14,16 +14,6 @@ test('parse string', (): void => {
   cantParseString([
     'erro pq falta aspas',
   ])
-
-  expect(
-    StringLiteral.parse('"1 ex3mpl0 mu1t0 d@or@"')
-  ).toMatchObject({
-    status: true,
-    value: {
-      name: 'string',
-      value: '1 ex3mpl0 mu1t0 d@or@'
-    }
-  })
 })
 
 test('parse literal', (): void => {
@@ -40,17 +30,4 @@ test('parse literal', (): void => {
   cantParseLiteral([
     'erro pq não é literal',
   ])
-
-  expect(
-    Literal.parse('10')
-  ).toMatchObject({
-    status: true,
-    value: {
-      name: 'literal',
-      value: {
-        name: 'number',
-        value: 10
-      }
-    }
-  })
 })
