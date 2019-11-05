@@ -5,11 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "cli": "npm run build-cli && ./bin/cli/tinp",
     "exec": "npm run build && node dist/main.js",
     "dev": "tsc -w",
     "build": "tsc",
-    "build-cli": "tsc src/cli/index.ts --outDir bin && mv bin/cli/index.js bin/cli/tinp && chmod +x bin/cli/tinp"
+    "build-cli": "npm run build && npm i -g"
   },
   "keywords": [],
   "author": "",
@@ -39,5 +38,8 @@
     "glob": "^7.1.5",
     "parsimmon": "^1.13.0",
     "yargs": "^14.2.0"
+  },
+  "bin": {
+    "tinp": "./dist/cli/index.js"
   }
 }

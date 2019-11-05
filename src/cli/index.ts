@@ -43,11 +43,9 @@ if (Yargs.argv.saida === 'js') {
 } else if (Yargs.argv.saida === 'tab-sim') {
   console.log('Ainda não implementado')
 } else if (Yargs.argv.saida === 'ast') {
-  const asts = filesContent.map((fc): Result<Node<'assignment', {}>> => {
-    return Assignment.parse(fc)
-  })
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  asts.forEach(ast => {
-    logAst(ast, true)
-  })
+  const parse =
+    (content: string): Result<Node<'assignment', {}>> => Assignment.parse(content)
+
+  const asts = filesContent.map(parse)
+  asts.forEach((ast): void => logAst(ast, true))
 }
