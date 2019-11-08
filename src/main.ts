@@ -1,9 +1,6 @@
 // Playground code
-import { Expression } from './parsers/expression'
-import { Assignment } from './parsers/assignment'
+import { Program } from './parsers/index'
 import { logAst } from './utils/logger'
 
-Expression.parse('(-1 / -(4 + 2)) >= 1 + 4 ou 1 + 2')
-
-const ast = Assignment.parse('message = "Hello World!"')
+const ast = Program.parse('foo = "bar" // teste\n')
 logAst(ast, true)
