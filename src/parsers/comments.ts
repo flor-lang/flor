@@ -1,12 +1,12 @@
 import * as P from 'parsimmon'
 
-export type LineCommentParser = P.Parser<P.Node<'linecomment', {}>>
+export type LineCommentParser = P.Parser<{}>
 
 // const Comment = P
 //   .regex(/[^\n]*/)
 //   .wrap(
 //     P.string('//'),
-//     P.end
+//     P.newline
 //   )
 
 // export const LineComment: LineCommentParser = Comment
@@ -17,10 +17,8 @@ export type LineCommentParser = P.Parser<P.Node<'linecomment', {}>>
 //   .node('linecomment')
 
 export const LineComment: LineCommentParser = P
-  .seqObj(
-    P.optWhitespace,
-    P.string('//').named('symbol-comment'),
-    P.regex(/[^\n]*/),
+  .regex(/[^\n]*/)
+  .wrap(
+    P.string('//'),
     P.end
   )
-  .node('linecomment')

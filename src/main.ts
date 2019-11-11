@@ -1,6 +1,14 @@
 // Playground code
-import { Program } from './parsers/index'
 import { logAst } from './utils/logger'
 
-const ast = Program.parse('foo = "bar" // teste\n')
+import { Program } from './parsers/index'
+const string = 'a // teste\n= 5'
+console.log(string)
+const ast = Program.parse(string)
+
+// import { LineComment } from './parsers/comments'
+// const string = ''
+// console.log(string)
+// const ast = LineComment.parse(string)
+
 logAst(ast, true)
