@@ -3,6 +3,7 @@ import * as Yargs from 'yargs'
 import * as fs from 'fs'
 import * as glob from 'glob'
 
+import comments from '../utils/comments'
 import { Assignment } from '../parsers/assignment'
 import { logAst } from '../utils/logger'
 import { Result, Node } from 'parsimmon'
@@ -31,7 +32,8 @@ const filesContent = files
   .map((path): string => {
     try {
       const content = fs.readFileSync(path, 'utf-8')
-      return String(content)
+      const processed = comments.remove(String(content))
+      return processed
     } catch (e) {
       console.log(`Não foi possível ler arquivo: ${path}`)
       process.exit(1)
