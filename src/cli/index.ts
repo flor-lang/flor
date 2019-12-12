@@ -21,7 +21,6 @@ Yargs
 Yargs
   .options({
     saida: {
-      default: 'js',
       describe: 'saida do compilador',
       choices: ['js', 'ast']
     }
@@ -40,11 +39,25 @@ const filesContent = files
     }
   })
 
-if (Yargs.argv.saida === 'js') {
+const haveConfig = fs.existsSync('./tinpconfig.json')
+let outputFormat = Yargs.argv.saida || 'js'
+
+if (haveConfig) {
+  try {
+    const configFile = fs.readFileSync('./tinpconfig.json', 'utf-8')
+    const configs = JSON.parse(String(configFile))
+
+    if (configs.saida && !Yargs.argv.saida) outputFormat = configs.saida
+  } catch (e) {
+    console.log(`Não foi possível ler arquivo de configuração`)
+  }
+}
+
+if (outputFormat === 'js') {
   console.log('Ainda não implementado :(')
-} else if (Yargs.argv.saida === 'tab-sim') {
+} else if (outputFormat === 'tab-sim') {
   console.log('Ainda não implementado')
-} else if (Yargs.argv.saida === 'ast') {
+} else if (outputFormat === 'ast') {
   const parse =
     (content: string): Result<Node<'program', {}>> => Program.parse(content)
 
