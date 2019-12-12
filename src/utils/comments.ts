@@ -35,9 +35,7 @@ const remove = (file: string): string => {
       add()
       next()
       while (!atEnd()) {
-        if (getCurrentChar() === DOUBLE_QUOTE && !isEscaping) {
-          return
-        }
+        if (getCurrentChar() === DOUBLE_QUOTE && !isEscaping()) return
         add()
         next()
       }
@@ -71,7 +69,7 @@ const remove = (file: string): string => {
   }
 
   const processRegex = (): void => {
-    if (getCurrentChar() === SLASH && getNextChar() != STAR && getNextChar() != SLASH) {
+    if (getCurrentChar() === SLASH && getNextChar() !== SLASH && getNextChar() !== STAR) {
       while (!atEnd()) {
         add()
         next()

@@ -4,6 +4,9 @@ test('remove single line comment', (): void => {
   expect(
     comments.remove('a = 1// teste')
   ).toBe('a = 1')
+  expect(
+    comments.remove('a = "oi mundo" // teste')
+  ).toBe('a = "oi mundo" ')
 })
 
 test('remove multi line comment', (): void => {
