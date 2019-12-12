@@ -31,3 +31,9 @@ test('not remove comment inside string', (): void => {
     comments.remove('a = "\\" // Teste"')
   ).toBe('a = "\\" // Teste"')
 })
+
+test('not remove comment inside regex', (): void => {
+  expect(
+    comments.remove('a = /\\/*/')
+  ).toBe('a = /\\/*/')
+})

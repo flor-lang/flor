@@ -2,7 +2,6 @@ const SLASH = '/'
 const BACK_SLASH = '\\'
 const STAR = '*'
 const DOUBLE_QUOTE = '"'
-// const SINGLE_QUOTE = "'"
 const NEW_LINE = '\n'
 const CARRIAGE_RETURN = '\r'
 
@@ -71,7 +70,18 @@ const remove = (file: string): string => {
     }
   }
 
+  const processRegex = (): void => {
+    if (getCurrentChar() === SLASH && getNextChar() != STAR && getNextChar() != SLASH) {
+      while (!atEnd()) {
+        add()
+        next()
+        if (getCurrentChar() === SLASH && !isEscaping()) return
+      }
+    }
+  }
+
   while (!atEnd()) {
+    processRegex()
     processDoubleQuotedString()
     processSingleLineComment()
     processMultiLineComment()
