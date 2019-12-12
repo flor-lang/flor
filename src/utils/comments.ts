@@ -19,14 +19,12 @@ const remove = (file: string): string => {
   const atEnd = (): boolean => position >= original.length
 
   const processSingleLineComment = (): void => {
-    if (getCurrentChar() === SLASH) {
-      if (getNextChar() === SLASH) {
+    if (getCurrentChar() === SLASH && getNextChar() === SLASH) {
+      next()
+      while (!atEnd()) {
         next()
-        while (!atEnd()) {
-          next()
-          if (getCurrentChar() === NEW_LINE || getCurrentChar() === CARRIAGE_RETURN) {
-            return
-          }
+        if (getCurrentChar() === NEW_LINE || getCurrentChar() === CARRIAGE_RETURN) {
+          return
         }
       }
     }
