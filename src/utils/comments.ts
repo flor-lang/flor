@@ -1,6 +1,6 @@
 const SLASH = '/'
 // const BACK_SLASH = '\\'
-// const STAR = '*'
+const STAR = '*'
 // const DOUBLE_QUOTE = '"'
 // const SINGLE_QUOTE = "'"
 const NEW_LINE = '\n'
@@ -30,14 +30,28 @@ const remove = (file: string): string => {
     }
   }
 
+  const processMultiLineComment = (): void => {
+    if (getCurrentChar() === SLASH && getNextChar() === STAR) {
+      next()
+      while (!atEnd()) {
+        next()
+        if (getCurrentChar() === STAR && getNextChar() === SLASH) {
+          next()
+          next()
+          return
+        }
+      }
+    }
+  }
+
   while (!atEnd()) {
     processSingleLineComment()
+    processMultiLineComment()
     if (!atEnd()) {
       add()
       next()
     }
   }
-  console.log(original, output)
   return output.join('')
 }
 
