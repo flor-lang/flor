@@ -4,7 +4,7 @@ import * as fs from 'fs'
 import * as glob from 'glob'
 
 import comments from '../utils/comments'
-import { Assignment } from '../parsers/assignment'
+import { Program } from '../parsers/program'
 import { logAst } from '../utils/logger'
 import { Result, Node } from 'parsimmon'
 
@@ -46,7 +46,7 @@ if (Yargs.argv.saida === 'js') {
   console.log('Ainda não implementado')
 } else if (Yargs.argv.saida === 'ast') {
   const parse =
-    (content: string): Result<Node<'assignment', {}>> => Assignment.parse(content)
+    (content: string): Result<Node<'program', {}>> => Program.parse(content)
 
   const asts = filesContent.map(parse)
   asts.forEach((ast): void => logAst(ast, true))
