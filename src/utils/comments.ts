@@ -18,7 +18,7 @@ const remove = (file: string): string => {
   const next = (): void => { position++ }
   const atEnd = (): boolean => position >= original.length
   const isEscaping = (): boolean => {
-    if (getPreviusChar() == BACK_SLASH) {
+    if (getPreviusChar() === BACK_SLASH) {
       let offset = 1
       let escaped = true
       while ((position - offset) > 0) {
