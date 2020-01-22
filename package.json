@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "exec": "npm run build && node dist/main.js",
     "dev": "tsc -w",
-    "exec": "npm run build && node dist/main.js"
+    "build": "tsc",
+    "build-cli": "npm run build && npm i -g"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
+    "@types/parsimmon": "^1.10.0",
     "@types/treeify": "^1.0.0",
+    "@types/yargs": "^13.0.3",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "eslint": "^6.1.0",
@@ -31,7 +35,11 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@types/parsimmon": "^1.10.0",
-    "parsimmon": "^1.13.0"
+    "glob": "^7.1.5",
+    "parsimmon": "^1.13.0",
+    "yargs": "^14.2.0"
+  },
+  "bin": {
+    "tinp": "./dist/cli/index.js"
   }
 }
