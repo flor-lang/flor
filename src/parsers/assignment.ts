@@ -9,15 +9,11 @@ export type LocParser = P.Parser<P.Node<'loc', {}>>
 export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 
 export const reservedList: string[] = [
-  'verdadeiro',
-  'falso',
-  'nulo',
-  'se',
-  'senao',
-  'entao',
-  'fim',
-  'e',
-  'ou'
+  'verdadeiro', 'falso', 'nulo',
+  'e', 'ou',
+  'se', 'senao', 'entao',
+  'enquanto', 'faca',
+  'fim'
 ]
 
 /**

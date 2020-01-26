@@ -1,7 +1,7 @@
 import { canParse, cantParse } from './utils'
 import { Statement, IfThenElseStatement } from '../src/parsers/statements'
 
-test('if statement', (): void => {
+test('if then else statement', (): void => {
   const canParseIfThenElseStatement = canParse(IfThenElseStatement)
   const cantParseIfThenElseStatement = cantParse(IfThenElseStatement)
 
@@ -44,7 +44,8 @@ test('if statement', (): void => {
     'se a > 0 senao a = 0 fim',
     'se 5 == 0 entao a = 0 senao fim',
     'se 5 == 0 entao senao a = 0 fim',
-    'se verdadeiro entao a = 5senao a = afim'
+    'se verdadeiro entao a = 5senao a = afim',
+    'se igual a entao a=0 fim'
   ])
 })
 

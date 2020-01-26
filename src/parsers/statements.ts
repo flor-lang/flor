@@ -5,8 +5,15 @@ import { Expression } from './expressions'
 import { Assignment } from './assignment'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
+export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
 export type StatementParser = P.Parser<P.Node<'statement', {}>>
 
+/**
+ * Parse If Then Else Statements
+ *
+ * if-then-else -> se expression entao statement fim
+ *              | se expression entao statement senao statement fim
+ */
 export const IfThenElseStatement: IfThenElseStatementParser = P
   .seqObj(
     If,
