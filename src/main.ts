@@ -1,5 +1,5 @@
 // Playground code
-import { Expression } from './parsers/expression'
+import { Expression } from './parsers/expressions'
 import { Assignment } from './parsers/assignment'
 import { logAst } from './utils/logger'
 

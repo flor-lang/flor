@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket } from './operators'
-import { ObjectParser, Expression, ExpressionParser } from './expression'
+import { ObjectParser, Expression, ExpressionParser } from './expressions'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
