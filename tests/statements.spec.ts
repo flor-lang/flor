@@ -1,5 +1,5 @@
 import { canParse, cantParse } from './utils'
-import { Statement, IfThenElseStatement } from '../src/parsers/statements'
+import { Statement, IfThenElseStatement, WhileStatement } from '../src/parsers/statements'
 
 test('if then else statement', (): void => {
   const canParseIfThenElseStatement = canParse(IfThenElseStatement)
@@ -46,6 +46,37 @@ test('if then else statement', (): void => {
     'se 5 == 0 entao senao a = 0 fim',
     'se verdadeiro entao a = 5senao a = afim',
     'se igual a entao a=0 fim'
+  ])
+})
+
+test('while statement', (): void => {
+  const canParseWhileStatement = canParse(WhileStatement)
+  const cantParseWhileStatement = cantParse(WhileStatement)
+  
+  canParseWhileStatement([
+    'enquanto i > 0 faca i = i - 1 fim',
+    'enquanto i <= 10 faca soma = soma + i fim',
+    'enquanto idade < 18 faca exibir_mensagem_censura = verdadeiro fim',
+    `
+    enquanto treta != falso
+    faca
+      treta = verdadeiro
+    fim
+    `,
+    `
+    enquanto i > 0 faca
+      se i % 2 igual a 0 entao
+        pares[i] = i
+      fim
+    fim
+    `
+  ])
+  cantParseWhileStatement([
+    'faca i = i - 1 enquanto verdadeiro',
+    'enquanto se 5 == 5 entao a = 1 fim faca i < 0 fim',
+    'enquanto a = 1 fim',
+    'enquanto a = 1 faca a = 0 fim',
+    'enquanto faca fim'
   ])
 })
 

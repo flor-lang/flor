@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End } from './operators'
+import { If, Then, Else, End, While, Do } from './operators'
 import { Expression } from './expressions'
 import { Assignment } from './assignment'
 
@@ -31,6 +31,22 @@ export const IfThenElseStatement: IfThenElseStatementParser = P
     End
   )
   .node('if-then-else')
+
+/**
+ * Parse While Statements
+ *
+ * while -> enquanto expression faca statement fim
+ */
+export const WhileStatement: WhileStatementParser = P
+  .seqObj(
+    While,
+    Expression.named('condition'),
+    Do,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): StatementParser => Statement).named('stmt'),
+    End
+  )
+  .node('while')
 
 export const Statement: StatementParser = P
   .alt(
