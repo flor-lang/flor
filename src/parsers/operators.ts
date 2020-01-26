@@ -23,8 +23,8 @@ export const NotEqualOperator = P.string('!=')
 export const EqualExprOperator = P.string('igual a')
 export const NotEqualExprOperator = P.string('diferente de')
 
-export const AndOperator = P.string('e')
-export const OrOperator = P.string('ou')
+export const AndOperator = P.regexp(/(^|\s)+e(\s|$)+/) // P.string('e')
+export const OrOperator = P.regexp(/(^|\s)+ou(\s|$)+/) // P.string('ou')
 
 /** unaryoperator -> ! | + | - */
 export const UnaryOperator = P.alt(NotOperator, PlusOperator, MinusOperator)
@@ -40,3 +40,9 @@ export const RelOperator = P.alt(LessEqual, Less, GreaterEqual, Greater)
 
 /** equalityoperator -> == | != */
 export const EqualityOperator = P.alt(EqualOperator, NotEqualOperator, EqualExprOperator, NotEqualExprOperator)
+
+export const Then = P.regexp(/(^|\s)+entao(\s|$)+/)
+export const End = P.regexp(/(^|\s)+fim(\s|$)+/)
+
+export const If = P.regexp(/(^|\s)+se(\s|$)+/)
+export const Else = P.regexp(/(^|\s)+senao(\s|$)+/)

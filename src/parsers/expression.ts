@@ -173,7 +173,7 @@ const Booline: ObjectParser = P
     P.optWhitespace
   )
 /**
- * Parse or relations ( e ) between expressions
+ * Parse or relations ( ou ) between expressions
  *
  * join -> join && equality | equality
 */
