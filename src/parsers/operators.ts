@@ -41,8 +41,11 @@ export const RelOperator = P.alt(LessEqual, Less, GreaterEqual, Greater)
 /** equalityoperator -> == | != */
 export const EqualityOperator = P.alt(EqualOperator, NotEqualOperator, EqualExprOperator, NotEqualExprOperator)
 
-export const Then = P.regexp(/(^|\s)+entao(\s|$)+/)
+export const Do = P.regexp(/(^|\s)+faca(\s|$)+/)
 export const End = P.regexp(/(^|\s)+fim(\s|$)+/)
 
 export const If = P.regexp(/(^|\s)+se(\s|$)+/)
+export const Then = P.regexp(/(^|\s)+entao(\s|$)+/)
 export const Else = P.regexp(/(^|\s)+senao(\s|$)+/)
+
+export const While = P.regexp(/(^|\s)+enquanto(\s|$)+/)
