@@ -108,6 +108,11 @@ export const ForToStatement: ForToStatementParser = P
   )
   .node('for-to')
 
+/**
+ * Parse Statements
+ *
+ * statement -> assigment | if-then-else | while | do-while | for-each | for-to
+ */
 export const Statement: StatementParser = P
   .alt(
     Assignment,
