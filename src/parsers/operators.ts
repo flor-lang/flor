@@ -1,4 +1,5 @@
 import * as P from 'parsimmon'
+import '../utils/parsimmon-extension'
 
 export const LeftParenthesis = P.string('(')
 export const RightParenthesis = P.string(')')
@@ -23,8 +24,8 @@ export const NotEqualOperator = P.string('!=')
 export const EqualExprOperator = P.string('igual a')
 export const NotEqualExprOperator = P.string('diferente de')
 
-export const AndOperator = P.regexp(/(^|\s)+e(\s|$)+/) // P.string('e')
-export const OrOperator = P.regexp(/(^|\s)+ou(\s|$)+/) // P.string('ou')
+export const AndOperator = P.string('e').wspc()
+export const OrOperator = P.string('ou').wspc()
 
 /** unaryoperator -> ! | + | - */
 export const UnaryOperator = P.alt(NotOperator, PlusOperator, MinusOperator)
@@ -41,11 +42,13 @@ export const RelOperator = P.alt(LessEqual, Less, GreaterEqual, Greater)
 /** equalityoperator -> == | != */
 export const EqualityOperator = P.alt(EqualOperator, NotEqualOperator, EqualExprOperator, NotEqualExprOperator)
 
-export const Do = P.regexp(/(^|\s)+faca(\s|$)+/)
-export const End = P.regexp(/(^|\s)+fim(\s|$)+/)
+export const Do = P.string('faca').wspc()
+export const End = P.string('fim').wspc()
 
-export const If = P.regexp(/(^|\s)+se(\s|$)+/)
-export const Then = P.regexp(/(^|\s)+entao(\s|$)+/)
-export const Else = P.regexp(/(^|\s)+senao(\s|$)+/)
+export const If = P.string('se').wspc()
+export const Then = P.string('entao').wspc()
+export const Else = P.string('senao').wspc()
 
-export const While = P.regexp(/(^|\s)+enquanto(\s|$)+/)
+export const While = P.string('enquanto').wspc()
+export const ForEach = P.string('para cada').wspc()
+export const Of = P.string('de').wspc()
