@@ -15,6 +15,7 @@ export const OfExpr = P.string('de').wspc()
 export const ToExpr = P.string('ate').wspc()
 export const WithExpr = P.string('com').wspc()
 export const StepExpr = P.string('passo').wspc()
+export const End = P.string('fim').wspc()
 
 export const NotOperator = P.string('!')
 export const PlusOperator = P.string('+')
@@ -53,7 +54,6 @@ export const RelOperator = P.alt(LessEqual, Less, GreaterEqual, Greater)
 export const EqualityOperator = P.alt(EqualOperator, NotEqualOperator, EqualExprOperator, NotEqualExprOperator)
 
 export const Do = P.string('faca').wspc()
-export const End = P.string('fim').wspc()
 
 export const If = P.string('se').wspc()
 export const Then = P.string('entao').wspc()

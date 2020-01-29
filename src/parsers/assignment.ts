@@ -13,6 +13,8 @@ export const reservedList: string[] = [
   'e', 'ou',
   'se', 'senao', 'entao',
   'enquanto', 'faca',
+  'a', 'de', 'ate', 'com',
+  'igual', 'diferente', 'para', 'cada', 'passo',
   'fim'
 ]
 
