@@ -1,13 +1,14 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr } from './operators'
-import { Expression } from './expressions'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr } from './operators'
+import { Expression, ObjectParser } from './expressions'
 import { Assignment, Identifier } from './assignment'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
 export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
 export type DoWhileStatementParser = P.Parser<P.Node<'do-while', {}>>
 export type ForEachStatementParser = P.Parser<P.Node<'for-each', {}>>
+export type ForToStatementParser = P.Parser<P.Node<'for-to', {}>>
 export type StatementParser = P.Parser<P.Node<'statement', {}>>
 
 /**
@@ -66,12 +67,17 @@ export const DoWhileStatement: DoWhileStatementParser = P
   )
   .node('do-while')
 
+/**
+ * Parse For-Each Statements
+ *
+ * for-each -> para cada identifier de expression faca statement fim
+ */
 export const ForEachStatement: ForEachStatementParser = P
   .seqObj(
     ForEach,
-    Identifier,
+    Identifier.named('identifier'),
     OfExpr,
-    Expression,
+    Expression.named('iterator'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): StatementParser => Statement).named('statement'),
@@ -79,12 +85,36 @@ export const ForEachStatement: ForEachStatementParser = P
   )
   .node('for-each')
 
+const ForToLine: ObjectParser = P.seqObj(WithExpr, StepExpr, Expression.named('step'))
+/**
+ * Parse For-To Statements
+ *
+ * for-to -> para identifier de expression ate expression faca statement fim
+ *         | para identifier de expression ate expression com passo expression faca statement fim
+ */
+export const ForToStatement: ForToStatementParser = P
+  .seqObj(
+    ForExpr,
+    Identifier.named('identifier'),
+    OfExpr,
+    Expression.named('start-iterator'),
+    ToExpr,
+    Expression.named('end-iterator'),
+    P.alt(ForToLine, P.optWhitespace).named('for-to-line'),
+    Do,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): StatementParser => Statement).named('statement'),
+    End
+  )
+  .node('for-to')
+
 export const Statement: StatementParser = P
   .alt(
     Assignment,
     IfThenElseStatement,
     WhileStatement,
     DoWhileStatement,
-    ForEachStatement
+    ForEachStatement,
+    ForToStatement
   )
   .node('statement')

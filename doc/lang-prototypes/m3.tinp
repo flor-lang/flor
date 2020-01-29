@@ -33,6 +33,10 @@ para cada i de [0...5] com passo 2 faca
   lista[i] = i
 fim
 
+para i de 10 ate 0 com passo -1 faca
+  // do stuff
+fim
+
 /* in operator */
 se lista contem valor faca
   // algo

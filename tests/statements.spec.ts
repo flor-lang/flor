@@ -1,5 +1,5 @@
 import { canParse, cantParse } from './utils'
-import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement } from '../src/parsers/statements'
+import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement } from '../src/parsers/statements'
 
 test('if then else statement', (): void => {
   const canParseIfThenElseStatement = canParse(IfThenElseStatement)
@@ -142,6 +142,36 @@ test('parse for each', (): void => {
       soma = soma + elemento
     fim
     `
+  ])
+})
+
+test('parse for to', (): void => {
+  const canParseForToStatement = canParse(ForToStatement)
+  const cantParseForToStatement = cantParse(ForToStatement)
+
+  canParseForToStatement([
+    'para i de 1 ate 10 faca print = i fim',
+    'para x de 0 ate 20 com passo 2 faca print = x fim',
+    'para y de 100 ate 0 com passo -1 -5 faca print = y fim',
+    'para i de inicio ate final com passo de_dois_em_dois faca teste = "teste" fim',
+    // to do swap operation i need to block parser implemented
+    `
+    para i de 0 ate tamanho_lista - 1 faca
+      para j de 1 ate tamanho_lista - 1 faca
+        se lista[j] < lista[j-1] entao
+          swap = lista[j] + lista[j-1]
+        fim
+      fim
+    fim
+    `
+  ])
+
+  cantParseForToStatement([
+    'para cada i de 2 ate 30 faca f = 4 fim',
+    'para 5 de i ate 10 faca alguma = "coisa" fim',
+    'paraide1ate10 faca oi = 0 fim',
+    'para i = 0 ate 2 faca a = 0 fim',
+    'para i de 3 ate 10 com passo faca a = 0 fim',
   ])
 })
 
