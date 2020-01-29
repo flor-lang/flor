@@ -1,12 +1,13 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr } from './operators'
 import { Expression } from './expressions'
-import { Assignment } from './assignment'
+import { Assignment, Identifier } from './assignment'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
 export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
 export type DoWhileStatementParser = P.Parser<P.Node<'do-while', {}>>
+export type ForEachStatementParser = P.Parser<P.Node<'for-each', {}>>
 export type StatementParser = P.Parser<P.Node<'statement', {}>>
 
 /**
@@ -65,11 +66,25 @@ export const DoWhileStatement: DoWhileStatementParser = P
   )
   .node('do-while')
 
+export const ForEachStatement: ForEachStatementParser = P
+  .seqObj(
+    ForEach,
+    Identifier,
+    OfExpr,
+    Expression,
+    Do,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): StatementParser => Statement).named('statement'),
+    End
+  )
+  .node('for-each')
+
 export const Statement: StatementParser = P
   .alt(
     Assignment,
     IfThenElseStatement,
     WhileStatement,
-    DoWhileStatement
+    DoWhileStatement,
+    ForEachStatement
   )
   .node('statement')

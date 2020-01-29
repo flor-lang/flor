@@ -1,5 +1,5 @@
 import { canParse, cantParse } from './utils'
-import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement } from '../src/parsers/statements'
+import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement } from '../src/parsers/statements'
 
 test('if then else statement', (): void => {
   const canParseIfThenElseStatement = canParse(IfThenElseStatement)
@@ -106,6 +106,42 @@ test('do while statement', (): void => {
     'faca a = 2 enquanto fim',
     'a=2 enquanto a fim',
     'faca a = "" a != nulo fim'
+  ])
+})
+
+test('parse for each', (): void => {
+  const canParseForEachStatement = canParse(ForEachStatement)
+  const cantParseForEachStatement = cantParse(ForEachStatement)
+
+  canParseForEachStatement([
+    'para cada elemento de colecao faca soma=soma+elemento fim',
+    'para cada i de lista_numeros faca lista_numeros[i] = i + 1 fim',
+    'para cada troll de trolls1 + trolls2 faca trolls3 = troll + troll fim',
+    `
+    para cada elemento de colecao faca
+      soma = soma + elemento
+    fim
+    `,
+    `
+    para cada i de lista faca
+      para cada j de lista faca
+        total = i + j
+      fim
+    fim
+    `
+  ])
+
+  cantParseForEachStatement([
+    'paracada elemento de colecao faca soma=soma+elemento fim',
+    'para cada troll de trolls1 + trolls2 faca troll + troll fim',
+    'para cada 5 de lista_numeros faca lista_numeros[i] = i + 1 fim',
+    'para cada a + b de lista_numeros faca lista_numeros[i] = i + 1 fim',
+    'para cada 5 de lista_numeros=1 faca lista_numeros[i] = i + 1 fim',
+    `
+    para elemento de colecao faca
+      soma = soma + elemento
+    fim
+    `
   ])
 })
 
