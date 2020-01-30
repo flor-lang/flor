@@ -15,12 +15,12 @@ test('parse assignment operation', (): void => {
   const cantParseAssignment = cantParse(Assignment)
 
   canParseAssignment([
-    'a = 20',
+    'x = 20',
     'b=verdadeiro',
     '_c = "string"',
     'op=nulo',
     'arr[0] =falso',
-    'a[0][0]= 0',
+    'x[0][0]= 0',
     'identifier = identifier',
     'foo = !((bar * 5) >= arr[index])'
   ])
@@ -39,7 +39,7 @@ test('parse identifier', (): void => {
   const canParseIdentifier = canParse(Identifier)
   const cantParseIdentifier = cantParse(Identifier)
 
-  canParseIdentifier(['a','_variavel','x1','snake_case'])
+  canParseIdentifier(['x','_variavel','x1','snake_case'])
   cantParseIdentifier([
     '1',
     '&teste',

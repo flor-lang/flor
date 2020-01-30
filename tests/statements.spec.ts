@@ -86,9 +86,9 @@ test('do while statement', (): void => {
   
   canParseDoWhileStatement([
     'faca i = i - 1 enquanto verdadeiro fim',
-    'faca a[i] = a[i+1] enquanto i < a_tamanho - 1 fim',
-    'faca a = 0 enquanto a fim',
-    'faca se a entao a=falso senao a=verdadeiro fim enquanto a != falso fim',
+    'faca v[i] = v[i+1] enquanto i < a_tamanho - 1 fim',
+    'faca v = 0 enquanto v fim',
+    'faca se v entao v=falso senao v=verdadeiro fim enquanto v != falso fim',
     `
     faca
       se i % 2 igual a 0 entao
@@ -99,13 +99,13 @@ test('do while statement', (): void => {
     `
   ])
   cantParseDoWhileStatement([
-    'enquanto a faca a = 0 fim',
-    'faca a enquanto a fim',
+    'enquanto x faca x = 0 fim',
+    'faca x enquanto x fim',
     'faca enquanto 0 == 0 fim',
-    'faca a = a enquanto a == a',
-    'faca a = 2 enquanto fim',
-    'a=2 enquanto a fim',
-    'faca a = "" a != nulo fim'
+    'faca x = a enquanto x == x',
+    'faca x = 2 enquanto fim',
+    'x=2 enquanto x fim',
+    'faca x = "" x != nulo fim'
   ])
 })
 
