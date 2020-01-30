@@ -1,9 +1,21 @@
 import * as P from 'parsimmon'
+import { Statement } from './statements'
+import { ObjectParser } from './expressions'
 
-import { Assignment } from './assignment'
-
+export type BlockParser = P.Parser<P.Node<'block', {}>>
 export type ProgramParser = P.Parser<P.Node<'program', {}>>
 
-export const Program: ProgramParser = Assignment
-  .many()
+export const Block: BlockParser = P
+  .seqObj(
+    Statement.named('statement'),
+    P.alt(
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      P.lazy((): ObjectParser => Block),
+      P.optWhitespace
+    ).named('next-statement')
+  )
+  .node('block')
+
+export const Program: ProgramParser = P
+  .seq(Block)
   .node('program')
