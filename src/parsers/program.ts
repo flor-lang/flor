@@ -1,6 +1,7 @@
 import * as P from 'parsimmon'
 import { Statement, StatementParser } from './statements'
 import { ObjectParser } from './expressions'
+import { blockTable } from '../main'
 
 export type BlockParser = P.Parser<P.Node<'block', {}>>
 export type ProgramParser = P.Parser<P.Node<'program', {}>>
@@ -22,6 +23,12 @@ export const Block: BlockParser = P
     ).named('next-statement')
   )
   .node('block')
+  .map((node): P.Node<'block', {}> => {
+    if (process.env.PARSE_ENV === 'MAIN') {
+      blockTable.add(node)
+    }
+    return node
+  })
 
 /**
  * Parse Program

@@ -3,6 +3,7 @@ import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket } from './operators'
 import { ObjectParser, Expression, ExpressionParser } from './expressions'
+import { identifierTable } from '../main'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
@@ -27,6 +28,12 @@ export const Identifier: IdentifierParser = P
   .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
   .assert((s: string): boolean => !reservedList.includes(s), `Erro de sintaxe: Identificador reservado`)
   .node('identifier')
+  .map((node): P.Node<'identifier', string> => {
+    if (process.env.PARSE_ENV === 'MAIN') {
+      identifierTable.add(node)
+    }
+    return node
+  })
 
 const Locline: ObjectParser = P
   .alt(
