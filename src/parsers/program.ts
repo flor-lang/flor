@@ -5,6 +5,11 @@ import { ObjectParser } from './expressions'
 export type BlockParser = P.Parser<P.Node<'block', {}>>
 export type ProgramParser = P.Parser<P.Node<'program', {}>>
 
+/**
+ * Parse Block
+ *
+ * block -> statement block | ∊
+ */
 export const Block: BlockParser = P
   .seqObj(
     P.optWhitespace,
@@ -18,5 +23,9 @@ export const Block: BlockParser = P
   )
   .node('block')
 
+/**
+ * Parse Program
+ * program -> block
+ */
 export const Program: ProgramParser = Block
   .node('program')
