@@ -30,7 +30,7 @@ export const Identifier: IdentifierParser = P
   .node('identifier')
   .map((node): P.Node<'identifier', string> => {
     if (process.env.PARSE_ENV === 'MAIN') {
-      identifierTable.add(node)
+      identifierTable.add(JSON.stringify(node))
     }
     return node
   })
