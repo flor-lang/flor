@@ -3,7 +3,7 @@ import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket } from './operators'
 import { ObjectParser, Expression, ExpressionParser } from './expressions'
-import { identifierTable } from '../main'
+import { identifierTable } from '../semantics/temp-symbol-table'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>

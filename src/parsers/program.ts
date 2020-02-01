@@ -1,7 +1,7 @@
 import * as P from 'parsimmon'
 import { Statement, StatementParser } from './statements'
 import { ObjectParser } from './expressions'
-import { blockTable } from '../main'
+import { blockTable } from '../semantics/temp-symbol-table'
 
 export type BlockParser = P.Parser<P.Node<'block', {}>>
 export type ProgramParser = P.Parser<P.Node<'program', {}>>
