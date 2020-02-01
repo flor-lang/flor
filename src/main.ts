@@ -113,27 +113,54 @@ scopeSymbols = scopeSymbols.sort((s1: any, s2: any) => s1.blockStmt.start.offset
 // console.log('Scope Symbols')
 // console.log(require('util').inspect(scopeSymbols, false, null, true))
 
-scopeSymbols = scopeSymbols.map((s: any) => ({ children: [], ...s }))
 const symbolTable: any = []
-const [root] = scopeSymbols.splice(0, 1)
-symbolTable.push(root)
 
-scopeSymbols.forEach((scopeSymbol: any) => {
-  let insides = symbolTable.filter((row: any) => (
-    scopeSymbol.blockStmt.start.offset > row.blockStmt.start.offset &&
-    scopeSymbol.blockStmt.end.offset < row.blockStmt.end.offset
+/* Children Methods beta versions */
+// scopeSymbols = scopeSymbols.map((s: any) => ({ children: [], ...s }))
+// const [root] = scopeSymbols.splice(0, 1)
+// symbolTable.push(root)
+
+// scopeSymbols.forEach((scopeSymbol: any) => {
+//   let insides = symbolTable.filter((row: any) => (
+//     scopeSymbol.blockStmt.start.offset > row.blockStmt.start.offset &&
+//     scopeSymbol.blockStmt.end.offset < row.blockStmt.end.offset
+//   ))
+//   while (insides.length !== 0) {
+//     const scope = insides[0]
+//     insides = scope.children.filter((row: any) => (
+//       scopeSymbol.blockStmt.start.offset > row.blockStmt.start.offset &&
+//       scopeSymbol.blockStmt.end.offset < row.blockStmt.end.offset
+//     ))
+//     if (insides.length === 0) {
+//       scope.children.push(scopeSymbol)
+//     }
+//   }
+// })
+
+/* Children Methods beta versions */
+scopeSymbols = scopeSymbols.map((s: any) => ({ parent: null, ...s }))
+i = 0
+while (i < scopeSymbols.length) {
+  // add to table in less cross point and remove from scope
+  const insides = symbolTable.filter((row: any) => (
+    scopeSymbols[i].blockStmt.start.offset > row.blockStmt.start.offset &&
+    scopeSymbols[i].blockStmt.end.offset < row.blockStmt.end.offset
   ))
-  while (insides.length !== 0) {
-    const scope = insides[0]
-    insides = scope.children.filter((row: any) => (
-      scopeSymbol.blockStmt.start.offset > row.blockStmt.start.offset &&
-      scopeSymbol.blockStmt.end.offset < row.blockStmt.end.offset
-    ))
-    if (insides.length === 0) {
-      scope.children.push(scopeSymbol)
-    }
+  const parentScopeSymbol = insides.sort((i1: any, i2: any) => {
+    const x1 = scopeSymbols[i].blockStmt.start.offset - i1.blockStmt.start.offset
+    const y1 = scopeSymbols[i].blockStmt.end.offset - i1.blockStmt.end.offset
+    const d1 = Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2))
+    const x2 = scopeSymbols[i].blockStmt.start.offset - i2.blockStmt.start.offset
+    const y2 = scopeSymbols[i].blockStmt.end.offset - i2.blockStmt.end.offset
+    const d2 = Math.sqrt(Math.pow(x2, 2) + Math.pow(y2, 2))
+    return d1 > d2
+  })
+  if (parentScopeSymbol.length !== 0) {
+    scopeSymbols[i].parent = parentScopeSymbol[0].blockStmt
   }
-})
+  symbolTable.push(scopeSymbols[i])
+  i = i + 1
+}
 
 console.log('Symbol Table')
 // console.log(require('util').inspect(symbolTable, false, null, true))
