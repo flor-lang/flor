@@ -5,6 +5,8 @@
 // Playground code
 import { logAst } from './utils/logger'
 import { Program } from './parsers/program'
+import { any } from 'parsimmon'
+import { asTree } from 'treeify'
 
 process.env.PARSE_ENV = 'MAIN'
 
@@ -111,11 +113,28 @@ scopeSymbols = scopeSymbols.sort((s1: any, s2: any) => s1.blockStmt.start.offset
 // console.log('Scope Symbols')
 // console.log(require('util').inspect(scopeSymbols, false, null, true))
 
-// scopeSymbols = scopeSymbols.map((s: any) => ({ children: [], ...s }))
-// const symbolTable: any = []
-// const [first, ...children] = scopeSymbols.splice(0)
-// symbolTable.push(first)
-// first.children.push(...children)
+scopeSymbols = scopeSymbols.map((s: any) => ({ children: [], ...s }))
+const symbolTable: any = []
+const [root] = scopeSymbols.splice(0, 1)
+symbolTable.push(root)
 
-// console.log('Symbol Table')
+scopeSymbols.forEach((scopeSymbol: any) => {
+  let insides = symbolTable.filter((row: any) => (
+    scopeSymbol.blockStmt.start.offset > row.blockStmt.start.offset &&
+    scopeSymbol.blockStmt.end.offset < row.blockStmt.end.offset
+  ))
+  while (insides.length !== 0) {
+    const scope = insides[0]
+    insides = scope.children.filter((row: any) => (
+      scopeSymbol.blockStmt.start.offset > row.blockStmt.start.offset &&
+      scopeSymbol.blockStmt.end.offset < row.blockStmt.end.offset
+    ))
+    if (insides.length === 0) {
+      scope.children.push(scopeSymbol)
+    }
+  }
+})
+
+console.log('Symbol Table')
 // console.log(require('util').inspect(symbolTable, false, null, true))
+console.log(asTree(symbolTable, true, false))
