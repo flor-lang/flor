@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 // Playground code
 import { logAst } from './utils/logger'
 import { Program } from './parsers/program'
@@ -44,17 +48,16 @@ const groupBy = function (arr: any, criteria: any): any[] {
 }
 
 const group = groupBy(Array.from(blockTable), (item: any) => item.end.offset)
-const scopes = []
+let scopes = []
 
-for (const scope in group) {
-  const blocks = group[scope]
-  scopes.push(blocks.sort((b1: any, b2: any) => b1.start.offset < b2.start.offset)[0])
+for (const blockStmt in group) {
+  const blocks = group[blockStmt]
+  scopes.push(blocks.sort((b1: any, b2: any) => b1.start.offset > b2.start.offset)[0])
 }
 
-// console.log('Scopes')
-// console.log(scopes.sort((s1, s2) => s1.start.offset - s2.start.offset))
+scopes = scopes.sort((s1, s2) => s1.start.offset - s2.start.offset)
 
-const symbolTable: any = []
+let scopeSymbols: any = []
 const identifiers = Array.from<string>(identifierTable)
   .map(id => JSON.parse(id))
   .sort((a, b) => a.start.offset - b.start.offset)
@@ -62,7 +65,7 @@ const identifiers = Array.from<string>(identifierTable)
 let i = 0
 while (i < scopes.length) {
   const symbols: any[] = []
-  const row = { scope: scopes[i], symbols }
+  const row = { blockStmt: scopes[i], symbols }
 
   let j = -1
   while (j < identifiers.length - 1) {
@@ -78,35 +81,41 @@ while (i < scopes.length) {
     }
   }
 
-  symbolTable.push(row)
+  scopeSymbols.push(row)
   i = i + 1
 }
 
-// scopes = scopes.sort((s1, s2) => s1.end.offset - s2.end.offset)
-// symbolTable = symbolTable.sort((s1: any, s2: any) => s1.scope.end.offset < s2.scope.end.offset)
+scopes = scopes.sort((s1, s2) => s1.end.offset - s2.end.offset)
+scopeSymbols = scopeSymbols.sort((s1: any, s2: any) => s1.blockStmt.end.offset < s2.blockStmt.end.offset)
 
-// i = 0
-// while (i < symbolTable.length) {
-//   let j = -1
-//   while (j < identifiers.length - 1) {
-//     j = j + 1
-//     const objId = identifiers[j]
-//     if (symbolTable.length <= i + 1) {
-//       break
-//     }
-//     if (objId.start.offset > symbolTable[i + 1].scope.end.offset) {
-//       identifiers.splice(j, 1)
-//       symbolTable[i].symbols.push(objId)
-//       j = j - 1
-//     }
-//   }
-//   i = i + 1
-// }
+i = 0
+while (i < scopeSymbols.length) {
+  let j = -1
+  while (j < identifiers.length - 1) {
+    j = j + 1
+    const objId = identifiers[j]
+    if (scopeSymbols.length <= i + 1) {
+      break
+    }
+    if (objId.start.offset > scopeSymbols[i + 1].blockStmt.end.offset) {
+      identifiers.splice(j, 1)
+      scopeSymbols[i].symbols.push(objId)
+      j = j - 1
+    }
+  }
+  i = i + 1
+}
 
-// symbolTable = symbolTable.sort((s1: any, s2: any) => s1.scope.start.offset > s2.scope.start.offset)
+scopeSymbols = scopeSymbols.sort((s1: any, s2: any) => s1.blockStmt.start.offset > s2.blockStmt.start.offset)
 
-console.log('Symbol Table')
-console.log(require('util').inspect(symbolTable.map((t: any) => {
-  const { scope, symbols } = t
-  return { scope: { name: scope.value.statement.value.name, start: scope.start, end: scope.end }, symbols }
-}), false, null, true))
+// console.log('Scope Symbols')
+// console.log(require('util').inspect(scopeSymbols, false, null, true))
+
+// scopeSymbols = scopeSymbols.map((s: any) => ({ children: [], ...s }))
+// const symbolTable: any = []
+// const [first, ...children] = scopeSymbols.splice(0)
+// symbolTable.push(first)
+// first.children.push(...children)
+
+// console.log('Symbol Table')
+// console.log(require('util').inspect(symbolTable, false, null, true))

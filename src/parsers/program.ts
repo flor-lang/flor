@@ -25,7 +25,11 @@ export const Block: BlockParser = P
   .node('block')
   .map((node): P.Node<'block', {}> => {
     if (process.env.PARSE_ENV === 'MAIN') {
-      blockTable.add(node)
+      blockTable.add({
+        name: (node.value as { statement: { value: { name: string} } }).statement.value.name,
+        start: node.start,
+        end: node.end
+      })
     }
     return node
   })
