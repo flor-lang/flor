@@ -20,7 +20,8 @@ test('parse literal', (): void => {
   const canParseLiteral = canParse(Literal)
   canParseLiteral([
     '"meu nome"',                 // String
-    '10',                         // Number
+    '10',                         // Integer
+    '3.14',                       // Float
     'verdadeiro',                 // Boolean
     'falso',                      // Boolean
     'nulo'                        // Null
@@ -29,5 +30,6 @@ test('parse literal', (): void => {
   const cantParseLiteral = cantParse(Literal)
   cantParseLiteral([
     'erro pq não é literal',
+    '3.14.15', '3.', '.3'
   ])
 })

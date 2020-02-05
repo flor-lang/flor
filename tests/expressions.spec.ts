@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Rel, Equality, Join, Bool } from '../src/parsers/expression'
+import { Factor, Unary, Term, Add, Rel, Equality, Join, Bool } from '../src/parsers/expressions'
 import { canParse, cantParse } from './utils'
 
 

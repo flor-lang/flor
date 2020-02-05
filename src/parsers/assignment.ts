@@ -2,16 +2,20 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket } from './operators'
-import { ObjectParser, Expression, ExpressionParser } from './expression'
+import { ObjectParser, Expression, ExpressionParser } from './expressions'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
 export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 
 export const reservedList: string[] = [
-  'verdadeiro',
-  'falso',
-  'nulo'
+  'verdadeiro', 'falso', 'nulo',
+  'e', 'ou',
+  'se', 'senao', 'entao',
+  'enquanto', 'faca',
+  'a', 'de', 'ate', 'com',
+  'igual', 'diferente', 'para', 'cada', 'passo',
+  'fim'
 ]
 
 /**
