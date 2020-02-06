@@ -3,6 +3,7 @@ import '../utils/parsimmon-extension'
 import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr } from './operators'
 import { Expression, ObjectParser } from './expressions'
 import { Assignment, Identifier } from './assignment'
+import { Block, BlockParser } from './program'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
 export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
@@ -14,8 +15,8 @@ export type StatementParser = P.Parser<P.Node<'statement', {}>>
 /**
  * Parse If Then Else Statements
  *
- * if-then-else -> se expression entao statement fim
- *              | se expression entao statement senao statement fim
+ * if-then-else -> se expression entao block fim
+ *              | se expression entao block senao block fim
  */
 export const IfThenElseStatement: IfThenElseStatementParser = P
   .seqObj(
@@ -24,11 +25,11 @@ export const IfThenElseStatement: IfThenElseStatementParser = P
     Then,
     P.seqObj(
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.lazy((): StatementParser => Statement).named('statement')
+      P.lazy((): BlockParser => Block).named('block')
     ).named('then'),
     P.alt(
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.seqObj(Else, P.lazy((): StatementParser => Statement).named('statement')),
+      P.seqObj(Else, P.lazy((): BlockParser => Block).named('block')),
       P.optWhitespace
     ).named('else'),
     End
@@ -38,7 +39,7 @@ export const IfThenElseStatement: IfThenElseStatementParser = P
 /**
  * Parse While Statements
  *
- * while -> enquanto expression faca statement fim
+ * while -> enquanto expression faca block fim
  */
 export const WhileStatement: WhileStatementParser = P
   .seqObj(
@@ -46,7 +47,7 @@ export const WhileStatement: WhileStatementParser = P
     Expression.named('condition'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    P.lazy((): StatementParser => Statement).named('statement'),
+    P.lazy((): BlockParser => Block).named('block'),
     End
   )
   .node('while')
@@ -54,13 +55,13 @@ export const WhileStatement: WhileStatementParser = P
 /**
  * Parse Do-While Statements
  *
- * do-while -> faca statement enquanto expression fim
+ * do-while -> faca block enquanto expression fim
  */
 export const DoWhileStatement: DoWhileStatementParser = P
   .seqObj(
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    P.lazy((): StatementParser => Statement).named('statement'),
+    P.lazy((): BlockParser => Block).named('block'),
     While,
     Expression.named('condition'),
     End
@@ -70,7 +71,7 @@ export const DoWhileStatement: DoWhileStatementParser = P
 /**
  * Parse For-Each Statements
  *
- * for-each -> para cada identifier de expression faca statement fim
+ * for-each -> para cada identifier de expression faca block fim
  */
 export const ForEachStatement: ForEachStatementParser = P
   .seqObj(
@@ -80,7 +81,7 @@ export const ForEachStatement: ForEachStatementParser = P
     Expression.named('iterator'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    P.lazy((): StatementParser => Statement).named('statement'),
+    P.lazy((): BlockParser => Block).named('block'),
     End
   )
   .node('for-each')
@@ -89,8 +90,8 @@ const ForToLine: ObjectParser = P.seqObj(WithExpr, StepExpr, Expression.named('s
 /**
  * Parse For-To Statements
  *
- * for-to -> para identifier de expression ate expression faca statement fim
- *         | para identifier de expression ate expression com passo expression faca statement fim
+ * for-to -> para identifier de expression ate expression faca block fim
+ *         | para identifier de expression ate expression com passo expression faca block fim
  */
 export const ForToStatement: ForToStatementParser = P
   .seqObj(
@@ -103,7 +104,7 @@ export const ForToStatement: ForToStatementParser = P
     P.alt(ForToLine, P.optWhitespace).named('for-to-line'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    P.lazy((): StatementParser => Statement).named('statement'),
+    P.lazy((): BlockParser => Block).named('block'),
     End
   )
   .node('for-to')
