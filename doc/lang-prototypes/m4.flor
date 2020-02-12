@@ -1,0 +1,42 @@
+importar Console
+
+definir interface Nomeavel
+  nome
+fim
+
+difinir classe Pessoa
+  implementa: Nomeavel
+  
+  propriedades:
+    nome
+    privado idade
+    telefones
+
+  construtor: funcao (nome, idade)
+    _.nome <- nome
+    _.idade <- idade
+    _.telefones <- []
+  fim
+    
+  metodos:
+    idade <- () := _.idade
+    
+    alterar_idade <- (idade) := _.idade = idade
+    
+    adicionar_telefone <- funcao (telefone)
+      _.telefones.adiciona(telefone)
+    fim
+    
+    remover_telefone <- funcao (telefone)
+      _.telefones.remove(telefone)
+    fim
+
+fim
+
+pessoa <- Pessoa(nome: 'Sandro', idade: 20)
+pessoa.adicionar_telefone('999999999')
+
+se pessoa.telefones.tamanho maior que 0 entao
+  Console.escreva(pessoa)
+fim
+
