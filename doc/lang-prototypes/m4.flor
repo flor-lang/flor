@@ -36,7 +36,7 @@ fim
 pessoa <- Pessoa(nome: 'Sandro', idade: 20)
 pessoa.adicionar_telefone('999999999')
 
-se pessoa.telefones.tamanho maior que 0 entao
+se pessoa.telefones.tamanho maior que 0 e pessoa.nome = 'Sandro' entao
   Console.escreva(pessoa)
 fim
 
