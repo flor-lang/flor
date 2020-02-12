@@ -23,18 +23,18 @@ difinir classe Pessoa
     
     alterar_idade <- (idade) := _.idade = idade
     
-    adicionar_telefone <- funcao (telefone)
-      _.telefones.adiciona(telefone)
+    adicionar_telefone <- funcao (numero)
+      _.telefones.adiciona(numero)
     fim
     
-    remover_telefone <- funcao (telefone)
-      _.telefones.remove(telefone)
+    remover_telefone <- funcao (numero)
+      _.telefones.remove(numero)
     fim
 
 fim
 
 pessoa <- Pessoa(nome: 'Sandro', idade: 20)
-pessoa.adicionar_telefone('999999999')
+pessoa.adicionar_telefone(numero: '999999999')
 
 se pessoa.telefones.tamanho maior que 0 e pessoa.nome = 'Sandro' entao
   Console.escreva(pessoa)
