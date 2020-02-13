@@ -33,7 +33,7 @@ difinir classe Pessoa
 
 fim
 
-pessoa <- Pessoa(nome: 'Sandro', idade: 20)
+pessoa <- objeto:Pessoa(nome: 'Sandro', idade: 20)
 pessoa.adicionar_telefone(numero: '999999999')
 
 se pessoa.telefones.tamanho maior que 0 e pessoa.nome = 'Sandro' entao
