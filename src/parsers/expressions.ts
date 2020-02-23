@@ -207,6 +207,7 @@ export const BlockFunction: BlockFunctionParser = P
 
 export const Expression: ExpressionParser = P
   .alt(
-    Bool
+    Bool,
+    BlockFunction
   )
   .node('expression')

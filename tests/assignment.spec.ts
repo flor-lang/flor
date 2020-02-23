@@ -21,7 +21,11 @@ test('parse assignment operation', (): void => {
     'arr[0] =falso',
     'x[0][0]= 0',
     'identifier = identifier',
-    'foo = !((bar * 5) >= arr[index])'
+    'foo = !((bar * 5) >= arr[index])',
+    'funcao_dois = "teste"',
+    `somar = funcao(x, y)
+       retorno = x + y
+     fim`
   ])
 
   cantParseAssignment([
@@ -30,7 +34,8 @@ test('parse assignment operation', (): void => {
     'nulo = nulo',
     '"string" = nulo',
     '[0] = 5',
-    'arr[] = "something"'
+    'arr[] = "something"',
+    'funcao = nulo'
   ])
 })
 

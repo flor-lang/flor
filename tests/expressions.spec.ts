@@ -67,25 +67,21 @@ test('can parse bool operation', (): void => {
 })
 
 test('can parse block function loc', (): void => {
-  const canParseBlockFunction = canParse(BlockFunction, true, 3)
+  const canParseBlockFunction = canParse(BlockFunction)
   const cantParseBlockFunction = cantParse(BlockFunction)
 
   canParseBlockFunction([
-    'funcao (numero) numero = 0 fim',
+    'funcao(numero) numero = 0 fim',
     'funcao () c = "Olá Mundo" fim',
-    `
-    funcao (lista)
-      aux = lista[0]
-      lista[0] = lista[1]
-      lista[1] = aux
-    fim
-    `,
-    `
-    funcao ( x, y )
-      aux = x * y
-      aux = aux / 2
-    fim
-    `
+    `funcao (lista)
+       aux = lista[0]
+       lista[0] = lista[1]
+       lista[1] = aux
+     fim`,
+    `funcao ( x, y )
+       aux = x * y
+       aux = aux / 2
+     fim`
   ])
 
   cantParseBlockFunction([
