@@ -189,16 +189,6 @@ export const Bool: BoolParser = P
   )
   .node('bool')
 
-export const Arg: ObjectParser = P
-  .seqObj(
-    LeftParenthesis, P.optWhitespace,
-    P.lazy((): IdentifierParser => Identifier)
-      .many()
-      .sepBy(P.seq(P.optWhitespace, P.string(','), P.optWhitespace))
-      .named('params'),
-    P.optWhitespace,
-    RightParenthesis
-  )
 /**
  * Parse block function expressions
  *
@@ -207,7 +197,10 @@ export const Arg: ObjectParser = P
 export const BlockFunction: BlockFunctionParser = P
   .seqObj(
     Function, P.optWhitespace,
-    Arg.named('arg'), P.optWhitespace,
+    P.lazy((): IdentifierParser => Identifier)
+      .sepWrp(',', '(', ')')
+      .named('args'),
+    P.optWhitespace,
     P.lazy((): BlockParser => Block).named('block'),
     End
   ).node('block-function')
