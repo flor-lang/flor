@@ -1,10 +1,11 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
-import { Equal, LeftBracket, RightBracket } from './operators'
+import { Equal, LeftBracket, RightBracket, Colon } from './operators'
 import { ObjectParser, Expression, ExpressionParser } from './expressions'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
+export type FunctionCallParser = P.Parser<P.Node<'function-call', {}>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
 export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
@@ -29,8 +30,32 @@ export const Identifier: IdentifierParser = P
   .assert((s: string): boolean => !reservedList.includes(s), `Erro de sintaxe: Identificador reservado`)
   .node('identifier')
 
+const LabeledArgs: ObjectParser = P
+  .seqObj(
+    Identifier.named('label'),
+    P.optWhitespace, Colon, P.optWhitespace,
+    P.lazy((): ExpressionParser => Expression).named('value')
+  )
+  .sepWrp(',', '(', ')')
+/**
+ * Parse function call
+ *
+ * function-call -> identifier (identifier: expr, ...)
+*/
+export const FunctionCall: FunctionCallParser = P
+  .seqObj(
+    Identifier.named('identifier'), P.optWhitespace,
+    LabeledArgs.named('labeled-args')
+  )
+  .node('function-call')
+/**
+ * Parse subscriptables
+ *
+ * subscriptable -> function-call | identifier
+*/
 export const Subscriptable: SubscriptableParser = P
   .alt(
+    FunctionCall,
     Identifier
   ).node('subscriptable')
 
@@ -45,13 +70,13 @@ const Locline: ObjectParser = P
     P.optWhitespace
   )
 /**
- * Loc parser - list acess or identifier
+ * Loc parser - list acess or subscriptable
  *
- * loc -> loc[ expr ] | identifier
+ * loc -> loc[ expr ] | subscriptable
 */
 export const Loc: LocParser = P
   .seqObj(
-    Identifier.named('identifier'),
+    Subscriptable.named('subscriptable'),
     P.optWhitespace,
     Locline.named('locline')
   )

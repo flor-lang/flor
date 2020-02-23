@@ -32,7 +32,7 @@ test('test block', (): void => {
 
 
 test('test program', (): void => {
-  const canParseProgram = canParse(Program)
+  const canParseProgram = canParse(Program, true, 2)
   const cantParseProgram = cantParse(Program)
 
   canParseProgram([
@@ -61,6 +61,15 @@ test('test program', (): void => {
     fim
       
     console_escrever = mensagem
+    `,
+    `
+    duplicar = (valor) := valor * 2
+    numero = ler()
+    se numero igual a 0 entao
+      x = escrever(texto: "O dobro de 0 é 0")
+    senao
+      x = escrever(texto: duplicar(valor: numero))
+    fim
     `
   ])
 
@@ -71,8 +80,6 @@ test('test program', (): void => {
     i = 0
     se i == 0 entao
     fim
-    `,
-    // not yet, not yet
-    'funcao_top() = valor'
+    `
   ])
 })

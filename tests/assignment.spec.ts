@@ -1,5 +1,21 @@
-import { Assignment, Loc, Identifier } from '../src/parsers/assignment'
+import { Assignment, Loc, Identifier, FunctionCall } from '../src/parsers/assignment'
 import { canParse, cantParse } from './utils'
+
+test('parse function call', (): void => {
+  const canParseFunctionCall = canParse(FunctionCall)
+  const cantParseFunctionCall = cantParse(FunctionCall)
+
+  canParseFunctionCall([
+    'ordenar ()',
+    'duplicar (x: 2)',
+    'somar(x: 0, y: 0)',
+    'subtrair(x:x,y:y)'
+  ])
+  cantParseFunctionCall([
+    'inserir(x)',
+    'inserir(0)'
+  ])
+})
 
 test('parse loc', (): void => {
   const canParseLoc = canParse(Loc)
@@ -14,6 +30,7 @@ test('parse assignment operation', (): void => {
   const cantParseAssignment = cantParse(Assignment)
 
   canParseAssignment([
+    'duplicar = (valor) := valor * 2',
     'x = 20',
     'b=verdadeiro',
     '_c = "string"',
@@ -26,7 +43,9 @@ test('parse assignment operation', (): void => {
     `somar = funcao(x, y)
        retornar x + y
      fim`,
-    'somar = (x, y) := x + y'
+    'somar = (x) := x + y',
+    'resultado = somar (x: 0, y: 1)',
+    'indice_2 = ordenar (lista: numeros)[2]'
   ])
 
   cantParseAssignment([
