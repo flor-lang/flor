@@ -5,6 +5,7 @@ import { Equal, LeftBracket, RightBracket } from './operators'
 import { ObjectParser, Expression, ExpressionParser } from './expressions'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
+export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
 export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 
@@ -15,7 +16,7 @@ export const reservedList: string[] = [
   'enquanto', 'faca',
   'a', 'de', 'ate', 'com',
   'igual', 'diferente', 'para', 'cada', 'passo',
-  'fim'
+  'funcao', 'fim'
 ]
 
 /**
@@ -27,6 +28,11 @@ export const Identifier: IdentifierParser = P
   .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
   .assert((s: string): boolean => !reservedList.includes(s), `Erro de sintaxe: Identificador reservado`)
   .node('identifier')
+
+export const Subscriptable: SubscriptableParser = P
+  .alt(
+    Identifier
+  ).node('subscriptable')
 
 const Locline: ObjectParser = P
   .alt(
@@ -41,7 +47,7 @@ const Locline: ObjectParser = P
 /**
  * Loc parser - list acess or identifier
  *
- * loc -> loc[ add ] | identifier
+ * loc -> loc[ expr ] | identifier
 */
 export const Loc: LocParser = P
   .seqObj(
