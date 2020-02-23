@@ -25,7 +25,8 @@ test('parse assignment operation', (): void => {
     'funcao_dois = "teste"',
     `somar = funcao(x, y)
        retornar x + y
-     fim`
+     fim`,
+    'somar = (x, y) := x + y'
   ])
 
   cantParseAssignment([

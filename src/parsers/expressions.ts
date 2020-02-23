@@ -228,6 +228,7 @@ export const InlineFunction: InlineFunctionParser = P
 export const Expression: ExpressionParser = P
   .alt(
     Bool,
-    BlockFunction
+    BlockFunction,
+    InlineFunction
   )
   .node('expression')
