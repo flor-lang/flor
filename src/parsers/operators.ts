@@ -61,3 +61,5 @@ export const Else = P.string('senao').wspc()
 
 export const While = P.string('enquanto').wspc()
 export const ForEach = P.seq(ForExpr, EachExpr)
+
+export const Function = P.string('funcao').wspc()
