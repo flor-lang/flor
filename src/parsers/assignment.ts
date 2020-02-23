@@ -16,7 +16,7 @@ export const reservedList: string[] = [
   'enquanto', 'faca',
   'a', 'de', 'ate', 'com',
   'igual', 'diferente', 'para', 'cada', 'passo',
-  'funcao', 'fim'
+  'funcao', 'retornar', 'fim'
 ]
 
 /**

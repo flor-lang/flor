@@ -63,3 +63,4 @@ export const While = P.string('enquanto').wspc()
 export const ForEach = P.seq(ForExpr, EachExpr)
 
 export const Function = P.string('funcao')
+export const Return = P.string('retornar').wspc()

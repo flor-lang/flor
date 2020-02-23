@@ -24,7 +24,7 @@ test('parse assignment operation', (): void => {
     'foo = !((bar * 5) >= arr[index])',
     'funcao_dois = "teste"',
     `somar = funcao(x, y)
-       retorno = x + y
+       retornar x + y
      fim`
   ])
 

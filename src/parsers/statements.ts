@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser } from './assignment'
 import { Block, BlockParser } from './program'
@@ -10,6 +10,7 @@ export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
 export type DoWhileStatementParser = P.Parser<P.Node<'do-while', {}>>
 export type ForEachStatementParser = P.Parser<P.Node<'for-each', {}>>
 export type ForToStatementParser = P.Parser<P.Node<'for-to', {}>>
+export type ReturnStatementParser = P.Parser<P.Node<'return', {}>>
 export type StatementParser = P.Parser<P.Node<'statement', {}>>
 
 /**
@@ -109,6 +110,16 @@ export const ForToStatement: ForToStatementParser = P
   )
   .node('for-to')
 
+export const ReturnStatement: ReturnStatementParser = P
+  .seqObj(
+    Return,
+    P.alt(
+      P.lazy((): ExpressionParser => Expression),
+      P.optWhitespace
+    ).named('expression')
+  )
+  .node('return')
+
 /**
  * Parse Statements
  *
@@ -121,6 +132,7 @@ export const Statement: StatementParser = P
     WhileStatement,
     DoWhileStatement,
     ForEachStatement,
-    ForToStatement
+    ForToStatement,
+    ReturnStatement
   )
   .node('statement')
