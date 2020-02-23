@@ -25,10 +25,6 @@ declare module 'parsimmon' {
      */
     wspc (): P.Parser<unknown>;
 
-    /**
-     * Return parser with lazy behavior
-     */
-    lzy<T> (): P.Parser<T>;
   }
 }
 
@@ -42,8 +38,4 @@ P.Parser.prototype.wspc = function<T> (): P.Parser<[string, T, string]> {
     this,
     P.regexp(/(\s|$)+/)
   )
-}
-
-P.Parser.prototype.lzy = function<T> (): P.Parser<T> {
-  return P.lazy((): P.Parser<T> => this)
 }
