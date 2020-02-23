@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Rel, Equality, Join, Bool, BlockFunction } from '../src/parsers/expressions'
+import { Factor, Unary, Term, Add, Rel, Equality, Join, Bool, BlockFunction, InlineFunction } from '../src/parsers/expressions'
 import { canParse, cantParse } from './utils'
 
 
@@ -66,7 +66,7 @@ test('can parse bool operation', (): void => {
   cantParseBool(['1ou'/*, 'ou1'*/, '', 'ou 1'])
 })
 
-test('can parse block function loc', (): void => {
+test('can parse block function', (): void => {
   const canParseBlockFunction = canParse(BlockFunction)
   const cantParseBlockFunction = cantParse(BlockFunction)
 
@@ -90,6 +90,28 @@ test('can parse block function loc', (): void => {
     '(x) := x*x',
     'funcao ("") x = [] fim',
     'funcao (0) fim'
+  ])
+})
+
+test('can parse inline function', (): void => {
+  const canParseInlineFunction = canParse(InlineFunction)
+  const cantParseInlineFunction = cantParse(InlineFunction)
+
+  canParseInlineFunction([
+    '(numero) := numero * 0',
+    '() := Pessoa',
+    '(x, y) :=  x + y',
+    '(x) := x >= 0',
+    '(x) := x % 2 == 0',
+    '():=1+1',
+    `(x) :=
+      x*x`
+  ])
+
+  cantParseInlineFunction([
+    '(numero) := numero = 0',
+    '(numero) := retornar 0',
+    '(x) : = x*2'
   ])
 })
 
