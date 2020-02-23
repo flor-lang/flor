@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser } from './assignment'
 import { Block, BlockParser } from './program'
@@ -11,6 +11,7 @@ export type DoWhileStatementParser = P.Parser<P.Node<'do-while', {}>>
 export type ForEachStatementParser = P.Parser<P.Node<'for-each', {}>>
 export type ForToStatementParser = P.Parser<P.Node<'for-to', {}>>
 export type ReturnStatementParser = P.Parser<P.Node<'return', {}>>
+export type FunctionCallParser = P.Parser<P.Node<'function-call', {}>>
 export type StatementParser = P.Parser<P.Node<'statement', {}>>
 
 /**
@@ -120,14 +121,34 @@ export const ReturnStatement: ReturnStatementParser = P
   )
   .node('return')
 
+const LabeledArgs: ObjectParser = P
+  .seqObj(
+    P.lazy((): IdentifierParser => Identifier).named('label'),
+    P.optWhitespace, Colon, P.optWhitespace,
+    P.lazy((): ExpressionParser => Expression).named('value')
+  )
+  .sepWrp(',', '(', ')')
+/**
+ * Parse function call
+ *
+ * function-call -> identifier (identifier: expr, ...)
+*/
+export const FunctionCall: FunctionCallParser = P
+  .seqObj(
+    P.lazy((): IdentifierParser => Identifier).named('identifier'), P.optWhitespace,
+    LabeledArgs.named('labeled-args')
+  )
+  .node('function-call')
+
 /**
  * Parse Statements
  *
- * statement -> assigment | if-then-else | while | do-while | for-each | for-to
+ * statement -> assigment | function-call | if-then-else | while | do-while | for-each | for-to
  */
 export const Statement: StatementParser = P
   .alt(
     P.lazy((): AssignmentParser => Assignment),
+    FunctionCall,
     IfThenElseStatement,
     WhileStatement,
     DoWhileStatement,

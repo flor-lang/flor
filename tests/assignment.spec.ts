@@ -1,21 +1,5 @@
-import { Assignment, Loc, Identifier, FunctionCall } from '../src/parsers/assignment'
+import { Assignment, Loc, Identifier } from '../src/parsers/assignment'
 import { canParse, cantParse } from './utils'
-
-test('parse function call', (): void => {
-  const canParseFunctionCall = canParse(FunctionCall)
-  const cantParseFunctionCall = cantParse(FunctionCall)
-
-  canParseFunctionCall([
-    'ordenar ()',
-    'duplicar (x: 2)',
-    'somar(x: 0, y: 0)',
-    'subtrair(x:x,y:y)'
-  ])
-  cantParseFunctionCall([
-    'inserir(x)',
-    'inserir(0)'
-  ])
-})
 
 test('parse loc', (): void => {
   const canParseLoc = canParse(Loc)
