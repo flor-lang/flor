@@ -1,6 +1,7 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { ExpressionParser, Expression } from './expressions'
+import { ExpressionParser, Expression, ObjectParser } from './expressions'
+import { Colon } from './operators'
 
 export type StringLiteralParser = P.Parser<P.Node<'string', string>>
 export type NumberLiteralParser = P.Parser<P.Node<'number', number>>
@@ -35,6 +36,16 @@ export const ArrayLiteral: ArrayLiteralParser = P
   .sepWrp(',', '[', ']')
   .node('array')
 
+const Serializable: ObjectParser = P.alt(StringLiteral, NumberLiteral)
+export const DictionaryLiteral: DictionaryLiteralParser = P
+  .seqObj(
+    Serializable.named('key'),
+    P.optWhitespace, Colon, P.optWhitespace,
+    P.lazy((): ExpressionParser => Expression).named('value')
+  )
+  .sepWrp(',', '{', '}')
+  .node('dictionary')
+
 /**
  * Parser to literals
  *
@@ -46,6 +57,7 @@ export const Literal: LiteralParser = P
     NullLiteral,
     BooleanLiteral,
     NumberLiteral,
-    ArrayLiteral
+    ArrayLiteral,
+    DictionaryLiteral
   )
   .node('literal')
