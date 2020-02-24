@@ -1,5 +1,5 @@
 import { canParse, cantParse } from './utils'
-import { Literal, StringLiteral } from '../src/parsers/literals'
+import { Literal, StringLiteral, ArrayLiteral } from '../src/parsers/literals'
 
 test('parse string', (): void => {
   const canParseString = canParse(StringLiteral)
@@ -13,6 +13,27 @@ test('parse string', (): void => {
   const cantParseString = cantParse(StringLiteral)
   cantParseString([
     'erro pq falta aspas',
+  ])
+})
+
+test('parse array', (): void => {
+  const canParseArray = canParse(ArrayLiteral)
+  const cantParseArray = cantParse(ArrayLiteral)
+
+  canParseArray([
+    '[]',
+    '[0]',
+    '[0,1,2,3,4,5]',
+    '["hello", "numero", 0]',
+    '[5 + 2, valor, aleatorio()]'
+  ])
+
+  cantParseArray([
+    '0, 2, 4',
+    '(0,1,2,3,4,5)',
+    '{0, 1}',
+    '{"chave": "valor"}',
+    '["chave": "valor"]'
   ])
 })
 

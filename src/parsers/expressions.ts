@@ -1,7 +1,7 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
-import { Literal } from './literals'
+import { Literal, LiteralParser } from './literals'
 import { Loc, LocParser, Identifier, IdentifierParser } from './assignment'
 import {
   AddOperator,
@@ -46,7 +46,7 @@ export const Factor: FactorParser = P
       P.optWhitespace, RightParenthesis
     ),
     P.lazy((): LocParser => Loc),
-    Literal
+    P.lazy((): LiteralParser => Literal)
   )
   .node('factor')
 
