@@ -43,6 +43,7 @@ export const Literal: LiteralParser = P
     StringLiteral,
     NullLiteral,
     BooleanLiteral,
-    NumberLiteral
+    NumberLiteral,
+    ArrayLiteral
   )
   .node('literal')

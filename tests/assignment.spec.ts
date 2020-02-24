@@ -29,7 +29,10 @@ test('parse assignment operation', (): void => {
      fim`,
     'somar = (x) := x + y',
     'resultado = somar (x: 0, y: 1)',
-    'indice_2 = ordenar (lista: numeros)[2]'
+    'indice_2 = ordenar (lista: numeros)[2]',
+    'entrada = [102, 104, 140, 95, 99]',
+    'mensagens = ["oi", "iai", "tudo bem", "tudo show"]',
+    'futuro = []'
   ])
 
   cantParseAssignment([

@@ -71,11 +71,12 @@ test('test program', (): void => {
       escrever(texto: duplicar(valor: numero))
     fim
     `,
-    // amostras = [3,4,2,10,3]
-    // aux = [0,0,0,0,0,0,0]
-    // saida = [0,0,0,0,0]
     `
+    amostras = [3,4,2,10,3]
+    aux = [0,0,0,0,0,0,0]
+
     filtro_mediano = funcao (amostras, numero_de_amostras)
+        saida = [0,0,0,0,0]
         aux[0] = amostras[0]
         aux[numero_de_amostras + 1] = amostras[numero_de_amostras - 1]
         para i de 1 ate numero_de_amostras faca
@@ -85,9 +86,11 @@ test('test program', (): void => {
             amostras_ordenadas = ordenar(e1: aux[i], e2: aux[i+1], e3: aux[i+2])
             saida[i] = amostras_ordenadas[1]
         fim
+        retornar saida
     fim
 
-    filtro_mediano(amostras: amostras, numero_de_amostras: 5)
+    saida = filtro_mediano(amostras: amostras, numero_de_amostras: 5)
+    escreva(lista: saida)
     `
   ])
 
