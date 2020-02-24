@@ -6,7 +6,8 @@ export type StringLiteralParser = P.Parser<P.Node<'string', string>>
 export type NumberLiteralParser = P.Parser<P.Node<'number', number>>
 export type BooleanLiteralParser = P.Parser<P.Node<'boolean', boolean>>
 export type NullLiteralParser = P.Parser<P.Node<'null', string>>
-export type ArrayLiteralParser = P.Parser<P.Node<'array', []>>
+export type ArrayLiteralParser = P.Parser<P.Node<'array', {}>>
+export type DictionaryLiteralParser = P.Parser<P.Node<'dictionary', {}>>
 export type LiteralParser = P.Parser<P.Node<'literal', string|number|boolean>>
 
 export const StringLiteral: StringLiteralParser = P
@@ -32,11 +33,12 @@ export const NullLiteral: NullLiteralParser = P
 export const ArrayLiteral: ArrayLiteralParser = P
   .lazy((): ExpressionParser => Expression)
   .sepWrp(',', '[', ']')
+  .node('array')
 
 /**
  * Parser to literals
  *
- * literal -> string | number | boolean | null
+ * literal -> string | number | boolean | null | array
 */
 export const Literal: LiteralParser = P
   .alt(
