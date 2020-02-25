@@ -1,5 +1,5 @@
 import { canParse, cantParse } from './utils'
-import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement, ReturnStatement, FunctionCall, InterfaceDeclaration } from '../src/parsers/statements'
+import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement, ReturnStatement, FunctionCall } from '../src/parsers/statements'
 
 test('if then else statement', (): void => {
   const canParseIfThenElseStatement = canParse(IfThenElseStatement)
@@ -208,46 +208,6 @@ test('parse function call', (): void => {
   cantParseFunctionCall([
     'inserir(x)',
     'inserir(0)'
-  ])
-})
-
-test('parse interface declaration', (): void => {
-  const canParseInterfaceDeclaration = canParse(InterfaceDeclaration)
-  const cantParseInterfaceDeclaration = cantParse(InterfaceDeclaration)
-
-  canParseInterfaceDeclaration([
-    'definir interface Teste foo bar fim',
-    `
-    definir interface Nomeavel
-      nome idade endereco
-    fim
-    `,
-    `
-    definir interface Nomeavel
-      nome
-    fim
-    `,
-    `
-    definir interface Pessoa
-      nome
-      idade
-      endereco
-    fim
-    `
-  ])
-  cantParseInterfaceDeclaration([
-    'definir interface fim',
-    'definir interface Vazio fim',
-    'interface NaoDefinida var fim',
-    'definir interface Foo bar',
-    'definir Foo bar fim',
-    // can be changed in future
-    `
-    definir interface ComMetodo
-      nome
-      executando()
-    fim
-    `
   ])
 })
 

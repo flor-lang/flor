@@ -71,3 +71,5 @@ export const ColonEqual = P.seq(Colon, Equal)
 
 export const Define = P.string('definir').wspc()
 export const Interface = P.string('interface').wspc()
+export const Class = P.string('classe').wspc()
+export const Inherit = P.string('herda')
