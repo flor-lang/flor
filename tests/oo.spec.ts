@@ -48,7 +48,7 @@ test('parse class declaration', (): void => {
   canParseClassDeclaration([
     `
     definir classe PessoaFisica
-      herda: Pessoa
+      heranca: Pessoa
     fim
     `
   ])
@@ -56,8 +56,8 @@ test('parse class declaration', (): void => {
   cantParseClassDeclaration([
     `
     definir classe PessoaFisica
-      herda: Pessoa
-      herda: Outro
+      heranca: Pessoa
+      heranca: Outro
     fim
     `
   ])
