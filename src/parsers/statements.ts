@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon, Define, Interface } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser } from './assignment'
 import { Block, BlockParser } from './program'
@@ -12,6 +12,7 @@ export type ForEachStatementParser = P.Parser<P.Node<'for-each', {}>>
 export type ForToStatementParser = P.Parser<P.Node<'for-to', {}>>
 export type ReturnStatementParser = P.Parser<P.Node<'return', {}>>
 export type FunctionCallParser = P.Parser<P.Node<'function-call', {}>>
+export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
 export type StatementParser = P.Parser<P.Node<'statement', {}>>
 
 /**
@@ -144,6 +145,28 @@ export const FunctionCall: FunctionCallParser = P
     LabeledArgs.named('labeled-args')
   )
   .node('function-call')
+
+/**
+ * Parse interface declaration
+ *
+ * interface-declaration -> definir interface identifier identifiers fim
+*/
+export const InterfaceDeclaration: InterfaceDeclarationParser = P
+  .seqObj(
+    Define, Interface,
+    P.lazy((): IdentifierParser => Identifier)
+      .sepBy(P.whitespace)
+      .named('properties'),
+    End
+  )
+  .assert((result: { properties: never[] }): boolean => result.properties.length > 1, 'Definir interface exige um identificador e no mínimo uma variável')
+  .map((ast: { properties: never[] }): { identifier: {}; properties: never[] } => {
+    return {
+      identifier: ast.properties[0],
+      properties: ast.properties.splice(1)
+    }
+  })
+  .node('interface-declaration')
 
 /**
  * Parse Statements

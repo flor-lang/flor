@@ -68,3 +68,6 @@ export const ForEach = P.seq(ForExpr, EachExpr)
 export const Function = P.string('funcao')
 export const Return = P.string('retornar').wspc()
 export const ColonEqual = P.seq(Colon, Equal)
+
+export const Define = P.string('definir').wspc()
+export const Interface = P.string('interface').wspc()
