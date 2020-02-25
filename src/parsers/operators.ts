@@ -7,6 +7,7 @@ export const LeftBracket = P.string('[')
 export const RightBracket = P.string(']')
 
 export const Colon = P.string(':')
+export const Dot = P.string('.')
 
 export const TheExpr = P.string('a').wspc()
 export const EqualExpr = P.string('igual').wspc()

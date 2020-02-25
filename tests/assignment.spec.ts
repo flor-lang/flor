@@ -5,7 +5,11 @@ test('parse loc', (): void => {
   const canParseLoc = canParse(Loc)
   const cantParseLoc = cantParse(Loc)
 
-  canParseLoc(['array[0]', 'arr[1][0]', 'arr[0 / 0]', 'arr[1 + 1]', 'arr["troll"]', 'arr[falso]'])
+  canParseLoc([
+    'array[0]', 'arr[1][0]', 'arr[0 / 0]', 'arr[1 + 1]', 'arr["troll"]', 'arr[falso]',
+    'pessoa.nome', 'pessoa.endereco.logradouro', 'peixe.nadar()', 'pessoa.endereco.mudar()', 'pets.gato.limpar()',
+    'cardume[1].nadar()', 'contato.lista_de_numeros[0]'
+  ])
   cantParseLoc(['array[]', '[]', '[][]', '[0]id'])
 })
 
@@ -19,6 +23,7 @@ test('parse assignment operation', (): void => {
     'b=verdadeiro',
     '_c = "string"',
     'op=nulo',
+    'foo.bar = "teste"',
     'arr[0] =falso',
     'x[0][0]= 0',
     'identifier = identifier',
@@ -32,7 +37,9 @@ test('parse assignment operation', (): void => {
     'indice_2 = ordenar (lista: numeros)[2]',
     'entrada = [102, 104, 140, 95, 99]',
     'mensagens = ["oi", "iai", "tudo bem", "tudo show"]',
-    'futuro = []'
+    'futuro = []',
+    'contato[1].lista_de_numeros[0] = "(77)77777-7777"',
+    'auxiliar = contatos.filtrar(numero: "(77)77777-7777")[0]'
   ])
 
   cantParseAssignment([

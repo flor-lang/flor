@@ -111,6 +111,11 @@ export const ForToStatement: ForToStatementParser = P
   )
   .node('for-to')
 
+/**
+ * Parser function returns
+ *
+ * return -> retornar expr
+ */
 export const ReturnStatement: ReturnStatementParser = P
   .seqObj(
     Return,
@@ -143,7 +148,7 @@ export const FunctionCall: FunctionCallParser = P
 /**
  * Parse Statements
  *
- * statement -> assigment | function-call | if-then-else | while | do-while | for-each | for-to
+ * statement -> assigment | function-call | if-then-else | while | do-while | for-each | for-to | return
  */
 export const Statement: StatementParser = P
   .alt(
