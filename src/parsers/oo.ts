@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { Define, Interface, End, Class, Inherit, Colon } from './operators'
+import { Define, Interface, End, Class, Inherit, Colon, Implements } from './operators'
 import { Identifier, IdentifierParser } from './assignment'
 import { ObjectParser } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
@@ -31,17 +31,28 @@ export const InterfaceDeclaration: InterfaceDeclarationParser = P
   }))
   .node('interface-declaration')
 
-export const MetaInheritance: ObjectParser = P
+const MetaInheritance: ObjectParser = P
   .seqObj(
     Inherit, P.optWhitespace,
     Colon, P.optWhitespace,
-    P.lazy((): IdentifierParser => Identifier).named('inherit-identifier')
+    P.lazy((): IdentifierParser => Identifier).named('parent')
   )
-  .node('meta-inheritance')
+  .node('inheritance')
+
+const MetaImplementations: ObjectParser = P
+  .seqObj(
+    Implements, P.optWhitespace,
+    Colon, P.optWhitespace,
+    P.lazy((): IdentifierParser => Identifier)
+      .sepBy(P.string(',').optWspc())
+      .named('interfaces')
+  )
+  .node('implementations')
 
 export const Meta: ObjectParser = P
   .alt(
-    MetaInheritance
+    MetaInheritance,
+    MetaImplementations
   )
 
 /**
@@ -66,4 +77,14 @@ export const ClassDeclaration: ClassDeclarationParser = P
     const metaNames = result.metas.map((m): string => m.name)
     return findDuplicates(metaNames).length === 0
   }, 'Configuração da classe duplicada')
+  .map((ast: { identifier: {}; metas: { name: string }[] }): {} => {
+    const cAst = {
+      identifier: ast.identifier,
+      meta: {
+        inheritance: ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || '',
+        implementations: ast.metas.filter((m): boolean => m.name === 'implementations')[0] || ''
+      }
+    }
+    return cAst
+  })
   .node('class-declaration')
