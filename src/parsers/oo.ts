@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor } from './operators'
+import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties } from './operators'
 import { Identifier, IdentifierParser } from './assignment'
 import { ObjectParser, BlockFunctionParser, BlockFunction } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
@@ -44,7 +44,7 @@ const MetaImplementations: ObjectParser = P
     Implements, P.optWhitespace,
     Colon, P.optWhitespace,
     P.lazy((): IdentifierParser => Identifier)
-      .sepBy(P.string(',').optWspc())
+      .sepBy(P.whitespace)
       .named('interfaces')
   )
   .node('implementations')
@@ -56,6 +56,16 @@ const MetaConstructor: ObjectParser = P
     P.lazy((): BlockFunctionParser => BlockFunction).named('function')
   )
   .node('constructor')
+
+// const MetaProperties: ObjectParser = P
+//   .seqObj(
+//     Properties, P.optWhitespace,
+//     Colon, P.optWhitespace,
+//     P.seqMap(
+
+//     ).sepBy(P.optWhitespace)
+//   )
+//   .node('properties')
 
 export const Meta: ObjectParser = P
   .alt(
