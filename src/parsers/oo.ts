@@ -1,8 +1,8 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, AccessModifier } from './operators'
-import { Identifier, IdentifierParser } from './assignment'
-import { ObjectParser, BlockFunctionParser, BlockFunction } from './expressions'
+import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, AccessModifier, Methods, Equal } from './operators'
+import { Identifier, IdentifierParser, AssignmentParser, Assignment } from './assignment'
+import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
 
 export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
@@ -57,26 +57,45 @@ const MetaConstructor: ObjectParser = P
   )
   .node('constructor')
 
+const PropertyDeclaration: ObjectParser = P
+  .seqObj(
+    P.alt(AccessModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    P.lazy((): IdentifierParser => Identifier).named('identifier')
+  )
+
 const MetaProperties: ObjectParser = P
   .seqObj(
     Properties, P.optWhitespace,
     Colon, P.optWhitespace,
-    P.seqObj(
-      P.alt(
-        AccessModifier.wspc(),
-        P.optWhitespace
-      ).named('access-modifier'),
-      P.lazy((): IdentifierParser => Identifier).named('identifier')
-    ).sepBy(P.whitespace).named('declarations')
+    PropertyDeclaration.sepBy(P.whitespace).named('declarations')
   )
   .node('properties')
+
+const MethodDeclaration: ObjectParser = P
+  .seqObj(
+    P.alt(AccessModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    P.seqObj(
+      P.lazy((): IdentifierParser => Identifier).named('identifier'),
+      P.optWhitespace, Equal, P.optWhitespace,
+      P.alt(InlineFunction, BlockFunction).named('function')
+    ).named('assignment')
+  )
+
+const MetaMethods: ObjectParser = P
+  .seqObj(
+    Methods, P.optWhitespace,
+    Colon, P.optWhitespace,
+    MethodDeclaration.many().named('declarations')
+  )
+  .node('methods')
 
 export const Meta: ObjectParser = P
   .alt(
     MetaInheritance,
     MetaImplementations,
     MetaProperties,
-    MetaConstructor
+    MetaConstructor,
+    MetaMethods
   )
 
 /**
@@ -108,7 +127,8 @@ export const ClassDeclaration: ClassDeclarationParser = P
         inheritance: ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || '',
         implementations: ast.metas.filter((m): boolean => m.name === 'implementations')[0] || '',
         constructor: ast.metas.filter((m): boolean => m.name === 'constructor')[0] || '',
-        properties: ast.metas.filter((m): boolean => m.name === 'properties')[0] || ''
+        properties: ast.metas.filter((m): boolean => m.name === 'properties')[0] || '',
+        methods: ast.metas.filter((m): boolean => m.name === 'methods')[0] || ''
       }
     }
     return cAst

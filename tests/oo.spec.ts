@@ -42,7 +42,7 @@ test('parse interface declaration', (): void => {
 })
 
 test('parse class declaration', (): void => {
-  const canParseClassDeclaration = canParse(ClassDeclaration)
+  const canParseClassDeclaration = canParse(ClassDeclaration, true, 2)
   const cantParseClassDeclaration = cantParse(ClassDeclaration)
 
   canParseClassDeclaration([
@@ -63,7 +63,14 @@ test('parse class declaration', (): void => {
       construtor: funcao (modelo)
         _modelo = modelo
       fim
-    
+    fim
+    `,
+    `
+    definir classe Luz
+      metodos:
+        ligar = funcao () __ligado = verdadeiro fim
+        desligar = funcao () __ligado = falso fim
+        privada esta_ligado = () := __ligado igual a verdadeiro
     fim
     `
   ])

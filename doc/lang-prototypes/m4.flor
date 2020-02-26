@@ -11,6 +11,7 @@ definir classe Pessoa
     nome
     privado idade
     telefones
+    estado_civil <- "solteiro"
 
   construtor: funcao (nome, idade)
     _.nome <- nome
