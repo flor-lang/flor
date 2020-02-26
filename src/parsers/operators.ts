@@ -35,8 +35,10 @@ export const LessEqual = P.string('<=')
 
 export const EqualOperator = P.string('==')
 export const NotEqualOperator = P.string('!=')
-export const EqualExprOperator = P.seq(EqualExpr, TheExpr)
-export const NotEqualExprOperator = P.seq(DifferentExpr, OfExpr)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const EqualExprOperator = P.seqMap(EqualExpr, TheExpr, (_, __): string => '==')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const NotEqualExprOperator = P.seqMap(DifferentExpr, OfExpr, (_, __): string => '!=')
 
 export const AndOperator = P.string('e').wspc()
 export const OrOperator = P.string('ou').wspc()
@@ -76,6 +78,7 @@ export const Inherit = P.string('heranca')
 export const Implements = P.string('interfaces')
 export const Constructor = P.string('construtor')
 export const Properties = P.string('propriedades')
+export const Methods = P.string('metodos')
 export const Private = P.string('privada')
 export const Public = P.string('publica')
 export const AccessModifier = P.alt(Private, Public)
