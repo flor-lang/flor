@@ -62,7 +62,10 @@ const MetaProperties: ObjectParser = P
     Properties, P.optWhitespace,
     Colon, P.optWhitespace,
     P.seqObj(
-      AccessModifier.named('access-modifier'), P.whitespace,
+      P.alt(
+        AccessModifier.wspc(),
+        P.optWhitespace
+      ).named('access-modifier'),
       P.lazy((): IdentifierParser => Identifier).named('identifier')
     ).sepBy(P.whitespace).named('declarations')
   )
@@ -72,8 +75,8 @@ export const Meta: ObjectParser = P
   .alt(
     MetaInheritance,
     MetaImplementations,
-    MetaConstructor,
-    MetaProperties
+    MetaProperties,
+    MetaConstructor
   )
 
 /**
