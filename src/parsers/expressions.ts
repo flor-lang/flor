@@ -35,14 +35,14 @@ export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 /**
  * Parse Integers Numbers and Expressions between parenthesis
  *
- * factor -> (expr) | loc | literal
+ * factor -> (bool) | loc | literal
 */
 export const Factor: FactorParser = P
   .alt(
     P.seqObj(
       LeftParenthesis, P.optWhitespace,
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.lazy((): ExpressionParser => Expression).named('between-parenthesis'),
+      P.lazy((): BoolParser => Bool).named('between-parenthesis'),
       P.optWhitespace, RightParenthesis
     ),
     P.lazy((): LocParser => Loc),

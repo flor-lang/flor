@@ -42,7 +42,7 @@ test('parse interface declaration', (): void => {
 })
 
 test('parse class declaration', (): void => {
-  const canParseClassDeclaration = canParse(ClassDeclaration, true, 2)
+  const canParseClassDeclaration = canParse(ClassDeclaration)
   const cantParseClassDeclaration = cantParse(ClassDeclaration)
 
   canParseClassDeclaration([
