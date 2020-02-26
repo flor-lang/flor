@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, AccessModifier, Methods, Equal } from './operators'
+import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, ClassFieldModifier, Methods, Equal } from './operators'
 import { Identifier, IdentifierParser } from './assignment'
 import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
@@ -61,7 +61,7 @@ const MetaConstructor: ObjectParser = P
 
 const PropertyDeclaration: ObjectParser = P
   .seqObj(
-    P.alt(AccessModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    P.alt(ClassFieldModifier.wspc(), P.optWhitespace).named('access-modifier'),
     P.lazy((): IdentifierParser => Identifier).named('identifier'),
     P.alt(
       P.seqObj(
@@ -82,7 +82,7 @@ const MetaProperties: ObjectParser = P
 
 const MethodDeclaration: ObjectParser = P
   .seqObj(
-    P.alt(AccessModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    P.alt(ClassFieldModifier.wspc(), P.optWhitespace).named('access-modifier'),
     P.seqObj(
       P.lazy((): IdentifierParser => Identifier).named('identifier'),
       P.optWhitespace, Equal, P.optWhitespace,
