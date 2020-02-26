@@ -42,7 +42,7 @@ test('parse interface declaration', (): void => {
 })
 
 test('parse class declaration', (): void => {
-  const canParseClassDeclaration = canParse(ClassDeclaration, true, 0)
+  const canParseClassDeclaration = canParse(ClassDeclaration)
   const cantParseClassDeclaration = cantParse(ClassDeclaration)
 
   canParseClassDeclaration([
@@ -50,6 +50,13 @@ test('parse class declaration', (): void => {
     definir classe PessoaFisica
       heranca: Pessoa
       interfaces: Nomeavel, Localizavel
+    fim
+    `,
+    `
+    definir classe Carro
+      construtor: funcao (modelo)
+        _modelo = modelo
+      fim
     fim
     `
   ])

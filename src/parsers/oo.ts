@@ -1,8 +1,8 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { Define, Interface, End, Class, Inherit, Colon, Implements } from './operators'
+import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor } from './operators'
 import { Identifier, IdentifierParser } from './assignment'
-import { ObjectParser } from './expressions'
+import { ObjectParser, BlockFunctionParser, BlockFunction } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
 
 export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
@@ -49,10 +49,19 @@ const MetaImplementations: ObjectParser = P
   )
   .node('implementations')
 
+const MetaConstructor: ObjectParser = P
+  .seqObj(
+    Constructor, P.optWhitespace,
+    Colon, P.optWhitespace,
+    P.lazy((): BlockFunctionParser => BlockFunction).named('function')
+  )
+  .node('constructor')
+
 export const Meta: ObjectParser = P
   .alt(
     MetaInheritance,
-    MetaImplementations
+    MetaImplementations,
+    MetaConstructor
   )
 
 /**
@@ -82,7 +91,8 @@ export const ClassDeclaration: ClassDeclarationParser = P
       identifier: ast.identifier,
       meta: {
         inheritance: ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || '',
-        implementations: ast.metas.filter((m): boolean => m.name === 'implementations')[0] || ''
+        implementations: ast.metas.filter((m): boolean => m.name === 'implementations')[0] || '',
+        constructor: ast.metas.filter((m): boolean => m.name === 'constructor')[0] || ''
       }
     }
     return cAst
