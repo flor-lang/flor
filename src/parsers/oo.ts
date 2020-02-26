@@ -1,8 +1,8 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, AccessModifier, Methods, Equal } from './operators'
-import { Identifier, IdentifierParser, AssignmentParser, Assignment } from './assignment'
-import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction } from './expressions'
+import { Identifier, IdentifierParser } from './assignment'
+import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
 
 export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
@@ -35,7 +35,8 @@ const MetaInheritance: ObjectParser = P
   .seqObj(
     Inherit, P.optWhitespace,
     Colon, P.optWhitespace,
-    P.lazy((): IdentifierParser => Identifier).named('parent')
+    P.lazy((): IdentifierParser => Identifier).named('parent'),
+    P.whitespace
   )
   .node('inheritance')
 
@@ -45,7 +46,8 @@ const MetaImplementations: ObjectParser = P
     Colon, P.optWhitespace,
     P.lazy((): IdentifierParser => Identifier)
       .sepBy(P.whitespace)
-      .named('interfaces')
+      .named('interfaces'),
+    P.whitespace
   )
   .node('implementations')
 
@@ -60,14 +62,21 @@ const MetaConstructor: ObjectParser = P
 const PropertyDeclaration: ObjectParser = P
   .seqObj(
     P.alt(AccessModifier.wspc(), P.optWhitespace).named('access-modifier'),
-    P.lazy((): IdentifierParser => Identifier).named('identifier')
+    P.lazy((): IdentifierParser => Identifier).named('identifier'),
+    P.alt(
+      P.seqObj(
+        P.optWhitespace, Equal, P.optWhitespace,
+        P.lazy((): BoolParser => Bool).named('bool')
+      ),
+      P.optWhitespace
+    ).named('assignment')
   )
 
 const MetaProperties: ObjectParser = P
   .seqObj(
     Properties, P.optWhitespace,
     Colon, P.optWhitespace,
-    PropertyDeclaration.sepBy(P.whitespace).named('declarations')
+    PropertyDeclaration.many().named('declarations')
   )
   .node('properties')
 
@@ -113,7 +122,7 @@ export const ClassDeclaration: ClassDeclarationParser = P
   .seqObj(
     Define, Class,
     P.lazy((): IdentifierParser => Identifier).named('identifier'), P.whitespace,
-    Meta.sepBy(P.whitespace).named('metas'),
+    Meta.many().named('metas'),
     End
   )
   .assert((result: { identifier: {}; metas: { name: string }[] }): boolean => {

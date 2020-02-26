@@ -42,7 +42,7 @@ test('parse interface declaration', (): void => {
 })
 
 test('parse class declaration', (): void => {
-  const canParseClassDeclaration = canParse(ClassDeclaration)
+  const canParseClassDeclaration = canParse(ClassDeclaration, true, 1)
   const cantParseClassDeclaration = cantParse(ClassDeclaration)
 
   canParseClassDeclaration([
@@ -55,13 +55,13 @@ test('parse class declaration', (): void => {
     `
     definir classe Carro
       propriedades:
-        privada _modelo
+        privado modelo
         marca
         construtora
-        ano
+        ano = 2020
     
       construtor: funcao (modelo)
-        _modelo = modelo
+        __modelo = modelo
       fim
     fim
     `,
@@ -70,7 +70,7 @@ test('parse class declaration', (): void => {
       metodos:
         ligar = funcao () __ligado = verdadeiro fim
         desligar = funcao () __ligado = falso fim
-        privada esta_ligado = () := __ligado igual a verdadeiro
+        privado esta_ligado = () := __ligado igual a verdadeiro
     fim
     `
   ])
