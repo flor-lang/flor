@@ -25,14 +25,13 @@ test('test block', (): void => {
 
   cantParseBlock([
     'x=0 x>5',
-    'a',
-    ''
+    'a'
   ])
 })
 
 
 test('test program', (): void => {
-  const canParseProgram = canParse(Program)
+  const canParseProgram = canParse(Program, true, 0)
   const cantParseProgram = cantParse(Program)
 
   canParseProgram([
@@ -91,16 +90,16 @@ test('test program', (): void => {
 
     saida = filtro_mediano(amostras: amostras, numero_de_amostras: 5)
     escreva(lista: saida)
-    `
-  ])
-
-  cantParseProgram([
-    'x=0 x>5 fim',
-    '// comment are pre-processed',
+    `,
     `
     i = 0
     se i == 0 entao
     fim
     `
+  ])
+
+  cantParseProgram([
+    'x=0 x>5 fim',
+    '// comment are pre-processed'
   ])
 })

@@ -95,10 +95,8 @@ export const Loc: LocParser = P
 */
 export const Assignment: AssignmentParser = P
   .seqObj(
-    Loc.named('loc'),
-    P.optWhitespace,
-    Equal,
-    P.optWhitespace,
+    Loc.optWspc().named('loc'),
+    Equal, P.optWhitespace,
     P.lazy((): ExpressionParser => Expression).named('expression')
   )
   .node('assignment')
