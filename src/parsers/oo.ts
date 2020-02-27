@@ -1,12 +1,14 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, ClassFieldModifier, Methods, Equal } from './operators'
+import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, ClassFieldModifier, Methods, Equal, New } from './operators'
 import { Identifier, IdentifierParser } from './assignment'
 import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
+import { FunctionCallParser, FunctionCall } from './statements'
 
 export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
 export type ClassDeclarationParser = P.Parser<P.Node<'class-declaration', {}>>
+export type ClassInstantiationParser = P.Parser<P.Node<'class-instantiation', {}>>
 
 /**
  * Parse interface declaration
@@ -143,3 +145,14 @@ export const ClassDeclaration: ClassDeclarationParser = P
     return cAst
   })
   .node('class-declaration')
+
+/**
+ * Parser class instantiation expression
+ *
+ * class-instantiation -> novo function-call | nova function-call
+ */
+export const ClassInstantiation: ClassInstantiationParser = P
+  .seqObj(
+    New, P.lazy((): FunctionCallParser => FunctionCall).named('constructor')
+  )
+  .node('class-instantiation')

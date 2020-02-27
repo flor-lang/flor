@@ -1,5 +1,5 @@
 import { canParse, cantParse } from './utils'
-import { InterfaceDeclaration, ClassDeclaration } from '../src/parsers/oo'
+import { InterfaceDeclaration, ClassDeclaration, ClassInstantiation } from '../src/parsers/oo'
 
 test('parse interface declaration', (): void => {
   const canParseInterfaceDeclaration = canParse(InterfaceDeclaration)
@@ -82,5 +82,22 @@ test('parse class declaration', (): void => {
       heranca: Outro
     fim
     `
+  ])
+})
+
+
+test('parse interface declaration', (): void => {
+  const canParseClassInstantiation = canParse(ClassInstantiation)
+  const cantParseClassInstantiation = cantParse(ClassInstantiation)
+
+  canParseClassInstantiation([
+    'novo Humano()',
+    'nova Pessoa()',
+    'novo Jogador(nome: "Baxola", camisa: 10)'
+  ])
+
+  cantParseClassInstantiation([
+    'novoHumano()',
+    'nova Pessoa'  
   ])
 })
