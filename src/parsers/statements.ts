@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
-import { Assignment, Identifier, IdentifierParser, AssignmentParser } from './assignment'
+import { Assignment, Identifier, IdentifierParser, AssignmentParser, LocParser, Loc } from './assignment'
 import { Block, BlockParser } from './program'
 import { InterfaceDeclarationParser, InterfaceDeclaration, ClassDeclarationParser, ClassDeclaration } from './oo'
 
@@ -149,7 +149,9 @@ export const FunctionCall: FunctionCallParser = P
 /**
  * Parse Statements
  *
- * statement -> assigment | function-call | if-then-else | while | do-while | for-each | for-to | return
+ * statement -> assigment
+ *             | interface-declaration | class-declaration | function-call
+ *             | if-then-else | while | do-while | for-each | for-to | return
  */
 export const Statement: StatementParser = P
   .alt(
@@ -162,6 +164,7 @@ export const Statement: StatementParser = P
     DoWhileStatement,
     ForEachStatement,
     ForToStatement,
-    ReturnStatement
+    ReturnStatement,
+    P.lazy((): LocParser => Loc)
   )
   .node('statement')

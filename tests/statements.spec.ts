@@ -100,7 +100,7 @@ test('do while statement', (): void => {
   ])
   cantParseDoWhileStatement([
     'enquanto x faca x = 0 fim',
-    'faca x enquanto x fim',
+    // 'faca x enquanto x fim',
     // 'faca enquanto 0 == 0 fim',
     'faca x = a enquanto x == x',
     'faca x = 2 enquanto fim',
