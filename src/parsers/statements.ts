@@ -4,6 +4,7 @@ import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithE
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser } from './assignment'
 import { Block, BlockParser } from './program'
+import { InterfaceDeclarationParser, InterfaceDeclaration, ClassDeclarationParser, ClassDeclaration } from './oo'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
 export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
@@ -153,6 +154,8 @@ export const FunctionCall: FunctionCallParser = P
 export const Statement: StatementParser = P
   .alt(
     P.lazy((): AssignmentParser => Assignment),
+    P.lazy((): InterfaceDeclarationParser => InterfaceDeclaration),
+    P.lazy((): ClassDeclarationParser => ClassDeclaration),
     FunctionCall,
     IfThenElseStatement,
     WhileStatement,

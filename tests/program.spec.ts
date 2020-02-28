@@ -31,7 +31,7 @@ test('test block', (): void => {
 
 
 test('test program', (): void => {
-  const canParseProgram = canParse(Program, true, 0)
+  const canParseProgram = canParse(Program)
   const cantParseProgram = cantParse(Program)
 
   canParseProgram([

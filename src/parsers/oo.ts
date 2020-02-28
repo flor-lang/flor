@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 import { Define, Interface, End, Class, Inherit, Colon, Implements, Constructor, Properties, ClassFieldModifier, Methods, Equal, New } from './operators'
 import { Identifier, IdentifierParser } from './assignment'
-import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool } from './expressions'
+import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool, InlineFunctionParser } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
 import { FunctionCallParser, FunctionCall } from './statements'
 
@@ -88,7 +88,10 @@ const MethodDeclaration: ObjectParser = P
     P.seqObj(
       P.lazy((): IdentifierParser => Identifier).named('identifier'),
       P.optWhitespace, Equal, P.optWhitespace,
-      P.alt(InlineFunction, BlockFunction).named('function')
+      P.alt(
+        P.lazy((): InlineFunctionParser => InlineFunction),
+        P.lazy((): BlockFunctionParser => BlockFunction)
+      ).named('function')
     ).named('assignment')
   )
 
@@ -100,7 +103,7 @@ const MetaMethods: ObjectParser = P
   )
   .node('methods')
 
-export const Meta: ObjectParser = P
+const Meta: ObjectParser = P
   .alt(
     MetaInheritance,
     MetaImplementations,
