@@ -18,6 +18,7 @@ import {
   ColonEqual
 } from './operators'
 import { BlockParser, Block } from './program'
+import { ClassInstantiationParser, ClassInstantiation } from './oo'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -223,10 +224,11 @@ export const InlineFunction: InlineFunctionParser = P
 /**
  * Parse expressions
  *
- * expr -> bool | block-function | inline-function
+ * expr -> class-instantiation | inline-function | block-function | bool
 */
 export const Expression: ExpressionParser = P
   .alt(
+    P.lazy((): ClassInstantiationParser => ClassInstantiation),
     InlineFunction,
     BlockFunction,
     Bool
