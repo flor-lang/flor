@@ -21,7 +21,8 @@ export const reservedList: string[] = [
   'igual', 'diferente', 'para', 'cada', 'passo',
   'funcao', 'retornar', 'fim',
   'definir', 'interface', 'classe', 'novo', 'nova',
-  'construtor', 'privado', 'publico', 'estatico'
+  'construtor', 'propriedades', 'metodos',
+  'privado', 'publico', 'estatico'
 ]
 
 /**

@@ -95,6 +95,41 @@ test('test program', (): void => {
     i = 0
     se i == 0 entao
     fim
+    `,
+    `
+    definir interface Disputa
+      time_a time_b
+    fim
+    
+    definir classe Jogo
+      interfaces: Disputa
+
+      propriedades:
+        time_a
+        time_b
+        privado numero_gols_a = 0
+        privado numero_gols_b = 0
+      
+      construtor: funcao(time_a, time_b)
+        __time_a = time_a
+        __time_b = time_b
+      fim
+
+      metodos:
+        marcar_gol = funcao(time)
+          se time igual a __time_a entao
+            __numero_gols_a = __numero_gols_a + 1
+          senao
+            __numero_gols_b = __numero_gols_b + 1
+          fim
+        fim
+
+        texto = () := __time_a + ": " + __numero_gols_a + " | " + __time_b + ": " + __numero_gols_b
+    fim
+
+    jogo = novo Jogo(time_a: "Fortaleza", time_b: "Independiente")
+    jogo.marcar_gol(time: "Fortaleza")
+    escreva(texto: jogo)
     `
   ])
 
