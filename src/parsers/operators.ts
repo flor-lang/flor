@@ -6,6 +6,9 @@ export const RightParenthesis = P.string(')')
 export const LeftBracket = P.string('[')
 export const RightBracket = P.string(']')
 
+export const Colon = P.string(':')
+export const Dot = P.string('.')
+
 export const TheExpr = P.string('a').wspc()
 export const EqualExpr = P.string('igual').wspc()
 export const DifferentExpr = P.string('diferente').wspc()
@@ -32,8 +35,10 @@ export const LessEqual = P.string('<=')
 
 export const EqualOperator = P.string('==')
 export const NotEqualOperator = P.string('!=')
-export const EqualExprOperator = P.seq(EqualExpr, TheExpr)
-export const NotEqualExprOperator = P.seq(DifferentExpr, OfExpr)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const EqualExprOperator = P.seqMap(EqualExpr, TheExpr, (_, __): string => '==')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const NotEqualExprOperator = P.seqMap(DifferentExpr, OfExpr, (_, __): string => '!=')
 
 export const AndOperator = P.string('e').wspc()
 export const OrOperator = P.string('ou').wspc()
@@ -61,3 +66,21 @@ export const Else = P.string('senao').wspc()
 
 export const While = P.string('enquanto').wspc()
 export const ForEach = P.seq(ForExpr, EachExpr)
+
+export const Function = P.string('funcao')
+export const Return = P.string('retornar').wspc()
+export const ColonEqual = P.seq(Colon, Equal)
+
+export const Define = P.string('definir').wspc()
+export const Interface = P.string('interface').wspc()
+export const Class = P.string('classe').wspc()
+export const Inherit = P.string('heranca')
+export const Implements = P.string('interfaces')
+export const Constructor = P.string('construtor')
+export const Properties = P.string('propriedades')
+export const Methods = P.string('metodos')
+export const Private = P.string('privado')
+export const Public = P.string('publico')
+export const Static = P.string('estatico')
+export const ClassFieldModifier = P.alt(Private, Public, Static)
+export const New = P.alt(P.string('novo'), P.string('nova')).wspc()

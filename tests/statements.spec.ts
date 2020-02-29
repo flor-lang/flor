@@ -1,5 +1,5 @@
 import { canParse, cantParse } from './utils'
-import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement } from '../src/parsers/statements'
+import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement, ReturnStatement, FunctionCall } from '../src/parsers/statements'
 
 test('if then else statement', (): void => {
   const canParseIfThenElseStatement = canParse(IfThenElseStatement)
@@ -37,7 +37,7 @@ test('if then else statement', (): void => {
     'se fim entao se fim',
     'se peso < 0 entao peso = 0',
     'se peso < 0 peso = 0 fim',
-    'se ativo entao fim',
+    // 'se ativo entao fim',
     'se fim entao a = 0 fim',
     'se a = 0 entao a = 0 fim',
     'se a entao b',
@@ -100,8 +100,8 @@ test('do while statement', (): void => {
   ])
   cantParseDoWhileStatement([
     'enquanto x faca x = 0 fim',
-    'faca x enquanto x fim',
-    'faca enquanto 0 == 0 fim',
+    // 'faca x enquanto x fim',
+    // 'faca enquanto 0 == 0 fim',
     'faca x = a enquanto x == x',
     'faca x = 2 enquanto fim',
     'x=2 enquanto x fim',
@@ -172,6 +172,42 @@ test('parse for to', (): void => {
     'paraide1ate10 faca oi = 0 fim',
     'para i = 0 ate 2 faca a = 0 fim',
     'para i de 3 ate 10 com passo faca a = 0 fim',
+  ])
+})
+
+test('parse return statement', (): void => {
+  const canParseStatement = canParse(ReturnStatement)
+  const cantParseStatement = cantParse(ReturnStatement)
+
+  canParseStatement([
+    'retornar 0',
+    'retornar (5 + 2) * 10',
+    'retornar verdadeiro >= 0',
+    'retornar aux',
+    'retornar "string"',
+    'retornar funcao() retornar x fim',
+    'retornar'
+  ])
+  cantParseStatement([
+    'retornar retornar',
+    'retornar enquanto 0 faca x = 0 fim',
+    'retornar x = 0'
+  ])
+})
+
+test('parse function call', (): void => {
+  const canParseFunctionCall = canParse(FunctionCall)
+  const cantParseFunctionCall = cantParse(FunctionCall)
+
+  canParseFunctionCall([
+    'ordenar ()',
+    'duplicar (x: 2)',
+    'somar(x: 0, y: 0)',
+    'subtrair(x:x,y:y)'
+  ])
+  cantParseFunctionCall([
+    'inserir(x)',
+    'inserir(0)'
   ])
 })
 
