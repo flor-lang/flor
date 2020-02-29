@@ -6,6 +6,8 @@ export const RightParenthesis = P.string(')')
 export const LeftBracket = P.string('[')
 export const RightBracket = P.string(']')
 
+export const Colon = P.string(':')
+
 export const TheExpr = P.string('a').wspc()
 export const EqualExpr = P.string('igual').wspc()
 export const DifferentExpr = P.string('diferente').wspc()
@@ -61,3 +63,7 @@ export const Else = P.string('senao').wspc()
 
 export const While = P.string('enquanto').wspc()
 export const ForEach = P.seq(ForExpr, EachExpr)
+
+export const Function = P.string('funcao')
+export const Return = P.string('retornar').wspc()
+export const ColonEqual = P.seq(Colon, Equal)

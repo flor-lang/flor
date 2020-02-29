@@ -2,7 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Literal } from './literals'
-import { Loc, LocParser } from './assignment'
+import { Loc, LocParser, Identifier, IdentifierParser } from './assignment'
 import {
   AddOperator,
   TermOperator,
@@ -12,8 +12,12 @@ import {
   EqualityOperator,
   AndOperator,
   OrOperator,
-  UnaryOperator
+  UnaryOperator,
+  Function,
+  End,
+  ColonEqual
 } from './operators'
+import { BlockParser, Block } from './program'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -24,6 +28,8 @@ export type RelParser = P.Parser<P.Node<'rel', {}>>
 export type EqualityParser = P.Parser<P.Node<'equality', {}>>
 export type JoinParser = P.Parser<P.Node<'join', {}>>
 export type BoolParser = P.Parser<P.Node<'bool', {}>>
+export type BlockFunctionParser = P.Parser<P.Node<'block-function', {}>>
+export type InlineFunctionParser = P.Parser<P.Node<'inline-function', {}>>
 export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 
 /**
@@ -185,8 +191,44 @@ export const Bool: BoolParser = P
   )
   .node('bool')
 
+const Args: ObjectParser = P.lazy((): IdentifierParser => Identifier).sepWrp(',', '(', ')')
+/**
+ * Parse block function expressions
+ *
+ * block-function -> funcao (identifier, ...) block fim
+*/
+export const BlockFunction: BlockFunctionParser = P
+  .seqObj(
+    Function, P.optWhitespace,
+    Args.named('args'),
+    P.optWhitespace,
+    P.lazy((): BlockParser => Block).named('block'),
+    End
+  ).node('block-function')
+
+/**
+ * Parse inline function expressions
+ *
+ * inline-function -> (identifier, ...) := expression
+*/
+export const InlineFunction: InlineFunctionParser = P
+  .seqObj(
+    Args.named('args'), P.optWhitespace,
+    ColonEqual, P.optWhitespace,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): ExpressionParser => Expression).named('expression')
+  )
+  .node('inline-function')
+
+/**
+ * Parse expressions
+ *
+ * expr -> bool | block-function | inline-function
+*/
 export const Expression: ExpressionParser = P
   .alt(
+    InlineFunction,
+    BlockFunction,
     Bool
   )
   .node('expression')

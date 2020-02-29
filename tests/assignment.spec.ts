@@ -1,6 +1,5 @@
 import { Assignment, Loc, Identifier } from '../src/parsers/assignment'
 import { canParse, cantParse } from './utils'
-import { Literal } from '../src/parsers/literals'
 
 test('parse loc', (): void => {
   const canParseLoc = canParse(Loc)
@@ -15,6 +14,7 @@ test('parse assignment operation', (): void => {
   const cantParseAssignment = cantParse(Assignment)
 
   canParseAssignment([
+    'duplicar = (valor) := valor * 2',
     'x = 20',
     'b=verdadeiro',
     '_c = "string"',
@@ -22,7 +22,14 @@ test('parse assignment operation', (): void => {
     'arr[0] =falso',
     'x[0][0]= 0',
     'identifier = identifier',
-    'foo = !((bar * 5) >= arr[index])'
+    'foo = !((bar * 5) >= arr[index])',
+    'funcao_dois = "teste"',
+    `somar = funcao(x, y)
+       retornar x + y
+     fim`,
+    'somar = (x) := x + y',
+    'resultado = somar (x: 0, y: 1)',
+    'indice_2 = ordenar (lista: numeros)[2]'
   ])
 
   cantParseAssignment([
@@ -31,7 +38,8 @@ test('parse assignment operation', (): void => {
     'nulo = nulo',
     '"string" = nulo',
     '[0] = 5',
-    'arr[] = "something"'
+    'arr[] = "something"',
+    'funcao = nulo'
   ])
 })
 
