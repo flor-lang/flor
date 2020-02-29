@@ -76,6 +76,7 @@ const Locline: ObjectParser = P
     ),
     P.optWhitespace
   )
+  .node('locline')
 /**
  * Loc parser - list acess or subscriptable
  *
