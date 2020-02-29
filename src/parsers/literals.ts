@@ -1,13 +1,19 @@
 import * as P from 'parsimmon'
+import '../utils/parsimmon-extension'
+import { ExpressionParser, Expression, ObjectParser } from './expressions'
+import { Colon } from './operators'
 
 export type StringLiteralParser = P.Parser<P.Node<'string', string>>
 export type NumberLiteralParser = P.Parser<P.Node<'number', number>>
 export type BooleanLiteralParser = P.Parser<P.Node<'boolean', boolean>>
 export type NullLiteralParser = P.Parser<P.Node<'null', string>>
+export type ArrayLiteralParser = P.Parser<P.Node<'array', {}>>
+export type DictionaryLiteralParser = P.Parser<P.Node<'dictionary', {}>>
 export type LiteralParser = P.Parser<P.Node<'literal', string|number|boolean>>
 
 export const StringLiteral: StringLiteralParser = P
-  .regexp(/".*"/)
+  // .regexp(/".*"/)
+  .regexp(/^"(?:[^\\"]|\\.)*"/)
   .map((s): string => s.slice(1, -1))
   .node('string')
 
@@ -25,16 +31,33 @@ export const NullLiteral: NullLiteralParser = P
   .string('nulo')
   .node('null')
 
+export const ArrayLiteral: ArrayLiteralParser = P
+  .lazy((): ExpressionParser => Expression)
+  .sepWrp(',', '[', ']')
+  .node('array')
+
+const Serializable: ObjectParser = P.alt(StringLiteral, NumberLiteral)
+export const DictionaryLiteral: DictionaryLiteralParser = P
+  .seqObj(
+    Serializable.named('key'),
+    P.optWhitespace, Colon, P.optWhitespace,
+    P.lazy((): ExpressionParser => Expression).named('value')
+  )
+  .sepWrp(',', '{', '}')
+  .node('dictionary')
+
 /**
  * Parser to literals
  *
- * literal -> string | number | boolean | null
+ * literal -> string | number | boolean | null | array
 */
 export const Literal: LiteralParser = P
   .alt(
     StringLiteral,
     NullLiteral,
     BooleanLiteral,
-    NumberLiteral
+    NumberLiteral,
+    ArrayLiteral,
+    DictionaryLiteral
   )
   .node('literal')

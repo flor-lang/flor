@@ -2,8 +2,9 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
-import { Assignment, Identifier, IdentifierParser, AssignmentParser } from './assignment'
+import { Assignment, Identifier, IdentifierParser, AssignmentParser, LocParser, Loc } from './assignment'
 import { Block, BlockParser } from './program'
+import { InterfaceDeclarationParser, InterfaceDeclaration, ClassDeclarationParser, ClassDeclaration } from './oo'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
 export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
@@ -111,6 +112,11 @@ export const ForToStatement: ForToStatementParser = P
   )
   .node('for-to')
 
+/**
+ * Parser function returns
+ *
+ * return -> retornar expr
+ */
 export const ReturnStatement: ReturnStatementParser = P
   .seqObj(
     Return,
@@ -143,17 +149,22 @@ export const FunctionCall: FunctionCallParser = P
 /**
  * Parse Statements
  *
- * statement -> assigment | function-call | if-then-else | while | do-while | for-each | for-to
+ * statement -> assigment
+ *             | interface-declaration | class-declaration | function-call
+ *             | if-then-else | while | do-while | for-each | for-to | return
  */
 export const Statement: StatementParser = P
   .alt(
     P.lazy((): AssignmentParser => Assignment),
+    P.lazy((): InterfaceDeclarationParser => InterfaceDeclaration),
+    P.lazy((): ClassDeclarationParser => ClassDeclaration),
     FunctionCall,
     IfThenElseStatement,
     WhileStatement,
     DoWhileStatement,
     ForEachStatement,
     ForToStatement,
-    ReturnStatement
+    ReturnStatement,
+    P.lazy((): LocParser => Loc)
   )
   .node('statement')

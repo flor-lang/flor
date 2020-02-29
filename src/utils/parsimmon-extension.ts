@@ -23,12 +23,12 @@ declare module 'parsimmon' {
     /**
      * Returns a parser putting mandatory whitespace around it
      */
-    wspc<T> (): P.Parser<[string, T, string]>;
+    wspc<T> (): P.Parser<T>;
 
     /**
      * Returns a parser putting optoinal whitespace around it
      */
-    optWspc<T> (): P.Parser<[string, T, string]>;
+    optWspc<T> (): P.Parser<T>;
 
     /**
      * Returns parser to handle many elements separated by comma wrapped by string parsers
@@ -46,19 +46,23 @@ P.Parser.prototype.named = function (name: string): [never, P.Parser<never>] {
   return [name as never, this as P.Parser<never>]
 }
 
-P.Parser.prototype.wspc = function<T> (): P.Parser<[string, T, string]> {
-  return P.seq(
+P.Parser.prototype.wspc = function<T> (): P.Parser<T> {
+  return P.seqMap(
     P.regexp(/(^|\s)+/),
     this,
-    P.regexp(/(\s|$)+/)
+    P.regexp(/(\s|$)+/),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (_, parsed: T, __): T => parsed
   )
 }
 
-P.Parser.prototype.optWspc = function<T> (): P.Parser<[string, T, string]> {
-  return P.seq(
+P.Parser.prototype.optWspc = function<T> (): P.Parser<T> {
+  return P.seqMap(
     P.optWhitespace,
     this,
-    P.optWhitespace
+    P.optWhitespace,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (_, parsed: T, __): T => parsed
   )
 }
 

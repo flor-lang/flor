@@ -1,7 +1,7 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
-import { Literal } from './literals'
+import { Literal, LiteralParser } from './literals'
 import { Loc, LocParser, Identifier, IdentifierParser } from './assignment'
 import {
   AddOperator,
@@ -18,6 +18,7 @@ import {
   ColonEqual
 } from './operators'
 import { BlockParser, Block } from './program'
+import { ClassInstantiationParser, ClassInstantiation } from './oo'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -35,18 +36,18 @@ export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 /**
  * Parse Integers Numbers and Expressions between parenthesis
  *
- * factor -> (expr) | loc | literal
+ * factor -> (bool) | loc | literal
 */
 export const Factor: FactorParser = P
   .alt(
     P.seqObj(
       LeftParenthesis, P.optWhitespace,
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.lazy((): ExpressionParser => Expression).named('between-parenthesis'),
+      P.lazy((): BoolParser => Bool).named('between-parenthesis'),
       P.optWhitespace, RightParenthesis
     ),
     P.lazy((): LocParser => Loc),
-    Literal
+    P.lazy((): LiteralParser => Literal)
   )
   .node('factor')
 
@@ -223,10 +224,11 @@ export const InlineFunction: InlineFunctionParser = P
 /**
  * Parse expressions
  *
- * expr -> bool | block-function | inline-function
+ * expr -> class-instantiation | inline-function | block-function | bool
 */
 export const Expression: ExpressionParser = P
   .alt(
+    P.lazy((): ClassInstantiationParser => ClassInstantiation),
     InlineFunction,
     BlockFunction,
     Bool

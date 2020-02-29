@@ -4,13 +4,14 @@ definir interface Nomeavel
   nome
 fim
 
-difinir classe Pessoa
+definir classe Pessoa
   implementa: Nomeavel
   
   propriedades:
     nome
     privado idade
     telefones
+    estado_civil <- "solteiro"
 
   construtor: funcao (nome, idade)
     _.nome <- nome
@@ -38,5 +39,9 @@ pessoa.adicionar_telefone(numero: '999999999')
 
 se pessoa.telefones.tamanho maior que 0 e pessoa.nome = 'Sandro' entao
   Console.escreva(pessoa)
+fim
+
+definir class PessoaJuridica
+  herda: Pessoa
 fim
 
