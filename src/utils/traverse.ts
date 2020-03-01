@@ -1,25 +1,28 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const traverser = (ast: any, visitor: any): void => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function traverseArray (array: any, parent: any): void {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    array.forEach((child: any): void => {
+import { Node } from 'parsimmon'
+
+export type AstNode = Node<string, {}>
+
+export interface Callback { (node: AstNode, parent: AstNode): void }
+export interface Visitor {
+  [index: string]: {enter: Callback; exit: Callback};
+}
+
+export const traverser = (ast: AstNode, visitor: Visitor): void => {
+  function traverseArray (array: AstNode[], parent: AstNode): void {
+    array.forEach((child: AstNode): void => {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       traverseNode(child, parent)
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function traverseObj (obj: any, parent: any): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function traverseObj (obj: AstNode, parent: AstNode): void {
     for (const node in obj) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       traverseNode(obj[node], parent)
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function traverseNode (node: any, parent: any): void {
+  function traverseNode (node: AstNode, parent: AstNode): void {
     const methods = visitor[node.name]
 
     if (methods && methods.enter) {
