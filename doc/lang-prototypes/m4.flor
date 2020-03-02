@@ -1,4 +1,5 @@
-importar Console
+importar "console" como Console
+importar Nomeavel, Mortal de "../base/interfaces" 
 
 definir interface Nomeavel
   nome
