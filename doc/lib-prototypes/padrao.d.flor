@@ -23,3 +23,11 @@
 "texto".remover_espacos_das_laterais()
 "texto".remover_espacos_a_esquerda()
 "texto".remover_espacos_a_direita()
+
+TextoLibraryInterface = {
+  "letra_na" = {
+    "std_func": "charAt",
+    "return_type": "texto",
+    "arg_1": { label: "posicao", type: "numero" }
+  }
+}
