@@ -10,7 +10,7 @@
 "texto".indice(de: "texto")
 "texto".ultimo_indice(de: "texto")
 "texto".tamanho
-"texto".corresponde_com(regexp: novo RegExp("[0-9]*"))
+"texto".casa_com(regexp: novo RegExp("[0-9]*"))
 "texto".normalizar()
 "texto".substituir(texto: "valor", pelo_texto: "novo valor")
 "texto".pesquisar_por(texto: "valor")

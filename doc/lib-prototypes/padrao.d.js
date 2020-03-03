@@ -6,9 +6,9 @@
 'string'.charCodeAt(0)
 'string'.concat(['hei', 'listen'])
 'string'.endsWith('sufixo')
-'string'.includes('palavra')
-'string'.indexOf('texto')
-'string'.lastIndexOf('texto')
+'string'.includes('palavra') // array property
+'string'.indexOf('texto') // array property
+'string'.lastIndexOf('texto') // array property
 'string'.length // array property
 'string'.match(new RegExp('[0-9]*')) // regex lib
 'string'.normalize()
