@@ -1,0 +1,25 @@
+/* florlint-desabilitar expressoes_sem_uso */
+/* Basic Types */
+
+// Texto : String
+"texto".letra_na(posicao: 2)
+"texto".unicode_da_letra_na(posicao: 2)
+"texto".concatenar(textos: ["hei", "listen"])
+"texto".termina(com: "sufixo")
+"texto".possui(texto: "palavra")
+"texto".indice(de: "texto")
+"texto".ultimo_indice(de: "texto")
+"texto".tamanho
+"texto".corresponde_com(regexp: novo RegExp("[0-9]*"))
+"texto".normalizar()
+"texto".substituir(texto: "valor", pelo_texto: "novo valor")
+"texto".pesquisar_por(texto: "valor")
+"texto".pesquisar_por(regexp: novo RegExp("valor"))
+"texto".obter_subtexto(posicao_inicial: 0, posicao_final: 10)
+"texto".dividir_texto_pelo(separador: "-")
+"texto".inicia(com: "prefixo")
+"texto".minusculo()
+"texto".maiusculo()
+"texto".remover_espacos_das_laterais()
+"texto".remover_espacos_a_esquerda()
+"texto".remover_espacos_a_direita()
