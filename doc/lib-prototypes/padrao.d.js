@@ -23,3 +23,7 @@
 'string'.trim()
 'string'.trimLeft()
 'string'.trimRight()
+
+// Numero: Number
+0.5.toExponential()
+0.5.toFixed()

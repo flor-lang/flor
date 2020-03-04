@@ -24,10 +24,6 @@
 "texto".remover_espacos_a_esquerda()
 "texto".remover_espacos_a_direita()
 
-TextoLibraryInterface = {
-  "letra_na" = {
-    "std_func": "charAt",
-    "return_type": "texto",
-    "arg_1": { label: "posicao", type: "numero" }
-  }
-}
+// Numero : Number
+0.5.notacao_cientifica()
+0.5.numero_de_casas_decimais(n: 0)
