@@ -56,3 +56,7 @@ lista.ordenar(f: (a, b) := a + b)
 lista.remover_elementos(posicao_inicial: 5, quantidade: 1)
 lista.inserir(elemento: 10, na_posicao: 2)
 lista.adicionar_no_inicio(elemento: 0)
+
+// Dictionary : Object
+
+// Object : Object

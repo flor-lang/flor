@@ -56,3 +56,7 @@ lista.sort((a, b) => a > b)
 lista.splice(5, 1)
 lista.splice(2, 0, 10)
 lista.unshift(0)
+
+// Dictionary : Object
+
+// Object : Object
