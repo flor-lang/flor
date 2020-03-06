@@ -1,11 +1,5 @@
-/* eslint-disable @typescript-eslint/prefer-interface */
 /* eslint-disable @typescript-eslint/camelcase */
-
-export type LibDeclaration = {
-  [key: string]: {
-    ref: string;
-    tipo: string
-    | { params: [string, string][]; retorno: string }; }; }
+import { LibDeclaration } from './lib-declarations'
 
 export const ListaDeclarations: LibDeclaration = {
   tamanho: {
