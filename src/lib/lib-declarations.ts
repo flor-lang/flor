@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-interface */
 
+type LibFunctionDeclaration = { params: [string, string | LibFunctionDeclaration][]; retorno: string }
+
 export type LibDeclaration = {
   [key: string]: {
     ref: string;
-    tipo: string
-    | { params: [string, string][]; retorno: string }; }; }
+    tipo: string | LibFunctionDeclaration; }; }
