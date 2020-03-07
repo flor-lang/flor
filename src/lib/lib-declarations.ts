@@ -4,5 +4,5 @@ type LibFunctionDeclaration = { params: [string, string | LibFunctionDeclaration
 
 export type LibDeclaration = {
   [key: string]: {
-    ref: string;
+    ref: string | any;
     tipo: string | LibFunctionDeclaration; }; }

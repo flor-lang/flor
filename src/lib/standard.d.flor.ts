@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/camelcase */
 import { LibDeclaration } from './lib-declarations'
 
@@ -52,11 +54,102 @@ export const ListaDeclarations: LibDeclaration = {
     ref: 'findIndex',
     tipo: {
       params: [['f', { params: [['*', '*']], retorno: 'booleano' }]],
-      retorno: 'numero' } }
+      retorno: 'numero' } },
+
+  para_cada: {
+    ref: 'forEach',
+    tipo: {
+      params: [['f', { params: [['*', '*']], retorno: '*' }]],
+      retorno: 'numero' } },
+
+  possui: {
+    ref: 'includes',
+    tipo: {
+      params: [['elemento', 'numero']],
+      retorno: 'booleano' } },
+
+  unir_em_texto: {
+    ref: 'join',
+    tipo: {
+      params: [['separador', 'texto']],
+      retorno: 'texto' } },
+
+  mapear: {
+    ref: 'map',
+    tipo: {
+      params: [['f', { params: [['*', '*']], retorno: '*' }]],
+      retorno: 'lista' } },
+
+  remover_ultimo_elemento: {
+    ref: 'pop',
+    tipo: {
+      params: [],
+      retorno: '*' } },
+
+  adicionar: {
+    ref: 'push',
+    tipo: {
+      params: [['elemento', '*']],
+      retorno: '*' } },
+
+  reduzir: {
+    ref: 'reduce',
+    tipo: {
+      params: [['valor_inicial', '*'], ['f', { params: [['*', '*'], ['*', '*']], retorno: '*' }]],
+      retorno: '*' } },
+
+  inverter: {
+    ref: 'reverse',
+    tipo: {
+      params: [],
+      retorno: 'lista' } },
+
+  remover_primeiro_elemento: {
+    ref: 'shift',
+    tipo: {
+      params: [],
+      retorno: '*' } },
+
+  obter_sublista: {
+    ref: 'slice',
+    tipo: {
+      params: [['posicao_inicial', 'numero'], ['posicao_final', 'numero']],
+      retorno: 'lista' } },
+
+  verificar_algum_elemento: {
+    ref: 'some',
+    tipo: {
+      params: [['f', { params: [['*', '*']], retorno: 'booleano' }]],
+      retorno: 'booleano' } },
+
+  ordenar: {
+    ref: 'sort',
+    tipo: {
+      params: [['f', { params: [['*', '*'], ['*', '*']], retorno: 'booleano' }]],
+      retorno: 'lista' } },
+
+  remover_elementos: {
+    ref: 'splice',
+    tipo: {
+      params: [['posicao_inicial', 'numero'], ['quantidade', 'numero']],
+      retorno: 'lista' } },
+
+  inserir: {
+    ref: '@impl/inserir',
+    tipo: {
+      params: [['elemento', '*'], ['na_posicao', 'numero']],
+      retorno: 'lista' } },
+
+  unshift: {
+    ref: 'push',
+    tipo: {
+      params: [['elemento', '*']],
+      retorno: '*' } }
 }
 
+const { obter_sublista, ...ListaCommons } = ListaDeclarations
 export const TextoDeclarations: LibDeclaration = {
-  ...ListaDeclarations,
+  ...ListaCommons,
 
   letra_na: {
     ref: 'charAt',
