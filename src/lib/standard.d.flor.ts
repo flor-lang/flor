@@ -264,3 +264,17 @@ export const TextoDeclarations: LibDeclaration = {
       retorno: 'texto' } }
 
 }
+
+export const NumeroDeclarations: LibDeclaration = {
+  notacao_cientifica: {
+    ref: 'toExponential',
+    tipo: {
+      params: [],
+      retorno: 'texto' } },
+
+  com_casas_decimais: {
+    ref: 'toFixed',
+    tipo: {
+      params: [['quantidade', 'numero']],
+      retorno: 'texto' } }
+}

@@ -26,7 +26,7 @@
 
 // Numero : Number
 0.5.notacao_cientifica()
-0.5.numero_de_casas_decimais(n: 0)
+0.5.com_casas_decimais(quantidade: 0)
 
 // Booleano : Boolean
 
