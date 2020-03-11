@@ -50,7 +50,7 @@ export const ListaDeclarations: LibDeclaration = {
       params: [['f', { params: [['*', '*']], retorno: 'booleano' }]],
       retorno: '*' } },
 
-  encontrarIndice: {
+  encontrar_indice: {
     ref: 'findIndex',
     tipo: {
       params: [['f', { params: [['*', '*']], retorno: 'booleano' }]],
