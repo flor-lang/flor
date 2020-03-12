@@ -2,9 +2,9 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket, Dot } from './operators'
-import { ObjectParser, Expression, ExpressionParser } from './expressions'
+import { ObjectParser, Expression, ExpressionParser, BoolParser, Bool } from './expressions'
 import { FunctionCall, FunctionCallParser } from './statements'
-import { mapLocNode } from '../utils/node-map'
+import { mapLocNode, mapObjectableNode } from '../utils/node-map'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
@@ -56,12 +56,13 @@ export const Objectable: ObjectableParser = P
     P.lazy((): ObjectParser => Locline).named('locline')
   )
   .node('objectable')
+  // .map(mapObjectableNode)
 
 /** indexable -> indexable locline | [expr] */
 export const Indexable: IndexableParser = P
   .seqObj(
     LeftBracket, P.optWhitespace,
-    P.lazy((): ExpressionParser => Expression).named('index'),
+    P.lazy((): BoolParser => Bool).named('index'),
     P.optWhitespace, RightBracket,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ObjectParser => Locline).named('locline')
@@ -100,6 +101,6 @@ export const Assignment: AssignmentParser = P
   .seqObj(
     Loc.optWspc().named('lhs'),
     Equal, P.optWhitespace,
-    P.lazy((): ExpressionParser => Expression).named('expression')
+    P.lazy((): ExpressionParser => Expression)//.named('expression')
   )
   .node('assignment')
