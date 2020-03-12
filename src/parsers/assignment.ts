@@ -4,6 +4,7 @@ import '../utils/parsimmon-extension'
 import { Equal, LeftBracket, RightBracket, Dot } from './operators'
 import { ObjectParser, Expression, ExpressionParser } from './expressions'
 import { FunctionCall, FunctionCallParser } from './statements'
+import { mapLocNode } from '../utils/node-map'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
@@ -88,6 +89,7 @@ export const Loc: LocParser = P
     Locline.named('locline')
   )
   .node('loc')
+  .map(mapLocNode)
 
 /**
  * Parser to variable assignment statement
@@ -96,7 +98,7 @@ export const Loc: LocParser = P
 */
 export const Assignment: AssignmentParser = P
   .seqObj(
-    Loc.optWspc().named('loc'),
+    Loc.optWspc().named('lhs'),
     Equal, P.optWhitespace,
     P.lazy((): ExpressionParser => Expression).named('expression')
   )
