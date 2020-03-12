@@ -25,15 +25,3 @@ export const mapLocNode = (ast: unknown): any => {
     return ast
   }
 }
-
-export const mapObjectableNode = (ast: unknown): any => {
-  try {
-    const tree = ast as { value: { variable: { value: {} }; locline: {} } }
-    if (/^[ ]*$/.test(tree.value.locline as string)) {
-      return tree.value.variable.value
-    }
-    return ast
-  } catch {
-    return ast
-  }
-}

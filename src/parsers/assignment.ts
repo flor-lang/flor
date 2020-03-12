@@ -4,7 +4,7 @@ import '../utils/parsimmon-extension'
 import { Equal, LeftBracket, RightBracket, Dot } from './operators'
 import { ObjectParser, Expression, ExpressionParser, BoolParser, Bool } from './expressions'
 import { FunctionCall, FunctionCallParser } from './statements'
-import { mapLocNode, mapObjectableNode } from '../utils/node-map'
+import { mapLocNode } from '../utils/node-map'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
@@ -56,7 +56,6 @@ export const Objectable: ObjectableParser = P
     P.lazy((): ObjectParser => Locline).named('locline')
   )
   .node('objectable')
-  // .map(mapObjectableNode)
 
 /** indexable -> indexable locline | [expr] */
 export const Indexable: IndexableParser = P
@@ -101,6 +100,6 @@ export const Assignment: AssignmentParser = P
   .seqObj(
     Loc.optWspc().named('lhs'),
     Equal, P.optWhitespace,
-    P.lazy((): ExpressionParser => Expression)//.named('expression')
+    P.lazy((): ExpressionParser => Expression).named('expression')
   )
   .node('assignment')

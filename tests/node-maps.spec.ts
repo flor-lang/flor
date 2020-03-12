@@ -40,4 +40,14 @@ test('test loc node mapping', () => {
         ]
       }
     })
+
+    expect(Loc.tryParse('parse().tree')).toMatchObject({
+      value: {
+        subscriptable: { value: { value: { identifier: { value: 'parse' } } } },
+        params: [
+          { value: { value: 'tree' } }
+        ]
+      }
+    })
+
 })
