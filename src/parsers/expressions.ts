@@ -19,13 +19,14 @@ import {
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
+import { mapBoolNode, mapJoinNode, mapEqualityNode, mapAddNode, mapTermNode, mapUnaryNode } from '../utils/node-map'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
 export type UnaryParser = P.Parser<P.Node<'unary', {}>>
 export type TermParser = P.Parser<P.Node<'term', {}>>
 export type AddParser = P.Parser<P.Node<'add', {}>>
-export type RelParser = P.Parser<P.Node<'rel', {}>>
+export type InequalityParser = P.Parser<P.Node<'inequality', {}>>
 export type EqualityParser = P.Parser<P.Node<'equality', {}>>
 export type JoinParser = P.Parser<P.Node<'join', {}>>
 export type BoolParser = P.Parser<P.Node<'bool', {}>>
@@ -38,7 +39,7 @@ export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
  *
  * factor -> (bool) | loc | literal
 */
-export const Factor: FactorParser = P
+export const Factor: ObjectParser = P
   .alt(
     P.seqObj(
       LeftParenthesis, P.optWhitespace,
@@ -49,7 +50,7 @@ export const Factor: FactorParser = P
     P.lazy((): LocParser => Loc),
     P.lazy((): LiteralParser => Literal)
   )
-  .node('factor')
+  // .node('factor')
 
 const UnaryLine = UnaryOperator
 /**
@@ -63,6 +64,7 @@ export const Unary: UnaryParser = P
     Factor.named('factor')
   )
   .node('unary')
+  .map(mapUnaryNode)
 
 const TermLine: ObjectParser = P
   .alt(
@@ -85,6 +87,7 @@ export const Term: TermParser = P
     TermLine.named('termline')
   )
   .node('term')
+  .map(mapTermNode)
 
 const AddLine: ObjectParser = P
   .alt(
@@ -107,24 +110,25 @@ export const Add: AddParser = P
     AddLine.named('addline')
   )
   .node('add')
+  .map(mapAddNode)
 
-const Inequality: ObjectParser = P
+const Inequality: InequalityParser = P
   .seqObj(
     Add.named('lhs'), P.optWhitespace,
     RelOperator.named('operator'), P.optWhitespace,
     Add.named('rhs')
   )
+  .node('inequality')
 /**
  * Parse inequalities relations (> < >= <=) between expressions
  *
  * rel -> rel < add | rel > add | rel >= add | rel <= add | add
 */
-export const Rel: RelParser = P
+export const Rel: ObjectParser = P
   .alt(
     Inequality,
     Add
   )
-  .node('rel')
 
 export const EqualityLine: ObjectParser = P
   .alt(
@@ -147,6 +151,7 @@ export const Equality: EqualityParser = P
     EqualityLine.named('equalityline')
   )
   .node('equality')
+  .map(mapEqualityNode)
 
 const JoinLine: ObjectParser = P
   .alt(
@@ -169,6 +174,7 @@ export const Join: JoinParser = P
     JoinLine.named('joinline')
   )
   .node('join')
+  .map(mapJoinNode)
 
 const Booline: ObjectParser = P
   .alt(
@@ -191,6 +197,7 @@ export const Bool: BoolParser = P
     Booline.named('booline')
   )
   .node('bool')
+  .map(mapBoolNode)
 
 const Args: ObjectParser = P.lazy((): IdentifierParser => Identifier).sepWrp(',', '(', ')')
 /**
