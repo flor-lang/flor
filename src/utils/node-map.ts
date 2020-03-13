@@ -25,3 +25,16 @@ export const mapLocNode = (ast: unknown): any => {
     return ast
   }
 }
+
+export const mapBoolNode = (ast: unknown): any => {
+  type BoolNode = {}
+  try {
+    const tree = ast as BoolNode
+    // if (/^[ ]*$/.test(<string> tree) {
+
+    // }
+    return ast
+  } catch {
+    return ast
+  }
+}
