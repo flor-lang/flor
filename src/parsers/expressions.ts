@@ -19,7 +19,7 @@ import {
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
-import { mapBoolNode, mapJoinNode, mapEqualityNode, mapAddNode, mapTermNode, mapUnaryNode } from '../utils/node-map'
+import { mapBoolNode, mapJoinNode, mapEqualityNode, mapAddNode, mapArithmeticNode, mapUnaryNode } from '../utils/node-map'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -87,7 +87,7 @@ export const Term: TermParser = P
     TermLine.named('termline')
   )
   .node('term')
-  .map(mapTermNode)
+  .map(mapArithmeticNode)
 
 const AddLine: ObjectParser = P
   .alt(
@@ -110,7 +110,7 @@ export const Add: AddParser = P
     AddLine.named('addline')
   )
   .node('add')
-  .map(mapAddNode)
+  .map(mapArithmeticNode)
 
 const Inequality: InequalityParser = P
   .seqObj(

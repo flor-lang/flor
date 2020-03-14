@@ -67,36 +67,6 @@ export const mapEqualityNode = (ast: unknown): any => {
   }
 }
 
-type AddLine = { operator: string; term: {}; addline: AddLine }
-const mapAddline = (ast: unknown): any => {
-  try {
-    const tree = ast as AddLine
-    const { addline, ...nodes } = tree
-    if (/^[ ]*$/.test((addline as unknown) as string)) {
-      const { operator, ...metadata } = nodes
-      return { ...metadata, parentOperator: operator }
-    } else {
-      const { parentOperator, ...add } = mapAddline(addline)
-      return {
-        name: 'add',
-        value: {
-          parentOperator: tree.operator,
-          operator: parentOperator || add.value.parentOperator,
-          params: [
-            tree.term,
-            add.term || ((add): any => {
-              delete add.value.parentOperator
-              return add
-            })(add)
-          ]
-        }
-      }
-    }
-  } catch {
-    return ast
-  }
-}
-
 type AddNode = { value: { term: {}; addline: {} } }
 export const mapAddNode = (ast: unknown): any => {
   try {
@@ -161,7 +131,7 @@ const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
 }
 
 // type TermNode = { name: string; value: { operator: string; unary: {}; termline: {} } }
-export const mapTermNode = (ast: unknown): any => {
+export const mapArithmeticNode = (ast: unknown): any => {
   try {
     const tree = ast as { name: string; value: { [x: string]: any } }
     const nodeName = tree.name
@@ -170,7 +140,7 @@ export const mapTermNode = (ast: unknown): any => {
     if (/^[ ]*$/.test(tree.value[lineName] as string)) {
       return mapNodeWithEmptyLine(tree, childName)
     } else {
-      const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value.termline, nodeName, childName))
+      const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value[lineName], nodeName, childName))
       delete node.value.parentOperator
       return node
     }
