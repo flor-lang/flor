@@ -19,7 +19,7 @@ import {
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
-import { mapBoolNode, mapJoinNode, mapArithmeticRecursiveNode, mapUnaryNode } from '../utils/node-map'
+import { mapBoolNode, mapArithmeticRecursiveNode, mapUnaryNode } from '../utils/node-map'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -156,7 +156,7 @@ export const Equality: EqualityParser = P
 const JoinLine: ObjectParser = P
   .alt(
     P.seqObj(
-      AndOperator, P.optWhitespace,
+      AndOperator.named('operator'), P.optWhitespace,
       Equality.named('equality'), P.optWhitespace,
       P.lazy((): ObjectParser => JoinLine).named('joinline')
     ),
@@ -165,7 +165,7 @@ const JoinLine: ObjectParser = P
 /**
  * Parse and relations ( e ) between expressions
  *
- * join -> join && equality | equality
+ * join -> join e equality | equality
 */
 export const Join: JoinParser = P
   .seqObj(
@@ -174,7 +174,7 @@ export const Join: JoinParser = P
     JoinLine.named('joinline')
   )
   .node('join')
-  .map(mapJoinNode)
+  .map(mapArithmeticRecursiveNode)
 
 const Boolline: ObjectParser = P
   .alt(

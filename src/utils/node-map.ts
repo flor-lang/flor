@@ -41,18 +41,18 @@ export const mapBoolNode = (ast: unknown): any => {
   }
 }
 
-type JoinNode = { value: { equality: {}; joinline: {} } }
-export const mapJoinNode = (ast: unknown): any => {
-  try {
-    const tree = ast as JoinNode
-    if (/^[ ]*$/.test(tree.value.joinline as string)) {
-      return tree.value.equality
-    }
-    return ast
-  } catch {
-    return ast
-  }
-}
+// type JoinNode = { value: { equality: {}; joinline: {} } }
+// export const mapJoinNode = (ast: unknown): any => {
+//   try {
+//     const tree = ast as JoinNode
+//     if (/^[ ]*$/.test(tree.value.joinline as string)) {
+//       return tree.value.equality
+//     }
+//     return ast
+//   } catch {
+//     return ast
+//   }
+// }
 
 // type EqualityNode = { value: { rel: {}; equalityline: {} } }
 // export const mapEqualityNode = (ast: unknown): any => {
