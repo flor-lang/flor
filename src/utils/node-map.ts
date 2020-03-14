@@ -54,31 +54,31 @@ export const mapJoinNode = (ast: unknown): any => {
   }
 }
 
-type EqualityNode = { value: { rel: {}; equalityline: {} } }
-export const mapEqualityNode = (ast: unknown): any => {
-  try {
-    const tree = ast as EqualityNode
-    if (/^[ ]*$/.test(tree.value.equalityline as string)) {
-      return tree.value.rel
-    }
-    return ast
-  } catch {
-    return ast
-  }
-}
+// type EqualityNode = { value: { rel: {}; equalityline: {} } }
+// export const mapEqualityNode = (ast: unknown): any => {
+//   try {
+//     const tree = ast as EqualityNode
+//     if (/^[ ]*$/.test(tree.value.equalityline as string)) {
+//       return tree.value.rel
+//     }
+//     return ast
+//   } catch {
+//     return ast
+//   }
+// }
 
-type AddNode = { value: { term: {}; addline: {} } }
-export const mapAddNode = (ast: unknown): any => {
-  try {
-    const tree = ast as AddNode
-    if (/^[ ]*$/.test(tree.value.addline as string)) {
-      return tree.value.term
-    }
-    return ast
-  } catch {
-    return ast
-  }
-}
+// type AddNode = { value: { term: {}; addline: {} } }
+// export const mapAddNode = (ast: unknown): any => {
+//   try {
+//     const tree = ast as AddNode
+//     if (/^[ ]*$/.test(tree.value.addline as string)) {
+//       return tree.value.term
+//     }
+//     return ast
+//   } catch {
+//     return ast
+//   }
+// }
 
 const mountExprNode = (
   nodeName: string,
@@ -115,7 +115,6 @@ const splitNodeLine = (node: { [x: string]: any }, nodeline: string): any => {
   return [node, line]
 }
 
-// type TermLine = { operator: string; unary: {}; termline: TermLine }
 const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
   try {
     const lineName = nodeName + 'line'
@@ -130,8 +129,7 @@ const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
   }
 }
 
-// type TermNode = { name: string; value: { operator: string; unary: {}; termline: {} } }
-export const mapArithmeticNode = (ast: unknown): any => {
+export const mapArithmeticRecursiveNode = (ast: unknown): any => {
   try {
     const tree = ast as { name: string; value: { [x: string]: any } }
     const nodeName = tree.name
