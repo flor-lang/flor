@@ -100,6 +100,6 @@ export const Assignment: AssignmentParser = P
   .seqObj(
     Loc.optWspc().named('lhs'),
     Equal, P.optWhitespace,
-    P.lazy((): ExpressionParser => Expression).named('expression')
+    P.lazy((): ExpressionParser => Expression).named('rhs')
   )
   .node('assignment')

@@ -80,14 +80,58 @@ export const mapAddNode = (ast: unknown): any => {
   }
 }
 
+type TermLine = { operator: string; unary: {}; termline: TermLine }
+const mapTermline = (ast: unknown): any => {
+  try {
+    const tree = ast as TermLine
+    const { termline, ...nodes } = tree
+    if (/^[ ]*$/.test((termline as unknown) as string)) {
+      const { operator, ...metadata } = nodes
+      return { ...metadata, parentOperator: operator }
+    } else {
+      const { parentOperator, ...term } = mapTermline(termline)
+      return {
+        name: 'term',
+        value: {
+          parentOperator: tree.operator,
+          operator: parentOperator || term.value.parentOperator,
+          params: [
+            tree.unary,
+            term.unary || ((term): any => {
+              delete term.value.parentOperator
+              return term
+            })(term)
+          ]
+        }
+      }
+    }
+  } catch {
+    return ast
+  }
+}
+
 type TermNode = { value: { unary: {}; termline: {} } }
 export const mapTermNode = (ast: unknown): any => {
   try {
     const tree = ast as TermNode
     if (/^[ ]*$/.test(tree.value.termline as string)) {
       return tree.value.unary
+    } else {
+      const termline = mapTermline(tree.value.termline)
+      return {
+        name: 'term',
+        value: {
+          operator: termline.parentOperator || termline.value.parentOperator,
+          params: [
+            tree.value.unary,
+            termline.unary || ((term): any => {
+              delete term.value.parentOperator
+              return term
+            })(termline)
+          ]
+        }
+      }
     }
-    return ast
   } catch {
     return ast
   }
