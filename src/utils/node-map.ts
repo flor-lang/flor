@@ -28,18 +28,18 @@ export const mapLocNode = (ast: unknown): any => {
   }
 }
 
-type BoolNode = { value: { join: {}; boolline: {} } }
-export const mapBoolNode = (ast: unknown): any => {
-  try {
-    const tree = ast as BoolNode
-    if (/^[ ]*$/.test(tree.value.boolline as string)) {
-      return tree.value.join
-    }
-    return ast
-  } catch {
-    return ast
-  }
-}
+// type BoolNode = { value: { join: {}; boolline: {} } }
+// export const mapBoolNode = (ast: unknown): any => {
+//   try {
+//     const tree = ast as BoolNode
+//     if (/^[ ]*$/.test(tree.value.boolline as string)) {
+//       return tree.value.join
+//     }
+//     return ast
+//   } catch {
+//     return ast
+//   }
+// }
 
 // type JoinNode = { value: { equality: {}; joinline: {} } }
 // export const mapJoinNode = (ast: unknown): any => {

@@ -19,7 +19,7 @@ import {
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
-import { mapBoolNode, mapArithmeticRecursiveNode, mapUnaryNode } from '../utils/node-map'
+import { mapArithmeticRecursiveNode, mapUnaryNode } from '../utils/node-map'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -179,7 +179,7 @@ export const Join: JoinParser = P
 const Boolline: ObjectParser = P
   .alt(
     P.seqObj(
-      OrOperator, P.optWhitespace,
+      OrOperator.named('operator'), P.optWhitespace,
       Join.named('join'), P.optWhitespace,
       P.lazy((): ObjectParser => Boolline).named('boolline')
     ),
@@ -197,7 +197,7 @@ export const Bool: BoolParser = P
     Boolline.named('boolline')
   )
   .node('bool')
-  .map(mapBoolNode)
+  .map(mapArithmeticRecursiveNode)
 
 const Args: ObjectParser = P.lazy((): IdentifierParser => Identifier).sepWrp(',', '(', ')')
 /**

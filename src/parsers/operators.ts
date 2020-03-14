@@ -42,7 +42,8 @@ export const NotEqualExprOperator = P.seqMap(DifferentExpr, OfExpr, (_, __): str
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AndOperator = P.seqMap(P.string('e').wspc(), (_): string => '&&')
-export const OrOperator = P.string('ou').wspc()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const OrOperator = P.seqMap(P.string('ou').wspc(), (_): string => '||')
 
 /** unaryoperator -> ! | + | - */
 export const UnaryOperator = P.alt(NotOperator, PlusOperator, MinusOperator)
