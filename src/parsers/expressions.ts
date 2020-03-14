@@ -112,29 +112,34 @@ export const Add: AddParser = P
   .node('add')
   .map(mapArithmeticRecursiveNode)
 
-const Inequality: InequalityParser = P
-  .seqObj(
-    Add.named('lhs'), P.optWhitespace,
-    RelOperator.named('operator'), P.optWhitespace,
-    Add.named('rhs')
+const InequalityLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      RelOperator.named('operator'), P.optWhitespace,
+      Add.named('add'), P.optWhitespace,
+      P.lazy((): ObjectParser => InequalityLine).named('inequalityline')
+    ),
+    P.optWhitespace
   )
-  .node('inequality')
 /**
  * Parse inequalities relations (> < >= <=) between expressions
  *
- * rel -> rel < add | rel > add | rel >= add | rel <= add | add
+ * inequalities -> inequalities < add | inequalities > add | inequalities >= add | inequalities <= add | add
 */
-export const Rel: ObjectParser = P
-  .alt(
-    Inequality,
-    Add
+export const Inequality: InequalityParser = P
+  .seqObj(
+    Add.named('add'),
+    P.optWhitespace,
+    InequalityLine.named('inequalityline')
   )
+  .node('inequality')
+  .map(mapArithmeticRecursiveNode)
 
-export const EqualityLine: ObjectParser = P
+const EqualityLine: ObjectParser = P
   .alt(
     P.seqObj(
       EqualityOperator.named('operator'), P.optWhitespace,
-      Rel.named('rel'), P.optWhitespace,
+      Inequality.named('inequality'), P.optWhitespace,
       P.lazy((): ObjectParser => EqualityLine).named('equalityline')
     ),
     P.optWhitespace
@@ -142,11 +147,11 @@ export const EqualityLine: ObjectParser = P
 /**
  * Parse equalities relations (== !=) between expressions
  *
- * equality -> equality == rel | equality != rel | rel
+ * equality -> equality == inequalities | equality != inequalities | inequalities
 */
 export const Equality: EqualityParser = P
   .seqObj(
-    Rel.named('rel'),
+    Inequality.named('inequality'),
     P.optWhitespace,
     EqualityLine.named('equalityline')
   )

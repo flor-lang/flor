@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Rel, Equality, Join, Bool, BlockFunction, InlineFunction } from '../src/parsers/expressions'
+import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction } from '../src/parsers/expressions'
 import { canParse, cantParse } from './utils'
 
 
@@ -34,12 +34,15 @@ test('parse add', (): void => {
   cantParseAdd(['1+2-', '2-*5'])
 })
 
-test('can parse relation operation', (): void => {
-  const canParseRel = canParse(Rel)
-  const cantParseRel = cantParse(Rel)
+test('can parse inequality operation', (): void => {
+  const canParseRel = canParse(Inequality)
+  const cantParseRel = cantParse(Inequality)
 
-  canParseRel(['5>2', '2 < 1', '5>=5', '2<=2', '5 >= (5+2)', '(1*1) <= (1/1)', '(1<=1)>(2>=1)', 'foo < arr[0]'])
-  cantParseRel(['5>>2', '2=2', '3==3', '', '>', '<3<3', '5 < 4 < 3'])
+  canParseRel([
+    '5>2', '2 < 1', '5>=5', '2<=2', '5 >= (5+2)', '(1*1) <= (1/1)',
+    '(1<=1)>(2>=1)', 'foo < arr[0]', '5 < 4 < 3', '2 > (2+3) < 1 <= (2<1)'
+  ])
+  cantParseRel(['5>>2', '2=2', '3==3', '', '>', '<3<3'])
 })
 
 test('can parse equality operation', (): void => {
