@@ -28,11 +28,11 @@ export const mapLocNode = (ast: unknown): any => {
   }
 }
 
-type BoolNode = { value: { join: {}; booline: {} } }
+type BoolNode = { value: { join: {}; boolline: {} } }
 export const mapBoolNode = (ast: unknown): any => {
   try {
     const tree = ast as BoolNode
-    if (/^[ ]*$/.test(tree.value.booline as string)) {
+    if (/^[ ]*$/.test(tree.value.boolline as string)) {
       return tree.value.join
     }
     return ast
@@ -67,6 +67,36 @@ export const mapEqualityNode = (ast: unknown): any => {
   }
 }
 
+type AddLine = { operator: string; term: {}; addline: AddLine }
+const mapAddline = (ast: unknown): any => {
+  try {
+    const tree = ast as AddLine
+    const { addline, ...nodes } = tree
+    if (/^[ ]*$/.test((addline as unknown) as string)) {
+      const { operator, ...metadata } = nodes
+      return { ...metadata, parentOperator: operator }
+    } else {
+      const { parentOperator, ...add } = mapAddline(addline)
+      return {
+        name: 'add',
+        value: {
+          parentOperator: tree.operator,
+          operator: parentOperator || add.value.parentOperator,
+          params: [
+            tree.term,
+            add.term || ((add): any => {
+              delete add.value.parentOperator
+              return add
+            })(add)
+          ]
+        }
+      }
+    }
+  } catch {
+    return ast
+  }
+}
+
 type AddNode = { value: { term: {}; addline: {} } }
 export const mapAddNode = (ast: unknown): any => {
   try {
@@ -80,57 +110,69 @@ export const mapAddNode = (ast: unknown): any => {
   }
 }
 
-type TermLine = { operator: string; unary: {}; termline: TermLine }
-const mapTermline = (ast: unknown): any => {
+const mountExprNode = (
+  nodeName: string,
+  childName: string,
+  node: { [x: string]: any },
+  nodeline: { [x: string]: any; parentOperator: any }
+): any => {
+  const { parentOperator, ...child } = nodeline
+  return {
+    name: nodeName,
+    value: {
+      parentOperator: node['operator'],
+      operator: parentOperator || child.value.parentOperator,
+      params: [
+        node[childName] || node.value[childName],
+        child[childName] || ((child): any => {
+          delete child.value.parentOperator
+          return child
+        })(child)
+      ]
+    }
+  }
+}
+
+const mapNodeWithEmptyLine = (node: { value: { [x: string]: any } }, childName: string): any => node.value[childName]
+const mapNodeLineWithEmptyLine = (nodes: { [x: string]: any; operator: any }): any => {
+  const { operator, ...metadata } = nodes
+  return { ...metadata, parentOperator: operator }
+}
+
+const splitNodeLine = (node: { [x: string]: any }, nodeline: string): any => {
+  const line = node[nodeline]
+  delete node[nodeline]
+  return [node, line]
+}
+
+// type TermLine = { operator: string; unary: {}; termline: TermLine }
+const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
   try {
-    const tree = ast as TermLine
-    const { termline, ...nodes } = tree
-    if (/^[ ]*$/.test((termline as unknown) as string)) {
-      const { operator, ...metadata } = nodes
-      return { ...metadata, parentOperator: operator }
+    const lineName = nodeName + 'line'
+    const [node, line] = splitNodeLine(ast, lineName)
+    if (/^[ ]*$/.test((line as unknown) as string)) {
+      return mapNodeLineWithEmptyLine(node)
     } else {
-      const { parentOperator, ...term } = mapTermline(termline)
-      return {
-        name: 'term',
-        value: {
-          parentOperator: tree.operator,
-          operator: parentOperator || term.value.parentOperator,
-          params: [
-            tree.unary,
-            term.unary || ((term): any => {
-              delete term.value.parentOperator
-              return term
-            })(term)
-          ]
-        }
-      }
+      return mountExprNode(nodeName, childName, ast, mapLine(line, nodeName, childName))
     }
   } catch {
     return ast
   }
 }
 
-type TermNode = { value: { unary: {}; termline: {} } }
+// type TermNode = { name: string; value: { operator: string; unary: {}; termline: {} } }
 export const mapTermNode = (ast: unknown): any => {
   try {
-    const tree = ast as TermNode
-    if (/^[ ]*$/.test(tree.value.termline as string)) {
-      return tree.value.unary
+    const tree = ast as { name: string; value: { [x: string]: any } }
+    const nodeName = tree.name
+    const lineName = tree.name + 'line'
+    const childName = Object.keys(tree.value).filter((k): boolean => k.endsWith('line') === false)[0]
+    if (/^[ ]*$/.test(tree.value[lineName] as string)) {
+      return mapNodeWithEmptyLine(tree, childName)
     } else {
-      const termline = mapTermline(tree.value.termline)
-      return {
-        name: 'term',
-        value: {
-          operator: termline.parentOperator || termline.value.parentOperator,
-          params: [
-            tree.value.unary,
-            termline.unary || ((term): any => {
-              delete term.value.parentOperator
-              return term
-            })(termline)
-          ]
-        }
-      }
+      const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value.termline, nodeName, childName))
+      delete node.value.parentOperator
+      return node
     }
   } catch {
     return ast

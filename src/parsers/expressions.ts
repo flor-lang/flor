@@ -176,12 +176,12 @@ export const Join: JoinParser = P
   .node('join')
   .map(mapJoinNode)
 
-const Booline: ObjectParser = P
+const Boolline: ObjectParser = P
   .alt(
     P.seqObj(
       OrOperator, P.optWhitespace,
       Join.named('join'), P.optWhitespace,
-      P.lazy((): ObjectParser => Booline).named('booline')
+      P.lazy((): ObjectParser => Boolline).named('boolline')
     ),
     P.optWhitespace
   )
@@ -194,7 +194,7 @@ export const Bool: BoolParser = P
   .seqObj(
     Join.named('join'),
     P.optWhitespace,
-    Booline.named('booline')
+    Boolline.named('boolline')
   )
   .node('bool')
   .map(mapBoolNode)
