@@ -30,6 +30,7 @@ export type InequalityParser = P.Parser<P.Node<'inequality', {}>>
 export type EqualityParser = P.Parser<P.Node<'equality', {}>>
 export type JoinParser = P.Parser<P.Node<'join', {}>>
 export type BoolParser = P.Parser<P.Node<'bool', {}>>
+export type BoolBtwParenthesesParser = P.Parser<P.Node<'wrapped', {}>>
 export type BlockFunctionParser = P.Parser<P.Node<'block-function', {}>>
 export type InlineFunctionParser = P.Parser<P.Node<'inline-function', {}>>
 export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
@@ -37,16 +38,12 @@ export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 /**
  * Parse Integers Numbers and Expressions between parenthesis
  *
- * factor -> (bool) | loc | literal
+ * factor -> wrapped | loc | literal
 */
 export const Factor: ObjectParser = P
   .alt(
-    P.seqObj(
-      LeftParenthesis, P.optWhitespace,
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.lazy((): BoolParser => Bool).named('between-parenthesis'),
-      P.optWhitespace, RightParenthesis
-    ),
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): BoolBtwParenthesesParser => BoolBtwParentheses),
     P.lazy((): LocParser => Loc),
     P.lazy((): LiteralParser => Literal)
   )
@@ -203,6 +200,15 @@ export const Bool: BoolParser = P
   )
   .node('bool')
   .map(mapArithmeticRecursiveNode)
+
+/**
+ * Parse bool expressions between parentheses
+ *
+ * wrapped -> ( bool )
+*/
+export const BoolBtwParentheses: BoolBtwParenthesesParser = Bool
+  .wrap(LeftParenthesis, RightParenthesis)
+  .node('wrapped')
 
 const Args: ObjectParser = P.lazy((): IdentifierParser => Identifier).sepWrp(',', '(', ')')
 /**

@@ -6,7 +6,7 @@ test('parse factor', (): void => {
   const canParseFactor = canParse(Factor)
   const cantParseFactor = cantParse(Factor)
 
-  canParseFactor(['5', '"5"', '(5)', '(-5 * 8)', '(1 ou 1)', 'verdadeiro', '(falso ou verdadeiro)', 'foo'])
+  canParseFactor(['5', '"5"', '(5)', '(-5 * 8)', '(1 ou 1)', 'verdadeiro', '(falso ou verdadeiro)', 'foo', '( 0 + 0 )'])
   cantParseFactor(['5 - 1', '9 + - 3', '5 -1', 'verdadeiro ou falso'])
 })
 
