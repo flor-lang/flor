@@ -51,7 +51,7 @@ export const Subscriptable: SubscriptableParser = P
 export const Objectable: ObjectableParser = P
   .seqObj(
     Dot,
-    Subscriptable.named('variable'),
+    Subscriptable.named('param'),
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ObjectParser => Locline).named('locline')
   )
@@ -60,9 +60,9 @@ export const Objectable: ObjectableParser = P
 /** indexable -> indexable locline | [expr] */
 export const Indexable: IndexableParser = P
   .seqObj(
-    LeftBracket, P.optWhitespace,
-    P.lazy((): BoolParser => Bool).named('index'),
-    P.optWhitespace, RightBracket,
+    P.lazy((): BoolParser => Bool)
+      .wrap(LeftBracket, RightBracket)
+      .named('param'),
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ObjectParser => Locline).named('locline')
   )
