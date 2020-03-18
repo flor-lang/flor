@@ -26,13 +26,14 @@ interface Visitor {
   literal?: EnterExitCallbacks;
 }
 
-const isAstNode = (genericObject: {}, parentName: string): boolean => {
+const isAstNode = (genericObject: {}, parent: AstNode): boolean => {
   try {
     if ((genericObject as AstNode).name) {
       return true
     }
   } catch (e) {
-    console.log(`not default node type in vale of ${parentName}`)
+    console.error(`not default node type in vale of ${parent.name}`)
+    console.log(parent)
   }
   return false
 }
@@ -50,7 +51,7 @@ export const traverser = (ast: AstNode, visitor: Visitor): void => {
       node.value.forEach((child: AstNode): void => {
         traverseNode(child, node)
       })
-    } else if (isAstNode(node.value, parent.name)) {
+    } else if (isAstNode(node.value, parent)) {
       traverseNode(node.value as AstNode, node)
     } else if (typeof node.value === 'object') {
       const keys = Object.keys(node.value)
