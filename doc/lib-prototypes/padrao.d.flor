@@ -1,0 +1,62 @@
+/* florlint-desabilitar expressoes_sem_uso */
+/* Basic Types */
+
+// Texto : String
+"texto".letra_na(posicao: 2)
+"texto".unicode_da_letra_na(posicao: 2)
+"texto".concatenar(textos: ["hei", "listen"])
+"texto".termina(com: "sufixo")
+"texto".possui(texto: "palavra")
+"texto".indice(de: "texto")
+"texto".ultimo_indice(de: "texto")
+"texto".tamanho
+"texto".casa_com(regexp: novo RegExp("[0-9]*"))
+"texto".normalizar()
+"texto".substituir(texto: "valor", pelo_texto: "novo valor")
+"texto".pesquisar_por(texto: "valor")
+"texto".pesquisar_por(regexp: novo RegExp("valor"))
+"texto".obter_subtexto(posicao_inicial: 0, posicao_final: 10)
+"texto".dividir_texto_pelo(separador: "-")
+"texto".inicia(com: "prefixo")
+"texto".minusculo()
+"texto".maiusculo()
+"texto".remover_espacos_das_laterais()
+"texto".remover_espacos_a_esquerda()
+"texto".remover_espacos_a_direita()
+
+// Numero : Number
+0.5.notacao_cientifica()
+0.5.com_casas_decimais(quantidade: 0)
+
+// Booleano : Boolean
+
+// Lista : Array
+lista = []
+lista.concatenar(lista: [])
+lista.verificar_todos_os_elementos(f: (valor) := valor % 2 == 0)
+lista.preencher_com(valor: 0, da_posicao: 1, a_posicao: 5)
+lista.filtrar(f: (valor) := valor % 2 == 0)
+lista.encontrar(f: (valor) := valor - 5 > 10)
+lista.encontrarIndice(p: (valor) := valor - 5 > 10)
+lista.para_cada(f: (valor) := escreva(texto: valor))
+lista.possui(elemento: 0)
+lista.indice(elemento: 0)
+lista.unir_em_texto(separador: "-")
+lista.ultimo_indice(elemento: 0)
+lista.tamanho
+lista.mapear(f: (valor) := valor * 2)
+lista.remover_ultimo_elemento()
+lista.adicionar(elemento: 0)
+lista.reduzir(valor_inicial: 0, f: (anterior, atual) := anterior + atual)
+lista.inverter()
+lista.remover_primeiro_elemento()
+lista.obter_sublista(posicao_inicial: 0, posicao_final: 2)
+lista.verificar_algum_elemento(f: (valor) := valor % 2 == 0)
+lista.ordenar(f: (a, b) := a + b)
+lista.remover_elementos(posicao_inicial: 5, quantidade: 1)
+lista.inserir(elemento: 10, na_posicao: 2)
+lista.adicionar_no_inicio(elemento: 0)
+
+// Dictionary : Object
+
+// Object : Object

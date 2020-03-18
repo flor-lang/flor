@@ -2,8 +2,9 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
 import { Equal, LeftBracket, RightBracket, Dot } from './operators'
-import { ObjectParser, Expression, ExpressionParser } from './expressions'
+import { ObjectParser, Expression, ExpressionParser, BoolParser, Bool } from './expressions'
 import { FunctionCall, FunctionCallParser } from './statements'
+import { mapLocNode } from '../utils/node-map'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
@@ -22,7 +23,7 @@ export const reservedList: string[] = [
   'funcao', 'retornar', 'fim',
   'definir', 'interface', 'classe', 'novo', 'nova',
   'construtor', 'propriedades', 'metodos',
-  'privado', 'publico', 'estatico'
+  'privado', 'publico', 'estatico', 'super', '__'
 ]
 
 /**
@@ -50,7 +51,7 @@ export const Subscriptable: SubscriptableParser = P
 export const Objectable: ObjectableParser = P
   .seqObj(
     Dot,
-    Subscriptable.named('variable'),
+    Subscriptable.named('param'),
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ObjectParser => Locline).named('locline')
   )
@@ -59,9 +60,9 @@ export const Objectable: ObjectableParser = P
 /** indexable -> indexable locline | [expr] */
 export const Indexable: IndexableParser = P
   .seqObj(
-    LeftBracket, P.optWhitespace,
-    P.lazy((): ExpressionParser => Expression).named('index'),
-    P.optWhitespace, RightBracket,
+    P.lazy((): BoolParser => Bool)
+      .wrap(LeftBracket, RightBracket)
+      .named('param'),
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ObjectParser => Locline).named('locline')
   )
@@ -89,6 +90,7 @@ export const Loc: LocParser = P
     Locline.named('locline')
   )
   .node('loc')
+  .map(mapLocNode)
 
 /**
  * Parser to variable assignment statement
@@ -97,8 +99,8 @@ export const Loc: LocParser = P
 */
 export const Assignment: AssignmentParser = P
   .seqObj(
-    Loc.optWspc().named('loc'),
+    Loc.optWspc().named('lhs'),
     Equal, P.optWhitespace,
-    P.lazy((): ExpressionParser => Expression).named('expression')
+    P.lazy((): ExpressionParser => Expression).named('rhs')
   )
   .node('assignment')

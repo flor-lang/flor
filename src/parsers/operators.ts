@@ -40,8 +40,10 @@ export const EqualExprOperator = P.seqMap(EqualExpr, TheExpr, (_, __): string =>
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const NotEqualExprOperator = P.seqMap(DifferentExpr, OfExpr, (_, __): string => '!=')
 
-export const AndOperator = P.string('e').wspc()
-export const OrOperator = P.string('ou').wspc()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const AndOperator = P.seqMap(P.string('e').wspc(), (_): string => '&&')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const OrOperator = P.seqMap(P.string('ou').wspc(), (_): string => '||')
 
 /** unaryoperator -> ! | + | - */
 export const UnaryOperator = P.alt(NotOperator, PlusOperator, MinusOperator)
