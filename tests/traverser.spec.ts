@@ -45,7 +45,7 @@ test('test visitor order, enter first, exit after', () => {
   traverser(fakeAstNode, visitor)
 })
 
-test('test comples ast', () => {
+test('test complex ast', () => {
   let flag = false
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
@@ -56,4 +56,23 @@ test('test comples ast', () => {
   }
   traverser(fakeAstNode, visitor)
   expect(flag).toBe(true)
+})
+
+test('visitor more complex', () => {
+  let flagForClass = false
+  let flagForInterface = false
+  const fakeAstNode: AstNode = getComplexProgramAst()
+  const visitor = {
+    'class-declaration': {
+      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
+      exit (node: AstNode, parent: AstNode): void { flagForClass = true }
+    },
+    'interface-declaration': {
+      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
+      exit (node: AstNode, parent: AstNode): void { flagForInterface = true }
+    }
+  }
+  traverser(fakeAstNode, visitor)
+  expect(flagForClass).toBe(true)
+  expect(flagForInterface).toBe(true)
 })
