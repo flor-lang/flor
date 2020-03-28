@@ -49,12 +49,7 @@ export const Factor: ObjectParser = P
   )
   // .node('factor')
 
-const UnaryLine: ObjectParser = P
-  .alt(
-    UnaryOperator,
-    P.optWhitespace
-  )
-  .node('unaryline')
+const UnaryLine: ObjectParser = UnaryOperator
 /**
  * Parse Unary Numbers with + or - operators
  *
@@ -62,7 +57,7 @@ const UnaryLine: ObjectParser = P
 */
 export const Unary: UnaryParser = P
   .seqObj(
-    UnaryLine.named('unaryline'),
+    P.alt(UnaryLine, P.optWhitespace).named('unaryline'),
     Factor.named('factor')
   )
   .node('unary')
@@ -77,7 +72,6 @@ const TermLine: ObjectParser = P
     ),
     P.optWhitespace
   )
-  .node('termline')
 /**
  * Parse terms with factor operators(* / %)
  *
@@ -101,7 +95,6 @@ const AddLine: ObjectParser = P
     ),
     P.optWhitespace
   )
-  .node('addline')
 
 /**
  * Parse terms with add operators(+ -)
@@ -149,7 +142,6 @@ const EqualityLine: ObjectParser = P
     ),
     P.optWhitespace
   )
-  .node('equalityline')
 
 /**
  * Parse equalities relations (== !=) between expressions
@@ -174,8 +166,6 @@ const JoinLine: ObjectParser = P
     ),
     P.optWhitespace
   )
-  .node('joinline')
-
 /**
  * Parse and relations ( e ) between expressions
  *
@@ -199,7 +189,6 @@ const Boolline: ObjectParser = P
     ),
     P.optWhitespace
   )
-  .node('booline')
 
 /**
  * Parse or relations ( ou ) between expressions
