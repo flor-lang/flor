@@ -1,4 +1,5 @@
 import { AstNode } from 'utils/traverse'
+import { expressionCG, ExpressionNode } from './expressions'
 
 interface AssignmentNode { lhs: LhsNode; rhs: RhsNode }
 interface LhsNode { subscriptable: { value: AstNode }; params: [] }
@@ -31,12 +32,8 @@ export const assignmentCG = (node: AstNode): string => {
   }
 
   const rhs = (node: RhsNode): string => {
-    const expression = node.value as AstNode
-    const literal = expression.value as AstNode
-    // TO DO
-    return literal.value as string
+    return expressionCG(node as ExpressionNode)
   }
 
-  // console.log(assignmentNode)
   return `${lhs(assignmentNode.lhs)} = ${rhs(assignmentNode.rhs)}\\n`
 }
