@@ -6,7 +6,6 @@ export interface ExpressionNode { value: { name: string; value: LiteralNode } }
 
 export const expressionCG = (node: ExpressionNode): string => {
   const literalCG = (node: LiteralNode): string => {
-    console.log(node.name)
     switch (node.name) {
       case 'number':
         return String(node.value)
@@ -14,6 +13,8 @@ export const expressionCG = (node: ExpressionNode): string => {
         return `"${node.value}"`
       case 'boolean':
         return String(node.value)
+      case 'null':
+        return 'null'
     }
   }
 
