@@ -19,6 +19,24 @@ const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false,
   })
 }
 
+export const canParse = parseStrings(true)
+export const cantParse = parseStrings(false)
+
+export const generatorTester = (p: Parser<any>, cg: any, log: boolean = false) => (inputs: [string, string][]) => {
+  inputs.forEach(i => {
+    const ast = p.tryParse(i[0])
+    const resultCode = cg(ast)
+  
+    if (log) {
+      const resultAst = p.parse(i[0])
+      logAst(resultAst)
+      console.log(resultCode)
+    }
+  
+    expect(resultCode).toBe(i[1])
+  })
+}
+
 export const getAssignmentProgramAst = (): AstNode => {
   const ast = Program.tryParse(`i = 0`)
 
@@ -66,6 +84,3 @@ export const getComplexProgramAst = (): AstNode => {
 
   return ast
 } 
-
-export const canParse = parseStrings(true)
-export const cantParse = parseStrings(false)
