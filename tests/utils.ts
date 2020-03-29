@@ -29,7 +29,7 @@ export const generatorTester = (p: Parser<any>, cg: any, log: boolean = false, l
   
     if (log && index === logIndex) {
       const resultAst = p.parse(i[0])
-      logAst(resultAst)
+      logAst(resultAst, true)
       // console.log(resultCode)
     }
   
