@@ -45,6 +45,19 @@ test('test visitor order, enter first, exit after', () => {
   traverser(fakeAstNode, visitor)
 })
 
+test('stop if node not have name', () => {
+  let flag = false
+  const fakeAstNode: AstNode = getAssignmentProgramAst()
+  const visitor = {
+    expression: {
+      enter (node: AstNode, parent: AstNode): void { flag = true },
+      exit (node: AstNode, parent: AstNode): void { flag = true }
+    }
+  }
+  traverser(fakeAstNode, visitor)
+  expect(flag).toBe(false)   
+})
+
 test('test complex ast', () => {
   let flag = false
   const fakeAstNode: AstNode = getComplexProgramAst()
