@@ -22,15 +22,15 @@ const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false,
 export const canParse = parseStrings(true)
 export const cantParse = parseStrings(false)
 
-export const generatorTester = (p: Parser<any>, cg: any, log: boolean = false) => (inputs: [string, string][]) => {
-  inputs.forEach(i => {
+export const generatorTester = (p: Parser<any>, cg: any, log: boolean = false, logIndex: number = undefined) => (inputs: [string, string][]) => {
+  inputs.forEach((i, index) => {
     const ast = p.tryParse(i[0])
     const resultCode = cg(ast)
   
-    if (log) {
+    if (log && index === logIndex) {
       const resultAst = p.parse(i[0])
       logAst(resultAst)
-      console.log(resultCode)
+      // console.log(resultCode)
     }
   
     expect(resultCode).toBe(i[1])
