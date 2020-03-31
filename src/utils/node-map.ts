@@ -86,6 +86,21 @@ const mapNodeLineWithEmptyLine = (nodes: { [x: string]: any; operator: any }): a
   return { ...metadata, parentOperator: operator }
 }
 
+type ExprNode = { value: { operator: any; params: {}[] } }
+const mapNodeParamsWithOperator = (node: ExprNode): any => {
+  const mapOperator = (node: ExprNode): any => {
+    if (!node.value.operator) {
+      return node
+    }
+    const operatorNode = { name: 'operator', value: node.value.operator }
+    delete node.value.operator
+    node.value.params.map(mapOperator)
+    node.value.params.splice(1, 0, operatorNode)
+    return { ...node, value: node.value.params }
+  }
+  return mapOperator(node)
+}
+
 const splitNodeLine = (node: { [x: string]: any }, nodeline: string): any => {
   const line = node[nodeline]
   delete node[nodeline]
@@ -121,7 +136,7 @@ export const mapArithmeticRecursiveNode = (ast: unknown): any => {
     } else {
       const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value[lineName], nodeName, childName))
       delete node.value.parentOperator
-      return node
+      return mapNodeParamsWithOperator(node)
     }
   } catch {
     return ast

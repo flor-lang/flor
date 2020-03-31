@@ -54,7 +54,7 @@ test('test loc node mapping', () => {
     value: [
       { value: { value: 'lista' } },
       { value: [
-        { value: { value: 0 } }
+        { value: { value: { value: 0 } } }
       ]}
     ]
   })
