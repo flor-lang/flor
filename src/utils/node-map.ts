@@ -124,3 +124,13 @@ export const mapArithmeticRecursiveNode = (ast: unknown): any => {
     return ast
   }
 }
+
+interface Node { name: string; value: Node[] }
+interface ParsedNode { name: string; value: { [key: string]: Node } }
+
+export const nodePropertiesMapper = (properties: string[]): any =>
+  (ast: ParsedNode): Node => {
+    const nodeValues = properties.map((property): Node => ast.value[property])
+    delete ast.value
+    return { ...ast, value: nodeValues }
+  }
