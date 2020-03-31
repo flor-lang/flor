@@ -4,7 +4,7 @@ import '../utils/parsimmon-extension'
 import { Equal, LeftBracket, RightBracket, Dot } from './operators'
 import { ObjectParser, Expression, ExpressionParser, BoolParser, Bool } from './expressions'
 import { FunctionCall, FunctionCallParser } from './statements'
-import { mapLocNode } from '../utils/node-map'
+import { mapLocNode, nodePropertiesMapper } from '../utils/node-map'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
@@ -103,3 +103,4 @@ export const Assignment: AssignmentParser = P
     P.lazy((): ExpressionParser => Expression).named('rhs')
   )
   .node('assignment')
+  .map(nodePropertiesMapper(['lhs', 'rhs']))
