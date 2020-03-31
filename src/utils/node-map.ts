@@ -18,11 +18,14 @@ export const mapLocNode = (ast: unknown): any => {
     }
     const { locline, ...treeValue } = tree.value
     return {
-      ...treeValue,
-      params: locs.map((l): any[] => {
-        l.value = l.value.param.value
-        return l
-      })
+      ...tree,
+      value: {
+        ...treeValue,
+        params: locs.map((l): any[] => {
+          l.value = l.value.param.value
+          return l
+        })
+      }
     }
   } catch {
     return ast
