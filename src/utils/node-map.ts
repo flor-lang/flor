@@ -8,27 +8,23 @@ type LocNode = { value: { subscriptable: { value: {} }; locline: LocNode } }
  * Recursive loclines are assigned to a params property as a list
 */
 export const mapLocNode = (ast: unknown): any => {
-  try {
-    const tree = ast as LocNode
-    const locs: any[] = []
-    let loc = tree.value.locline
-    while (/^[ ]*$/gm.test((loc as unknown) as string) === false) {
-      locs.push(loc)
-      loc = loc.value.locline
+  const tree = ast as LocNode
+  const locs: any[] = []
+  let loc = tree.value.locline
+  while (/^[ ]*$/gm.test((loc as unknown) as string) === false) {
+    locs.push(loc)
+    loc = loc.value.locline
+  }
+  const { locline, ...treeValue } = tree.value
+  return {
+    ...tree,
+    value: {
+      ...treeValue,
+      params: locs.map((l): any[] => {
+        l.value = l.value.param.value
+        return l
+      })
     }
-    const { locline, ...treeValue } = tree.value
-    return {
-      ...tree,
-      value: {
-        ...treeValue,
-        params: locs.map((l): any[] => {
-          l.value = l.value.param.value
-          return l
-        })
-      }
-    }
-  } catch (e) {
-    return ast
   }
 }
 
@@ -38,22 +34,18 @@ type UnaryNode = { value: { factor: {}; unaryline: {} } }
  * Node are remapped with signal property
 */
 export const mapUnaryNode = (ast: unknown): any => {
-  try {
-    const tree = ast as UnaryNode
-    if (/^[ ]*$/gm.test(tree.value.unaryline as string)) {
-      return tree.value.factor
-    } else {
-      const { unaryline, ...treeValue } = tree.value
-      return {
-        ...tree,
-        value: {
-          ...treeValue,
-          signal: unaryline
-        }
+  const tree = ast as UnaryNode
+  if (/^[ ]*$/gm.test(tree.value.unaryline as string)) {
+    return tree.value.factor
+  } else {
+    const { unaryline, ...treeValue } = tree.value
+    return {
+      ...tree,
+      value: {
+        ...treeValue,
+        signal: unaryline
       }
     }
-  } catch {
-    return ast
   }
 }
 
@@ -108,16 +100,12 @@ const splitNodeLine = (node: { [x: string]: any }, nodeline: string): any => {
 }
 
 const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
-  try {
-    const lineName = nodeName + 'line'
-    const [node, line] = splitNodeLine(ast, lineName)
-    if (/^[ ]*$/gm.test((line as unknown) as string)) {
-      return mapNodeLineWithEmptyLine(node)
-    } else {
-      return mountExprNode(nodeName, childName, ast, mapLine(line, nodeName, childName))
-    }
-  } catch {
-    return ast
+  const lineName = nodeName + 'line'
+  const [node, line] = splitNodeLine(ast, lineName)
+  if (/^[ ]*$/gm.test((line as unknown) as string)) {
+    return mapNodeLineWithEmptyLine(node)
+  } else {
+    return mountExprNode(nodeName, childName, ast, mapLine(line, nodeName, childName))
   }
 }
 
@@ -126,20 +114,16 @@ const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
  * Recursive nodelines are assigned to a params property as a list
 */
 export const mapArithmeticRecursiveNode = (ast: unknown): any => {
-  try {
-    const tree = ast as { name: string; value: { [x: string]: any } }
-    const nodeName = tree.name
-    const lineName = tree.name + 'line'
-    const childName = Object.keys(tree.value).filter((k): boolean => k.endsWith('line') === false)[0]
-    if (/^[ ]*$/gm.test(tree.value[lineName] as string)) {
-      return mapNodeWithEmptyLine(tree, childName)
-    } else {
-      const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value[lineName], nodeName, childName))
-      delete node.value.parentOperator
-      return mapNodeParamsWithOperator(node)
-    }
-  } catch {
-    return ast
+  const tree = ast as { name: string; value: { [x: string]: any } }
+  const nodeName = tree.name
+  const lineName = tree.name + 'line'
+  const childName = Object.keys(tree.value).filter((k): boolean => k.endsWith('line') === false)[0]
+  if (/^[ ]*$/gm.test(tree.value[lineName] as string)) {
+    return mapNodeWithEmptyLine(tree, childName)
+  } else {
+    const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value[lineName], nodeName, childName))
+    delete node.value.parentOperator
+    return mapNodeParamsWithOperator(node)
   }
 }
 
