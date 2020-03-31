@@ -40,7 +40,7 @@ type UnaryNode = { value: { factor: {}; unaryline: {} } }
 export const mapUnaryNode = (ast: unknown): any => {
   try {
     const tree = ast as UnaryNode
-    if (/^[ ]*$/.test(tree.value.unaryline as string)) {
+    if (/^[ ]*$/gm.test(tree.value.unaryline as string)) {
       return tree.value.factor
     } else {
       const { unaryline, ...treeValue } = tree.value
@@ -96,7 +96,7 @@ const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
   try {
     const lineName = nodeName + 'line'
     const [node, line] = splitNodeLine(ast, lineName)
-    if (/^[ ]*$/.test((line as unknown) as string)) {
+    if (/^[ ]*$/gm.test((line as unknown) as string)) {
       return mapNodeLineWithEmptyLine(node)
     } else {
       return mountExprNode(nodeName, childName, ast, mapLine(line, nodeName, childName))
@@ -116,7 +116,7 @@ export const mapArithmeticRecursiveNode = (ast: unknown): any => {
     const nodeName = tree.name
     const lineName = tree.name + 'line'
     const childName = Object.keys(tree.value).filter((k): boolean => k.endsWith('line') === false)[0]
-    if (/^[ ]*$/.test(tree.value[lineName] as string)) {
+    if (/^[ ]*$/gm.test(tree.value[lineName] as string)) {
       return mapNodeWithEmptyLine(tree, childName)
     } else {
       const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value[lineName], nodeName, childName))
