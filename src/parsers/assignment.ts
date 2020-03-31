@@ -62,6 +62,7 @@ export const Indexable: IndexableParser = P
   .seqObj(
     P.lazy((): BoolParser => Bool)
       .wrap(LeftBracket, RightBracket)
+      .node('bool')
       .named('param'),
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ObjectParser => Locline).named('locline')
