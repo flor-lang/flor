@@ -12,7 +12,7 @@ export const mapLocNode = (ast: unknown): any => {
     const tree = ast as LocNode
     const locs: any[] = []
     let loc = tree.value.locline
-    while (/^[ ]*$/.test((loc as unknown) as string) === false) {
+    while (/^[ ]*$/gm.test((loc as unknown) as string) === false) {
       locs.push(loc)
       loc = loc.value.locline
     }
@@ -27,7 +27,7 @@ export const mapLocNode = (ast: unknown): any => {
         })
       }
     }
-  } catch {
+  } catch (e) {
     return ast
   }
 }
@@ -133,7 +133,13 @@ interface ParsedNode { name: string; value: { [key: string]: Node } }
 
 export const nodePropertiesMapper = (properties: string[]): any =>
   (ast: ParsedNode): Node => {
-    const nodeValues = properties.map((property): Node => ast.value[property])
+    const nodeValues = properties.map((property): Node => {
+      const value = ast.value[property]
+      if (!value) {
+        console.log(ast, property)
+      }
+      return ('name' in value) ? value : { name: property, value }
+    })
     delete ast.value
     return { ...ast, value: nodeValues }
   }

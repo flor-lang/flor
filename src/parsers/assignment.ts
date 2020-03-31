@@ -90,6 +90,7 @@ export const Loc: LocParser = P
   )
   .node('loc')
   .map(mapLocNode)
+  .map(nodePropertiesMapper(['subscriptable', 'params']))
 
 /**
  * Parser to variable assignment statement
