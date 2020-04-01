@@ -55,6 +55,7 @@ export const WhileStatement: WhileStatementParser = P
     End
   )
   .node('while')
+  .map(nodePropertiesMapper(['condition', 'block']))
 
 /**
  * Parse Do-While Statements
