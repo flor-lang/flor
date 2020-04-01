@@ -80,15 +80,16 @@ export const DoWhileStatement: DoWhileStatementParser = P
 export const ForEachStatement: ForEachStatementParser = P
   .seqObj(
     ForEach,
-    P.lazy((): IdentifierParser => Identifier).named('identifier'),
+    P.lazy((): IdentifierParser => Identifier).named('iterator'),
     OfExpr,
-    P.lazy((): ExpressionParser => Expression).named('iterator'),
+    P.lazy((): LocParser => Loc).named('collection'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): BlockParser => Block).named('block'),
     End
   )
   .node('for-each')
+  .map(nodePropertiesMapper(['iterator', 'collection', 'block']))
 
 const ForToLine: ObjectParser = P
   .alt(

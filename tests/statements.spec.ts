@@ -116,7 +116,7 @@ test('parse for each', (): void => {
   canParseForEachStatement([
     'para cada elemento de colecao faca soma=soma+elemento fim',
     'para cada i de lista_numeros faca lista_numeros[i] = i + 1 fim',
-    'para cada troll de trolls1 + trolls2 faca trolls3 = troll + troll fim',
+    // 'para cada troll de trolls1 + trolls2 faca trolls3 = troll + troll fim',
     `
     para cada elemento de colecao faca
       soma = soma + elemento
