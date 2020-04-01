@@ -90,7 +90,16 @@ export const ForEachStatement: ForEachStatementParser = P
   )
   .node('for-each')
 
-const ForToLine: ObjectParser = P.seqObj(WithExpr, StepExpr, P.lazy((): ExpressionParser => Expression).named('step'))
+const ForToLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      WithExpr, StepExpr,
+      P.lazy((): ExpressionParser => Expression).named('step')
+    )
+      .node('for-to-line')
+      .map(nodePropertiesMapper(['step'])),
+    P.optWhitespace
+  )
 /**
  * Parse For-To Statements
  *
@@ -105,13 +114,14 @@ export const ForToStatement: ForToStatementParser = P
     P.lazy((): ExpressionParser => Expression).named('start-iterator'),
     ToExpr,
     P.lazy((): ExpressionParser => Expression).named('end-iterator'),
-    P.alt(ForToLine, P.optWhitespace).named('for-to-line'),
+    ForToLine.named('for-to-line'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): BlockParser => Block).named('block'),
     End
   )
   .node('for-to')
+  .map(nodePropertiesMapper(['identifier', 'start-iterator', 'end-iterator', 'for-to-line', 'block']))
 
 /**
  * Parser function returns
