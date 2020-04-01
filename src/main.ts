@@ -2,5 +2,10 @@
 import { logAst } from './utils/logger'
 import { Program } from './parsers/program'
 
-const ast = Program.parse('para cada elemento de colecao faca soma=soma+elemento fim')
+const ast = Program.parse(`
+  faca
+    v[i] = v[i+1]
+  enquanto i < a_tamanho - 1
+  fim
+`)
 logAst(ast, true)

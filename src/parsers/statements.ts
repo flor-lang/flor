@@ -71,6 +71,7 @@ export const DoWhileStatement: DoWhileStatementParser = P
     End
   )
   .node('do-while')
+  .map(nodePropertiesMapper(['block', 'condition']))
 
 /**
  * Parse For-Each Statements
