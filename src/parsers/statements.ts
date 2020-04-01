@@ -5,6 +5,7 @@ import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser, LocParser, Loc } from './assignment'
 import { Block, BlockParser } from './program'
 import { InterfaceDeclarationParser, InterfaceDeclaration, ClassDeclarationParser, ClassDeclaration } from './oo'
+import { nodePropertiesMapper } from './../utils/node-map'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
 export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
@@ -126,6 +127,7 @@ export const ReturnStatement: ReturnStatementParser = P
     ).named('expression')
   )
   .node('return')
+  .map(nodePropertiesMapper(['expression']))
 
 const LabeledArgs: ObjectParser = P
   .seqObj(

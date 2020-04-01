@@ -127,18 +127,15 @@ export const mapArithmeticRecursiveNode = (ast: unknown): any => {
   }
 }
 
-interface Node { name: string; value: Node[] }
+interface Node { name: string; value: Node | Node[] }
 interface ParsedNode { name: string; value: { [key: string]: Node } }
 
 export const nodePropertiesMapper = (properties: string[]): any =>
   (ast: ParsedNode): Node => {
     const nodeValues = properties.map((property): Node => {
       const value = ast.value[property]
-      if (!value) {
-        console.log(ast, property)
-      }
-      return ('name' in value) ? value : { name: property, value }
+      return (value && 'name' in value) ? value : { name: property, value }
     })
     delete ast.value
-    return { ...ast, value: nodeValues }
+    return { ...ast, value: nodeValues.length === 1 ? nodeValues[0] : nodeValues }
   }

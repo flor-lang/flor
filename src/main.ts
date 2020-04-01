@@ -4,7 +4,7 @@ import { Program } from './parsers/program'
 
 const ast = Program.parse(`
   f = funcao (x)
-    retornar 2*x + 5
+    retornar
   fim
 `)
 logAst(ast, true)
