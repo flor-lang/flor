@@ -31,6 +31,26 @@ test('if then else statement', (): void => {
     senao
       mensagem = "Cliente necessita prestar contas"
     fim
+    `,
+    `
+    se divida_atual igual a 0 entao
+      mensagem = "Não há dividas"
+    senao se divida_atual < 0 entao
+      mensagem = "Cliente possui saldo"
+    senao se possui_pendencia entao
+      mensagem = "Cliente possui pendencia"
+    senao
+      mensagem = "Cliente necessita prestar contas"
+    fim
+    `,
+    `
+    se divida_atual igual a 0 entao
+      mensagem = "Não há dividas"
+    senao se divida_atual < 0 entao
+      mensagem = "Cliente possui saldo"
+    senao se possui_pendencia entao
+      mensagem = "Cliente possui pendencia"
+    fim
     `
   ])
   cantParseIfThenElseStatement([
@@ -45,7 +65,10 @@ test('if then else statement', (): void => {
     'se 5 == 0 entao a = 0 senao fim',
     'se 5 == 0 entao senao a = 0 fim',
     'se verdadeiro entao a = 5senao a = afim',
-    'se igual a entao a=0 fim'
+    'se igual a entao a=0 fim',
+    'senao se teste entao faca_algo() fim',
+    `se teste entao teste() senaose !teste entao fim`,
+    'se teste entao teste() senao se eita() fim',
   ])
 })
 

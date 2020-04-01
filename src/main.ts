@@ -2,5 +2,10 @@
 import { logAst } from './utils/logger'
 import { Program } from './parsers/program'
 
-const ast = Program.parse('enquanto idade < 18 faca exibir_mensagem_censura = verdadeiro fim')
+const ast = Program.parse(`
+  se teste entao
+    teste()
+  senao se !teste entao
+  fim
+`)
 logAst(ast, true)

@@ -65,6 +65,7 @@ export const Do = P.string('faca').wspc()
 export const If = P.string('se').wspc()
 export const Then = P.string('entao').wspc()
 export const Else = P.string('senao').wspc()
+export const ElseIf = P.seq(Else, If)
 
 export const While = P.string('enquanto').wspc()
 export const ForEach = P.seq(ForExpr, EachExpr)

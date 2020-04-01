@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon, ElseIf } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser, LocParser, Loc } from './assignment'
 import { Block, BlockParser } from './program'
@@ -31,6 +31,13 @@ export const IfThenElseStatement: IfThenElseStatementParser = P
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       P.lazy((): BlockParser => Block).named('block')
     ).named('then'),
+    P.seqObj(
+      ElseIf,
+      P.lazy((): ExpressionParser => Expression).named('condition'),
+      Then,
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      P.lazy((): BlockParser => Block).named('block')
+    ).many().named('elifs'),
     P.alt(
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       P.seqObj(Else, P.lazy((): BlockParser => Block).named('block')),
