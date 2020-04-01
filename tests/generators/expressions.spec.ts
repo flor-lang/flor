@@ -4,7 +4,7 @@ import { generatorTester } from '../utils'
 
 test('generate literal code', (): void => {
 
-  const tryGenerateExpressions = generatorTester(Expression, expressionCG, true, 6)
+  const tryGenerateExpressions = generatorTester(Expression, expressionCG)
 
   tryGenerateExpressions([
     ['10', '10'],
