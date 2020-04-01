@@ -14,7 +14,19 @@ test('test loc node mapping', () => {
     value: [
       { value: { value: 'mario' } },
       { value: [
-        { value: { value: { identifier: { value: 'codar' } } } }
+        { value: { value: [ { value: 'codar' }, { value: [] } ] } }
+      ]}
+    ]
+  })
+
+  expect(Loc.tryParse('mario.f(x: 0)')).toMatchObject({
+    value: [
+      { value: { value: 'mario' } },
+      { value: [
+        { value: { value: [
+          { value: 'f' },
+          { value: [ { value: [ { value: 'x' }, { name: 'expression' } ] } ] }
+        ] } }
       ]}
     ]
   })
@@ -23,7 +35,7 @@ test('test loc node mapping', () => {
     value: [
       { value: { value: 'mario' } },
       { value: [
-        { value: { value: { identifier: { value: 'codar' } } } },
+        { value: { value: [ { value: 'codar' }, { value: [] } ] } },
         { value: { value: 'codigo' } },
         { value: { value: 'texto' } }
       ]}
@@ -35,15 +47,15 @@ test('test loc node mapping', () => {
       { value: { value: 'codigo' } },
       { value: [
         { value: { value: 'bonito' } },
-        { value: { value: { identifier: { value: 'top' } } } },
-        { value: { value: { identifier: { value: 'da_bola' } } } }
+        { value: { value: [ { value: 'top' }, { value: [] } ] } },
+        { value: { value: [ { value: 'da_bola' }, { value: [] } ] } }
       ]}
     ]
   })
 
   expect(Loc.tryParse('parse().tree')).toMatchObject({
     value: [
-      { value: { value: { identifier: { value: 'parse' } } } },
+      { value: { value: [ { value: 'parse' }, { value: [] } ] } },
       { value: [
         { value: { value: 'tree' } }
       ]}

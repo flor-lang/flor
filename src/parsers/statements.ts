@@ -129,13 +129,18 @@ export const ReturnStatement: ReturnStatementParser = P
   .node('return')
   .map(nodePropertiesMapper(['expression']))
 
-const LabeledArgs: ObjectParser = P
+type LabeledArgsParser = P.Parser<P.Node<'labeled-args', {}>>
+const LabeledArgs: LabeledArgsParser = P
   .seqObj(
     P.lazy((): IdentifierParser => Identifier).named('label'),
     P.optWhitespace, Colon, P.optWhitespace,
     P.lazy((): ExpressionParser => Expression).named('value')
   )
+  .node('labeled-arg')
+  .map(nodePropertiesMapper(['label', 'value']))
   .sepWrp(',', '(', ')')
+  .node('labeled-args')
+
 /**
  * Parse function call
  *
@@ -147,6 +152,7 @@ export const FunctionCall: FunctionCallParser = P
     LabeledArgs.named('labeled-args')
   )
   .node('function-call')
+  .map(nodePropertiesMapper(['identifier', 'labeled-args']))
 
 /**
  * Parse Statements
