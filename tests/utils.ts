@@ -38,7 +38,7 @@ export const generatorTester = (p: Parser<any>, cg: any, log: boolean = false, l
 }
 
 export const getAssignmentProgramAst = (): AstNode => {
-  const ast = Program.tryParse(`i = 0`)
+  const ast = Program.tryParse(`i = 1-1`)
 
   return ast
 }

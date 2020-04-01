@@ -4,8 +4,9 @@ export type AstNode = Node<string, {}>
 export type IndexedAstNode = Node<string, {}> & {[index: string]: {}};
 
 interface EnterExitCallbacks {
-  enter(node: AstNode, parent: AstNode): void;
-  exit(node: AstNode, parent: AstNode): void;
+  enter?(node: AstNode, parent: AstNode): void;
+  between?(node: AstNode, parent: AstNode, index: number): void;
+  exit?(node: AstNode, parent: AstNode): void;
 }
 export interface Visitor {
   [index: string]: EnterExitCallbacks;
@@ -54,7 +55,11 @@ export const traverser = (ast: AstNode, visitor: Visitor): void => {
 
     // Order is important here, don't change unless you know what you doing
     if (Array.isArray(node.value)) {
-      node.value.forEach((child: AstNode): void => {
+      const arrayLen = node.value.length
+      node.value.forEach((child: AstNode, index: number): void => {
+        if (methods && methods.between && index > 0 && index < (arrayLen - 1)) {
+          methods.between(child, node, index)
+        }
         traverseNode(child, node)
       })
     } else if (isAstNode(node.value) && isInVisitor(node.value)) {

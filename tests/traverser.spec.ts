@@ -7,7 +7,6 @@ test('test if visitor enter', () => {
   const visitor = {
     assignment: {
       enter (node: AstNode, parent: AstNode): void { flag = true },
-      exit (node: AstNode, parent: AstNode): void { /* não faz nada */ }
     }
   }
   traverser(fakeAstNode, visitor)
@@ -19,7 +18,6 @@ test('test if can exit', () => {
   const fakeAstNode: AstNode = getAssignmentProgramAst()
   const visitor = {
     assignment: {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
       exit (node: AstNode, parent: AstNode): void { flag = true }
     }
   }
@@ -63,7 +61,6 @@ test('test complex ast', () => {
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
     'interface-declaration': {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
       exit (node: AstNode, parent: AstNode): void { flag = true }
     }
   }
@@ -77,11 +74,10 @@ test('visitor more complex', () => {
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
     'class-declaration': {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
+
       exit (node: AstNode, parent: AstNode): void { flagForClass = true }
     },
     'interface-declaration': {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
       exit (node: AstNode, parent: AstNode): void { flagForInterface = true }
     }
   }
