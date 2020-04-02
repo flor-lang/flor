@@ -5,7 +5,7 @@ import { Identifier, IdentifierParser } from './assignment'
 import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool, InlineFunctionParser } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
 import { FunctionCallParser, FunctionCall } from './statements'
-import { nodePropertiesMapper } from './../utils/node-map'
+import { nodePropertiesMapper, mapClassDeclarationNode } from './../utils/node-map'
 
 export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
 export type ClassDeclarationParser = P.Parser<P.Node<'class-declaration', {}>>
@@ -135,19 +135,7 @@ export const ClassDeclaration: ClassDeclarationParser = P
     const metaNames = result.metas.map((m): string => m.name)
     return findDuplicates(metaNames).length === 0
   }, 'Configuração da classe duplicada')
-  .map((ast: { identifier: {}; metas: { name: string }[] }): {} => {
-    const cAst = {
-      identifier: ast.identifier,
-      meta: {
-        inheritance: ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || '',
-        implementations: ast.metas.filter((m): boolean => m.name === 'implementations')[0] || '',
-        constructor: ast.metas.filter((m): boolean => m.name === 'constructor')[0] || '',
-        properties: ast.metas.filter((m): boolean => m.name === 'properties')[0] || '',
-        methods: ast.metas.filter((m): boolean => m.name === 'methods')[0] || ''
-      }
-    }
-    return cAst
-  })
+  .map(mapClassDeclarationNode)
   .node('class-declaration')
 
 /**

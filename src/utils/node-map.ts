@@ -127,6 +127,17 @@ export const mapArithmeticRecursiveNode = (ast: unknown): any => {
   }
 }
 
+export const mapClassDeclarationNode = (ast: { identifier: {}; metas: { name: string }[] }): any => ({
+  identifier: ast.identifier,
+  meta: {
+    inheritance: ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || '',
+    implementations: ast.metas.filter((m): boolean => m.name === 'implementations')[0] || '',
+    constructor: ast.metas.filter((m): boolean => m.name === 'constructor')[0] || '',
+    properties: ast.metas.filter((m): boolean => m.name === 'properties')[0] || '',
+    methods: ast.metas.filter((m): boolean => m.name === 'methods')[0] || ''
+  }
+})
+
 interface Node { name: string; value: Node | Node[] }
 interface ParsedNode { name: string; value: { [key: string]: Node } }
 
