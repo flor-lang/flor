@@ -87,7 +87,7 @@ test('visitor more complex', () => {
 })
 
 
-test('stop if node not have name', () => {
+test('visitor test between', () => {
   let flag = false
   const fakeAstNode: AstNode = getAssignmentProgramAst()
   const visitor = {
