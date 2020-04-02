@@ -34,7 +34,8 @@ export const InterfaceDeclaration: InterfaceDeclarationParser = P
   }))
   .node('interface-declaration')
 
-const MetaInheritance: ObjectParser = P
+type MetaInheritanceParser = P.Parser<P.Node<'inheritance', {}>>
+const MetaInheritance: MetaInheritanceParser = P
   .seqObj(
     Inherit, P.optWhitespace,
     Colon, P.optWhitespace,
@@ -42,6 +43,7 @@ const MetaInheritance: ObjectParser = P
     P.whitespace
   )
   .node('inheritance')
+  .map(nodePropertiesMapper(['parent']))
 
 const MetaImplementations: ObjectParser = P
   .seqObj(

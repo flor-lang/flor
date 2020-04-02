@@ -4,6 +4,9 @@ import { Program } from './parsers/program'
 
 const ast = Program.parse(`
   definir classe Carro
+    heranca: Veiculo
+    interfaces: Locomotivel Personalizavel
+
     propriedades:
       privado modelo
       marca
