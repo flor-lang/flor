@@ -129,6 +129,7 @@ export const mapArithmeticRecursiveNode = (ast: unknown): any => {
 
 export const mapClassDeclarationNode = (ast: { identifier: {}; metas: { name: string; value: {} }[] }): any => {
   const properties = ast.metas.filter((m): boolean => m.name === 'properties')[0]
+  const methods = ast.metas.filter((m): boolean => m.name === 'methods')[0]
   return [
     ast.identifier,
     {
@@ -138,7 +139,7 @@ export const mapClassDeclarationNode = (ast: { identifier: {}; metas: { name: st
         ast.metas.filter((m): boolean => m.name === 'implementations')[0] || { name: 'implementations', value: [] },
         ast.metas.filter((m): boolean => m.name === 'constructor')[0] || { name: 'constructor', value: '' },
         properties ? properties.value : { name: 'properties', value: [] },
-        { name: 'methods', value: ast.metas.filter((m): boolean => m.name === 'methods')[0] || '' }
+        methods ? methods.value : { name: 'methods', value: [] }
       ]
     }
   ]

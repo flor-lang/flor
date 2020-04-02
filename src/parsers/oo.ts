@@ -94,26 +94,30 @@ const MetaProperties: MetaPropertiesParser = P
   .node('properties')
   .map(nodePropertiesMapper(['properties']))
 
-const MethodDeclaration: ObjectParser = P
+type MethodDeclarationParser = P.Parser<P.Node<'method', {}>>
+const MethodDeclaration: MethodDeclarationParser = P
   .seqObj(
-    ClassFieldModifier.named('field-modifier'),
+    ClassFieldModifier.node('modifier').named('field-modifier'),
+    P.lazy((): IdentifierParser => Identifier).named('identifier'),
     P.seqObj(
-      P.lazy((): IdentifierParser => Identifier).named('identifier'),
       P.optWhitespace, Equal, P.optWhitespace,
       P.alt(
         P.lazy((): InlineFunctionParser => InlineFunction),
         P.lazy((): BlockFunctionParser => BlockFunction)
       ).named('function')
-    ).named('assignment')
+    ).node('function').map(nodePropertiesMapper(['function'])).named('function')
   )
+  .node('method')
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'function']))
 
 const MetaMethods: ObjectParser = P
   .seqObj(
     Methods, P.optWhitespace,
     Colon, P.optWhitespace,
-    MethodDeclaration.many().named('declarations')
+    MethodDeclaration.many().named('methods')
   )
   .node('methods')
+  .map(nodePropertiesMapper(['methods']))
 
 const Meta: ObjectParser = P
   .alt(
