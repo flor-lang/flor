@@ -41,10 +41,10 @@ export const mapUnaryNode = (ast: unknown): any => {
     const { unaryline, ...treeValue } = tree.value
     return {
       ...tree,
-      value: {
-        ...treeValue,
-        signal: unaryline
-      }
+      value: [
+        { name: 'operator', value: unaryline },
+        treeValue.factor
+      ]
     }
   }
 }
