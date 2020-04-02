@@ -14,6 +14,7 @@ const ast = Program.parse(`
           estatico ano = 2020
 
       construtor: funcao (modelo)
+          super()
           __modelo = modelo
       fim
 
