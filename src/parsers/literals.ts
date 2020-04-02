@@ -2,6 +2,7 @@ import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 import { ExpressionParser, Expression, ObjectParser } from './expressions'
 import { Colon } from './operators'
+import { nodePropertiesMapper } from './../utils/node-map'
 
 export type StringLiteralParser = P.Parser<P.Node<'string', string>>
 export type NumberLiteralParser = P.Parser<P.Node<'number', number>>
@@ -39,10 +40,10 @@ export const ArrayLiteral: ArrayLiteralParser = P
 const Serializable: ObjectParser = P.alt(StringLiteral, NumberLiteral)
 export const DictionaryLiteral: DictionaryLiteralParser = P
   .seqObj(
-    Serializable.named('key'),
+    Serializable.node('serializable').named('key'),
     P.optWhitespace, Colon, P.optWhitespace,
     P.lazy((): ExpressionParser => Expression).named('value')
-  )
+  ).node('key-value').map(nodePropertiesMapper(['key', 'value']))
   .sepWrp(',', '{', '}')
   .node('dictionary')
 
