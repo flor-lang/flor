@@ -127,28 +127,35 @@ export const mapArithmeticRecursiveNode = (ast: unknown): any => {
   }
 }
 
-export const mapClassDeclarationNode = (ast: { identifier: {}; metas: { name: string }[] }): any => ([
-  ast.identifier,
-  {
-    name: 'class-meta',
-    value: [
-      ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || { name: 'inheritance', value: '' },
-      ast.metas.filter((m): boolean => m.name === 'implementations')[0] || { name: 'implementations', value: [] },
-      ast.metas.filter((m): boolean => m.name === 'constructor')[0] || { name: 'constructor', value: '' },
-      { name: 'properties', value: ast.metas.filter((m): boolean => m.name === 'properties')[0] || '' },
-      { name: 'methods', value: ast.metas.filter((m): boolean => m.name === 'methods')[0] || '' }
-    ]
-  }
-])
+export const mapClassDeclarationNode = (ast: { identifier: {}; metas: { name: string; value: {} }[] }): any => {
+  const properties = ast.metas.filter((m): boolean => m.name === 'properties')[0]
+  return [
+    ast.identifier,
+    {
+      name: 'class-meta',
+      value: [
+        ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || { name: 'inheritance', value: '' },
+        ast.metas.filter((m): boolean => m.name === 'implementations')[0] || { name: 'implementations', value: [] },
+        ast.metas.filter((m): boolean => m.name === 'constructor')[0] || { name: 'constructor', value: '' },
+        properties ? properties.value : { name: 'properties', value: [] },
+        { name: 'methods', value: ast.metas.filter((m): boolean => m.name === 'methods')[0] || '' }
+      ]
+    }
+  ]
+}
 
-interface Node { name: string; value: Node | Node[] }
+interface Node { name: string; value: Node | Node[] | string }
 interface ParsedNode { name: string; value: { [key: string]: Node } }
 
 export const nodePropertiesMapper = (properties: string[]): any =>
   (ast: ParsedNode): Node => {
     const nodeValues = properties.map((property): Node => {
       const value = ast.value[property]
-      return (value && 'name' in value) ? value : { name: property, value }
+      try {
+        return ('name' in value) ? value : { name: property, value }
+      } catch {
+        return { name: property, value: '' }
+      }
     })
     delete ast.value
     return { ...ast, value: nodeValues.length === 1 ? nodeValues[0] : nodeValues }

@@ -16,6 +16,7 @@ const ast = Program.parse(`
     construtor: funcao (modelo)
       __modelo = modelo
     fim
+    
   fim
 `)
 logAst(ast, true)

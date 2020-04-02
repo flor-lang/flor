@@ -58,7 +58,8 @@ const MetaImplementations: MetaImplementationsParser = P
   .node('implementations')
   .map(nodePropertiesMapper(['interfaces']))
 
-const MetaConstructor: ObjectParser = P
+type MetaConstructorParser = P.Parser<P.Node<'constructor', {}>>
+const MetaConstructor: MetaConstructorParser = P
   .seqObj(
     Constructor, P.optWhitespace,
     Colon, P.optWhitespace,
@@ -67,30 +68,35 @@ const MetaConstructor: ObjectParser = P
   .node('constructor')
   .map(nodePropertiesMapper(['function']))
 
-const PropertyDeclaration: ObjectParser = P
+type PropertyDeclarationParser = P.Parser<P.Node<'property', {}>>
+const PropertyDeclaration: PropertyDeclarationParser = P
   .seqObj(
-    P.alt(ClassFieldModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    ClassFieldModifier.node('modifier').named('field-modifier'),
     P.lazy((): IdentifierParser => Identifier).named('identifier'),
     P.alt(
       P.seqObj(
         P.optWhitespace, Equal, P.optWhitespace,
         P.lazy((): BoolParser => Bool).named('bool')
-      ),
+      ).node('assignment').map(nodePropertiesMapper(['bool'])),
       P.optWhitespace
     ).named('assignment')
   )
+  .node('property')
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'assignment']))
 
-const MetaProperties: ObjectParser = P
+type MetaPropertiesParser = P.Parser<P.Node<'properties', {}>>
+const MetaProperties: MetaPropertiesParser = P
   .seqObj(
     Properties, P.optWhitespace,
     Colon, P.optWhitespace,
-    PropertyDeclaration.many().named('declarations')
+    PropertyDeclaration.many().named('properties')
   )
   .node('properties')
+  .map(nodePropertiesMapper(['properties']))
 
 const MethodDeclaration: ObjectParser = P
   .seqObj(
-    P.alt(ClassFieldModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    ClassFieldModifier.named('field-modifier'),
     P.seqObj(
       P.lazy((): IdentifierParser => Identifier).named('identifier'),
       P.optWhitespace, Equal, P.optWhitespace,
