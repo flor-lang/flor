@@ -19,7 +19,7 @@ import {
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
-import { mapArithmeticRecursiveNode, mapUnaryNode } from '../utils/node-map'
+import { mapArithmeticRecursiveNode, mapUnaryNode, nodePropertiesMapper } from '../utils/node-map'
 
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
@@ -226,7 +226,9 @@ export const BlockFunction: BlockFunctionParser = P
     P.optWhitespace,
     P.lazy((): BlockParser => Block).named('block'),
     End
-  ).node('block-function')
+  )
+  .node('block-function')
+  .map(nodePropertiesMapper(['args', 'block']))
 
 /**
  * Parse inline function expressions
@@ -241,6 +243,7 @@ export const InlineFunction: InlineFunctionParser = P
     P.lazy((): ExpressionParser => Expression).named('expression')
   )
   .node('inline-function')
+  .map(nodePropertiesMapper(['args', 'expression']))
 
 /**
  * Parse expressions

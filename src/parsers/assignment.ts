@@ -4,7 +4,7 @@ import '../utils/parsimmon-extension'
 import { Equal, LeftBracket, RightBracket, Dot } from './operators'
 import { ObjectParser, Expression, ExpressionParser, BoolParser, Bool } from './expressions'
 import { FunctionCall, FunctionCallParser } from './statements'
-import { mapLocNode } from '../utils/node-map'
+import { mapLocNode, nodePropertiesMapper } from '../utils/node-map'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
@@ -23,7 +23,7 @@ export const reservedList: string[] = [
   'funcao', 'retornar', 'fim',
   'definir', 'interface', 'classe', 'novo', 'nova',
   'construtor', 'propriedades', 'metodos',
-  'privado', 'publico', 'estatico', 'super', '__'
+  'privado', 'publico', 'estatico'
 ]
 
 /**
@@ -62,6 +62,7 @@ export const Indexable: IndexableParser = P
   .seqObj(
     P.lazy((): BoolParser => Bool)
       .wrap(LeftBracket, RightBracket)
+      .node('bool')
       .named('param'),
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ObjectParser => Locline).named('locline')
@@ -90,6 +91,7 @@ export const Loc: LocParser = P
   )
   .node('loc')
   .map(mapLocNode)
+  .map(nodePropertiesMapper(['subscriptable', 'params']))
 
 /**
  * Parser to variable assignment statement
@@ -103,3 +105,4 @@ export const Assignment: AssignmentParser = P
     P.lazy((): ExpressionParser => Expression).named('rhs')
   )
   .node('assignment')
+  .map(nodePropertiesMapper(['lhs', 'rhs']))

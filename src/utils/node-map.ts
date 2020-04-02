@@ -8,24 +8,23 @@ type LocNode = { value: { subscriptable: { value: {} }; locline: LocNode } }
  * Recursive loclines are assigned to a params property as a list
 */
 export const mapLocNode = (ast: unknown): any => {
-  try {
-    const tree = ast as LocNode
-    const locs: any[] = []
-    let loc = tree.value.locline
-    while (/^[ ]*$/.test((loc as unknown) as string) === false) {
-      locs.push(loc)
-      loc = loc.value.locline
-    }
-    const { locline, ...treeValue } = tree.value
-    return {
+  const tree = ast as LocNode
+  const locs: any[] = []
+  let loc = tree.value.locline
+  while (/^[ ]*$/gm.test((loc as unknown) as string) === false) {
+    locs.push(loc)
+    loc = loc.value.locline
+  }
+  const { locline, ...treeValue } = tree.value
+  return {
+    ...tree,
+    value: {
       ...treeValue,
       params: locs.map((l): any[] => {
         l.value = l.value.param.value
         return l
       })
     }
-  } catch {
-    return ast
   }
 }
 
@@ -35,22 +34,18 @@ type UnaryNode = { value: { factor: {}; unaryline: {} } }
  * Node are remapped with signal property
 */
 export const mapUnaryNode = (ast: unknown): any => {
-  try {
-    const tree = ast as UnaryNode
-    if (/^[ ]*$/.test(tree.value.unaryline as string)) {
-      return tree.value.factor
-    } else {
-      const { unaryline, ...treeValue } = tree.value
-      return {
-        ...tree,
-        value: {
-          ...treeValue,
-          signal: unaryline
-        }
-      }
+  const tree = ast as UnaryNode
+  if (/^[ ]*$/gm.test(tree.value.unaryline as string)) {
+    return tree.value.factor
+  } else {
+    const { unaryline, ...treeValue } = tree.value
+    return {
+      ...tree,
+      value: [
+        { name: 'operator', value: unaryline },
+        treeValue.factor
+      ]
     }
-  } catch {
-    return ast
   }
 }
 
@@ -83,6 +78,21 @@ const mapNodeLineWithEmptyLine = (nodes: { [x: string]: any; operator: any }): a
   return { ...metadata, parentOperator: operator }
 }
 
+type ExprNode = { value: { operator: any; params: {}[] } }
+const mapNodeParamsWithOperator = (node: ExprNode): any => {
+  const mapOperator = (node: ExprNode): any => {
+    if (!node.value.operator) {
+      return node
+    }
+    const operatorNode = { name: 'operator', value: node.value.operator }
+    delete node.value.operator
+    node.value.params.map(mapOperator)
+    node.value.params.splice(1, 0, operatorNode)
+    return { ...node, value: node.value.params }
+  }
+  return mapOperator(node)
+}
+
 const splitNodeLine = (node: { [x: string]: any }, nodeline: string): any => {
   const line = node[nodeline]
   delete node[nodeline]
@@ -90,16 +100,12 @@ const splitNodeLine = (node: { [x: string]: any }, nodeline: string): any => {
 }
 
 const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
-  try {
-    const lineName = nodeName + 'line'
-    const [node, line] = splitNodeLine(ast, lineName)
-    if (/^[ ]*$/.test((line as unknown) as string)) {
-      return mapNodeLineWithEmptyLine(node)
-    } else {
-      return mountExprNode(nodeName, childName, ast, mapLine(line, nodeName, childName))
-    }
-  } catch {
-    return ast
+  const lineName = nodeName + 'line'
+  const [node, line] = splitNodeLine(ast, lineName)
+  if (/^[ ]*$/gm.test((line as unknown) as string)) {
+    return mapNodeLineWithEmptyLine(node)
+  } else {
+    return mountExprNode(nodeName, childName, ast, mapLine(line, nodeName, childName))
   }
 }
 
@@ -108,19 +114,50 @@ const mapLine = (ast: unknown, nodeName: string, childName: string): any => {
  * Recursive nodelines are assigned to a params property as a list
 */
 export const mapArithmeticRecursiveNode = (ast: unknown): any => {
-  try {
-    const tree = ast as { name: string; value: { [x: string]: any } }
-    const nodeName = tree.name
-    const lineName = tree.name + 'line'
-    const childName = Object.keys(tree.value).filter((k): boolean => k.endsWith('line') === false)[0]
-    if (/^[ ]*$/.test(tree.value[lineName] as string)) {
-      return mapNodeWithEmptyLine(tree, childName)
-    } else {
-      const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value[lineName], nodeName, childName))
-      delete node.value.parentOperator
-      return node
-    }
-  } catch {
-    return ast
+  const tree = ast as { name: string; value: { [x: string]: any } }
+  const nodeName = tree.name
+  const lineName = tree.name + 'line'
+  const childName = Object.keys(tree.value).filter((k): boolean => k.endsWith('line') === false)[0]
+  if (/^[ ]*$/gm.test(tree.value[lineName] as string)) {
+    return mapNodeWithEmptyLine(tree, childName)
+  } else {
+    const node = mountExprNode(nodeName, childName, tree, mapLine(tree.value[lineName], nodeName, childName))
+    delete node.value.parentOperator
+    return mapNodeParamsWithOperator(node)
   }
 }
+
+export const mapClassDeclarationNode = (ast: { identifier: {}; metas: { name: string; value: {} }[] }): any => {
+  const properties = ast.metas.filter((m): boolean => m.name === 'properties')[0]
+  const methods = ast.metas.filter((m): boolean => m.name === 'methods')[0]
+  return [
+    ast.identifier,
+    {
+      name: 'class-meta',
+      value: [
+        ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || { name: 'inheritance', value: '' },
+        ast.metas.filter((m): boolean => m.name === 'implementations')[0] || { name: 'implementations', value: [] },
+        ast.metas.filter((m): boolean => m.name === 'constructor')[0] || { name: 'constructor', value: '' },
+        properties ? properties.value : { name: 'properties', value: [] },
+        methods ? methods.value : { name: 'methods', value: [] }
+      ]
+    }
+  ]
+}
+
+interface Node { name: string; value: Node | Node[] | string }
+interface ParsedNode { name: string; value: { [key: string]: Node } }
+
+export const nodePropertiesMapper = (properties: string[]): any =>
+  (ast: ParsedNode): Node => {
+    const nodeValues = properties.map((property): Node => {
+      const value = ast.value[property]
+      try {
+        return ('name' in value) ? value : { name: property, value }
+      } catch {
+        return { name: property, value: '' }
+      }
+    })
+    delete ast.value
+    return { ...ast, value: nodeValues.length === 1 ? nodeValues[0] : nodeValues }
+  }

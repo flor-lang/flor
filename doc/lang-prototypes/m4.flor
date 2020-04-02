@@ -40,9 +40,13 @@ pessoa.adicionar_telefone(numero: '999999999')
 
 se pessoa.telefones.tamanho maior que 0 e pessoa.nome = 'Sandro' entao
   Console.escreva(pessoa)
+senao se pessoa.nome = 'froids' entao
+  Console.escreva(pessoa)
+senao
+  Console.escreva("triste")
 fim
 
-definir class PessoaJuridica
+definir classe PessoaJuridica
   herda: Pessoa
 fim
 
