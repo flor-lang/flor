@@ -45,7 +45,8 @@ const MetaInheritance: MetaInheritanceParser = P
   .node('inheritance')
   .map(nodePropertiesMapper(['parent']))
 
-const MetaImplementations: ObjectParser = P
+type MetaImplementationsParser = P.Parser<P.Node<'implementations', {}>>
+const MetaImplementations: MetaImplementationsParser = P
   .seqObj(
     Implements, P.optWhitespace,
     Colon, P.optWhitespace,
@@ -55,6 +56,7 @@ const MetaImplementations: ObjectParser = P
     P.whitespace
   )
   .node('implementations')
+  .map(nodePropertiesMapper(['interfaces']))
 
 const MetaConstructor: ObjectParser = P
   .seqObj(
