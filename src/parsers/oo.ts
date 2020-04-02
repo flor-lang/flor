@@ -5,6 +5,7 @@ import { Identifier, IdentifierParser } from './assignment'
 import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool, InlineFunctionParser } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
 import { FunctionCallParser, FunctionCall } from './statements'
+import { nodePropertiesMapper } from './../utils/node-map'
 
 export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
 export type ClassDeclarationParser = P.Parser<P.Node<'class-declaration', {}>>
@@ -159,3 +160,4 @@ export const ClassInstantiation: ClassInstantiationParser = P
     New, P.lazy((): FunctionCallParser => FunctionCall).named('constructor')
   )
   .node('class-instantiation')
+  .map(nodePropertiesMapper(['constructor']))
