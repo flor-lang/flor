@@ -60,7 +60,7 @@ test('test complex ast', () => {
   let flag = false
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
-    'interface-declaration': {
+    interfaceDeclaration: {
       exit (node: AstNode, parent: AstNode): void { flag = true }
     }
   }
@@ -73,11 +73,11 @@ test('visitor more complex', () => {
   let flagForInterface = false
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
-    'class-declaration': {
+    classDeclaration: {
 
       exit (node: AstNode, parent: AstNode): void { flagForClass = true }
     },
-    'interface-declaration': {
+    interfaceDeclaration: {
       exit (node: AstNode, parent: AstNode): void { flagForInterface = true }
     }
   }
@@ -85,3 +85,23 @@ test('visitor more complex', () => {
   expect(flagForClass).toBe(true)
   expect(flagForInterface).toBe(true)
 })
+
+
+test('stop if node not have name', () => {
+  let flag = false
+  const fakeAstNode: AstNode = getAssignmentProgramAst()
+  const visitor = {
+    add: {
+      between (node: AstNode, parent: AstNode, index: number): void { 
+        flag = true
+        expect(node.name).toBe('operator')
+        expect(node.value).toBe('-')
+        expect(index).toBe(1)
+        expect(parent.name).toBe('add')
+      }
+    }
+  }
+  traverser(fakeAstNode, visitor)
+  expect(flag).toBe(true)   
+})
+

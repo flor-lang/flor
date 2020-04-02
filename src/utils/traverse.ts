@@ -1,4 +1,5 @@
 import { Node } from 'parsimmon'
+import { camelCase } from 'lodash'
 
 export type AstNode = Node<string, {}>
 export type IndexedAstNode = Node<string, {}> & {[index: string]: {}};
@@ -10,21 +11,6 @@ interface EnterExitCallbacks {
 }
 export interface Visitor {
   [index: string]: EnterExitCallbacks;
-  block?: EnterExitCallbacks;
-  statement?: EnterExitCallbacks;
-  assignment?: EnterExitCallbacks;
-  loc?: EnterExitCallbacks;
-  subscriptable?: EnterExitCallbacks;
-  expression?: EnterExitCallbacks;
-  bool?: EnterExitCallbacks;
-  join?: EnterExitCallbacks;
-  equality?: EnterExitCallbacks;
-  rel?: EnterExitCallbacks;
-  add?: EnterExitCallbacks;
-  term?: EnterExitCallbacks;
-  unary?: EnterExitCallbacks;
-  factor?: EnterExitCallbacks;
-  literal?: EnterExitCallbacks;
 }
 
 const isAstNode = (genericObject: {}): boolean => {
@@ -40,14 +26,14 @@ const isAstNode = (genericObject: {}): boolean => {
 export const traverser = (ast: AstNode, visitor: Visitor): void => {
   const isInVisitor = (genericObject: {}): boolean => {
     try {
-      return (genericObject as AstNode).name in visitor
+      return camelCase((genericObject as AstNode).name) in visitor
     } catch (_) {
       return false
     }
   }
 
   const traverseNode = (node: AstNode, parent: AstNode): void => {
-    const methods = visitor[node.name]
+    const methods = visitor[camelCase(node.name)]
 
     if (methods && methods.enter) {
       methods.enter(node, parent)
