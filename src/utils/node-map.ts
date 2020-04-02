@@ -134,7 +134,7 @@ export const mapClassDeclarationNode = (ast: { identifier: {}; metas: { name: st
     value: [
       ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || { name: 'inheritance', value: '' },
       ast.metas.filter((m): boolean => m.name === 'implementations')[0] || { name: 'implementations', value: [] },
-      { name: 'constructor', value: ast.metas.filter((m): boolean => m.name === 'constructor')[0] || '' },
+      ast.metas.filter((m): boolean => m.name === 'constructor')[0] || { name: 'constructor', value: '' },
       { name: 'properties', value: ast.metas.filter((m): boolean => m.name === 'properties')[0] || '' },
       { name: 'methods', value: ast.metas.filter((m): boolean => m.name === 'methods')[0] || '' }
     ]

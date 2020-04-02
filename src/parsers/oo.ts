@@ -65,6 +65,7 @@ const MetaConstructor: ObjectParser = P
     P.lazy((): BlockFunctionParser => BlockFunction).named('function')
   )
   .node('constructor')
+  .map(nodePropertiesMapper(['function']))
 
 const PropertyDeclaration: ObjectParser = P
   .seqObj(
