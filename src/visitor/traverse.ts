@@ -4,10 +4,10 @@ import { camelCase } from 'lodash'
 export type AstNode = Node<string, {}>
 export type IndexedAstNode = Node<string, {}> & {[index: string]: {}};
 
-interface EnterExitCallbacks {
-  enter?(node: AstNode, parent: AstNode): void;
-  between?(node: AstNode, parent: AstNode, index: number): void;
-  exit?(node: AstNode, parent: AstNode): void;
+export interface EnterExitCallbacks {
+  enter?(node?: AstNode, parent?: AstNode): void;
+  between?(node?: AstNode, parent?: AstNode, index?: number): void;
+  exit?(node?: AstNode, parent?: AstNode): void;
 }
 export interface Visitor {
   [index: string]: EnterExitCallbacks;
@@ -35,10 +35,10 @@ export const traverser = (ast: AstNode, visitor: Visitor): void => {
     if (Array.isArray(node.value)) {
       const arrayLen = node.value.length
       node.value.forEach((child: AstNode, index: number): void => {
-        if (methods && methods.between && index > 0 && index < (arrayLen - 1)) {
-          methods.between(child, node, index)
-        }
         traverseNode(child, node)
+        if (methods && methods.between && arrayLen > 1 && index < (arrayLen - 1)) {
+          methods.between(node, parent, index)
+        }
       })
     } else if (isAstNode(node.value)) {
       traverseNode(node.value as AstNode, node)

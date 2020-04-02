@@ -1,4 +1,4 @@
-import { traverser, AstNode } from '../src/utils/traverse'
+import { traverser, AstNode } from '../src/visitor/traverse'
 import { getAssignmentProgramAst, getComplexProgramAst } from './utils'
 
 test('test if visitor enter', () => {
@@ -43,19 +43,6 @@ test('test visitor order, enter first, exit after', () => {
   traverser(fakeAstNode, visitor)
 })
 
-test('stop if node not have name', () => {
-  let flag = false
-  const fakeAstNode: AstNode = getAssignmentProgramAst()
-  const visitor = {
-    expression: {
-      enter (node: AstNode, parent: AstNode): void { flag = true },
-      exit (node: AstNode, parent: AstNode): void { flag = true }
-    }
-  }
-  traverser(fakeAstNode, visitor)
-  expect(flag).toBe(false)   
-})
-
 test('test complex ast', () => {
   let flag = false
   const fakeAstNode: AstNode = getComplexProgramAst()
@@ -87,19 +74,18 @@ test('visitor more complex', () => {
 
 test('visitor test between', () => {
   let flag = false
+  let count = 0
   const fakeAstNode: AstNode = getAssignmentProgramAst()
   const visitor = {
     add: {
       between (node: AstNode, parent: AstNode, index: number): void { 
         flag = true
-        expect(node.name).toBe('operator')
-        expect(node.value).toBe('-')
-        expect(index).toBe(1)
-        expect(parent.name).toBe('add')
+        count++
       }
     }
   }
   traverser(fakeAstNode, visitor)
+  expect(count).toBe(2)
   expect(flag).toBe(true)   
 })
 
