@@ -24,28 +24,25 @@ export type StatementParser = P.Parser<P.Node<'statement', {}>>
  */
 export const IfThenElseStatement: IfThenElseStatementParser = P
   .seqObj(
-    If,
-    P.lazy((): ExpressionParser => Expression).named('condition'),
-    Then,
+    If, P.lazy((): ExpressionParser => Expression).named('condition'), Then,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): BlockParser => Block).named('block'),
     P.seqObj(
+      ElseIf, P.lazy((): ExpressionParser => Expression).named('condition'), Then,
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       P.lazy((): BlockParser => Block).named('block')
-    ).named('then'),
-    P.seqObj(
-      ElseIf,
-      P.lazy((): ExpressionParser => Expression).named('condition'),
-      Then,
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.lazy((): BlockParser => Block).named('block')
-    ).many().named('elifs'),
+    ).node('elif').map(nodePropertiesMapper(['condition', 'block'])).many().named('elifs'),
     P.alt(
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.seqObj(Else, P.lazy((): BlockParser => Block).named('block')),
+      P.seqObj(Else, P.lazy((): BlockParser => Block).named('block'))
+        .node('else')
+        .map(nodePropertiesMapper(['block'])),
       P.optWhitespace
     ).named('else'),
     End
   )
   .node('if-then-else')
+  .map(nodePropertiesMapper(['condition', 'block', 'elifs', 'else']))
 
 /**
  * Parse While Statements
