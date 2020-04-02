@@ -24,14 +24,6 @@ const isAstNode = (genericObject: {}): boolean => {
 }
 
 export const traverser = (ast: AstNode, visitor: Visitor): void => {
-  const isInVisitor = (genericObject: {}): boolean => {
-    try {
-      return camelCase((genericObject as AstNode).name) in visitor
-    } catch (_) {
-      return false
-    }
-  }
-
   const traverseNode = (node: AstNode, parent: AstNode): void => {
     const methods = visitor[camelCase(node.name)]
 
@@ -48,16 +40,9 @@ export const traverser = (ast: AstNode, visitor: Visitor): void => {
         }
         traverseNode(child, node)
       })
-    } else if (isAstNode(node.value) && isInVisitor(node.value)) {
+    } else if (isAstNode(node.value)) {
       traverseNode(node.value as AstNode, node)
-    } /* else if (typeof node.value === 'object') {
-      const keys = Object.keys(node.value)
-      keys.forEach((key): void => {
-        const obj = node.value as IndexedAstNode
-        const nextObj = obj[key]
-        traverseNode(nextObj as AstNode, node)
-      })
-    } */
+    }
 
     if (methods && methods.exit) {
       methods.exit(node, parent)

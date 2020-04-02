@@ -74,7 +74,6 @@ test('visitor more complex', () => {
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
     classDeclaration: {
-
       exit (node: AstNode, parent: AstNode): void { flagForClass = true }
     },
     interfaceDeclaration: {
@@ -85,7 +84,6 @@ test('visitor more complex', () => {
   expect(flagForClass).toBe(true)
   expect(flagForInterface).toBe(true)
 })
-
 
 test('visitor test between', () => {
   let flag = false
