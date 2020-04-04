@@ -10,16 +10,33 @@ export default class SymbolTable {
     this.parent = parent
   }
 
+  private iterateSymbolTable (callbackfn: (symbolTable: SymbolTable) => void): void {
+    for (let symbolTable = this as SymbolTable; symbolTable != null; symbolTable = symbolTable.parent) {
+      callbackfn(symbolTable)
+    }
+  }
+
+  private searchIdentifier (identifier: string, callbackfn: (symbolTable: SymbolTable) => void): void {
+    this.iterateSymbolTable((symbolTable): void => {
+      if (identifier in symbolTable.table) {
+        callbackfn(symbolTable)
+      }
+    })
+  }
+
   public put (identifier: string, node: AstNode): void {
-    this.table[identifier] = node
+    let table = this.table
+    this.searchIdentifier(identifier, (symbolTable): void => {
+      table = symbolTable.table
+    })
+    table[identifier] = node
   }
 
   public get (identifier: string): AstNode {
-    for (let symbolTable = this as SymbolTable; symbolTable != null; symbolTable = symbolTable.parent) {
-      if (identifier in symbolTable.table) {
-        return symbolTable.table[identifier]
-      }
-    }
-    return null
+    let node: AstNode = null
+    this.searchIdentifier(identifier, (symbolTable): void => {
+      node = symbolTable.table[identifier]
+    })
+    return node
   }
 }
