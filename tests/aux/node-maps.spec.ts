@@ -1,4 +1,4 @@
-import { Loc } from '../src/parsers/assignment'
+import { Loc } from '../../src/parsers/assignment'
 
 test('test loc node mapping', () => {
   expect(Loc.tryParse('mario.matheus')).toMatchObject({

@@ -2,6 +2,7 @@
 
 export interface LiteralNode { name: string; value: [] } // sorry, explain if you can
 export interface ExpressionNode { value: { name: string; value: LiteralNode } }
+export interface SerializableNode { value: { value: string | number } }
 
 export const expressionCG = (node: ExpressionNode): string => {
   const literalCG = (node: LiteralNode): string => {
@@ -20,8 +21,8 @@ export const expressionCG = (node: ExpressionNode): string => {
         }
         return node.value.reduce(arrayReducer, `[`) + ']'
       case 'dictionary':
-        const dictReducer = (acc: string, cur: { key: { value: string | number } ; value: ExpressionNode }, i: number): string => {
-          return `${acc}${i > 0 ? ',' : ''}"${String(cur.key.value)}":${expressionCG(cur.value)}`
+        const dictReducer = (acc: string, cur: { value: (SerializableNode | ExpressionNode)[] }, i: number): string => {
+          return `${acc}${i > 0 ? ',' : ''}"${String(cur.value[0].value.value)}":${expressionCG(cur.value[1] as ExpressionNode)}`
         }
         return node.value.reduce(dictReducer, '{') + '}'
     }

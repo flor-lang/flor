@@ -1,5 +1,5 @@
-import { canParse, cantParse } from './utils'
-import { InterfaceDeclaration, ClassDeclaration, ClassInstantiation } from '../src/parsers/oo'
+import { canParse, cantParse } from '../utils'
+import { InterfaceDeclaration, ClassDeclaration, ClassInstantiation } from '../../src/parsers/oo'
 
 test('parse interface declaration', (): void => {
   const canParseInterfaceDeclaration = canParse(InterfaceDeclaration)

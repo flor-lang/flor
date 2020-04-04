@@ -1,5 +1,5 @@
-import { Assignment, Loc, Identifier } from '../src/parsers/assignment'
-import { canParse, cantParse } from './utils'
+import { Assignment, Loc, Identifier } from '../../src/parsers/assignment'
+import { canParse, cantParse } from '../utils'
 
 test('parse loc', (): void => {
   const canParseLoc = canParse(Loc)

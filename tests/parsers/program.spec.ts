@@ -1,5 +1,5 @@
-import { canParse, cantParse } from './utils'
-import { Block, Program } from '../src/parsers/program'
+import { canParse, cantParse } from '../utils'
+import { Block, Program } from '../../src/parsers/program'
 
 test('test block', (): void => {
   const canParseBlock = canParse(Block)
