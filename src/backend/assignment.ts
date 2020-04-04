@@ -13,6 +13,8 @@ const assignment = {
 
 const loc = {
   enter (node: AstNode, parent: AstNode): void {
+    // TODO: Move to exit method after expression visitor evaluate type of expression
+    // to associate type to identifier at symbol table
     if (parent.name === 'assignment' && indexOfChildInParent(node, parent) === 0) {
       Env.get().symbolTable.put(identifierValueOfLocNode(node), node)
     }
