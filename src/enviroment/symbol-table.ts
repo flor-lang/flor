@@ -19,17 +19,13 @@ export default class SymbolTable {
   private searchIdentifier (identifier: string, callbackfn: (symbolTable: SymbolTable) => void): void {
     this.iterateSymbolTable((symbolTable): void => {
       if (identifier in symbolTable.table) {
-        callbackfn(symbolTable)
+        return callbackfn(symbolTable)
       }
     })
   }
 
   public put (identifier: string, node: AstNode): void {
-    let table = this.table
-    this.searchIdentifier(identifier, (symbolTable): void => {
-      table = symbolTable.table
-    })
-    table[identifier] = node
+    this.table[identifier] = node
   }
 
   public get (identifier: string): AstNode {
