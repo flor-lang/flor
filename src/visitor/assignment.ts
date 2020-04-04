@@ -1,5 +1,6 @@
 import { AstNode } from './traverse'
-import Env from './enviroment'
+import Env from '../enviroment/env'
+import { indexOfChildInParent, identifierValueOfLocNode } from '../utils/aux-functions'
 
 const assignment = {
   between (): void {
@@ -7,6 +8,14 @@ const assignment = {
   },
   exit (): void {
     Env.get().codeOutput += '\\n'
+  }
+}
+
+const loc = {
+  enter (node: AstNode, parent: AstNode): void {
+    if (parent.name === 'assignment' && indexOfChildInParent(node, parent) === 0) {
+      Env.get().symbolTable.put(identifierValueOfLocNode(node), node)
+    }
   }
 }
 
@@ -18,5 +27,6 @@ const identifier = {
 
 export default {
   assignment,
+  loc,
   identifier
 }
