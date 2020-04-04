@@ -1,4 +1,4 @@
-import { AstNode } from 'visitor/traverse'
+import { AstNode } from '../traverse'
 import { expressionCG, ExpressionNode } from './expressions'
 
 interface AssignmentNode { lhs: LhsNode; rhs: RhsNode }

@@ -1,4 +1,4 @@
-import SymbolTable from '../src/enviroment/symbol-table'
+import SymbolTable from '../../src/enviroment/symbol-table'
 
 const mockedIndex = { column: 0, line: 0, offset: 0 }
 const mockedPositions = { start: mockedIndex, end: mockedIndex }

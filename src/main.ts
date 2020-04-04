@@ -1,7 +1,7 @@
 // Playground code
 import { Program } from './parsers/program'
-import { visitor } from './visitor/visitor'
-import { traverser } from './visitor/traverse'
+import { visitor } from './backend/visitor'
+import { traverser } from './backend/traverse'
 import Env from './enviroment/env'
 import { logAst } from './utils/logger'
 

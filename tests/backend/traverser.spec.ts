@@ -1,5 +1,5 @@
-import { traverser, AstNode } from '../src/visitor/traverse'
-import { getAssignmentProgramAst, getComplexProgramAst } from './utils'
+import { AstNode, traverser } from '../../src/backend/traverse'
+import { getAssignmentProgramAst, getComplexProgramAst } from '../utils'
 
 test('test if visitor enter', () => {
   let flag = false

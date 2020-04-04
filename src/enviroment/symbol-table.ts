@@ -1,4 +1,4 @@
-import { AstNode } from '../visitor/traverse'
+import { AstNode } from '../backend/traverse'
 
 export default class SymbolTable {
   private table: { [key: string]: AstNode }

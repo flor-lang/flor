@@ -1,6 +1,6 @@
-import { expressionCG, ExpressionNode } from '../../src/generator/expressions'
-import { Expression } from '../../src/parsers/expressions'
 import { generatorTester } from '../utils'
+import { Expression } from '../../src/parsers/expressions'
+import { expressionCG } from '../../src/backend/generator/expressions'
 
 test('generate literal code', (): void => {
 
