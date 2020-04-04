@@ -1,5 +1,5 @@
 import { AstNode } from './traverse'
-import Env from './enviroment'
+import Env from '../enviroment/env'
 
 const number = {
   enter (node: AstNode): void {
