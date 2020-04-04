@@ -49,5 +49,5 @@ export const traverser = (ast: AstNode, visitor: Visitor): void => {
     }
   }
 
-  traverseNode(ast.value as AstNode, null)
+  traverseNode(ast as AstNode, null)
 }
