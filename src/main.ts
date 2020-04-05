@@ -6,9 +6,9 @@ import Env from './enviroment/env'
 import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
-  i = 1+2
-  j = i-1
-  i = j
+  variavel_um = 1+2
+  variavel_dois = variavel_um
+  variavel_dois = variavel_tres
 `)
 
 traverser(ast, visitor)

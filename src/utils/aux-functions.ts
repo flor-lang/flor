@@ -9,4 +9,5 @@ export const indexOfChildInParent = (childNode: AstNode, parentNode: AstNode): n
   return -1
 }
 
+export const locSubscriptableIsIdentifier = (locNode: AstNode): boolean => ((locNode.value as AstNode[])[0].value as AstNode).name === 'identifier'
 export const identifierValueOfLocNode = (locNode: AstNode): string => ((locNode.value as AstNode[])[0].value as AstNode).value as string
