@@ -1,6 +1,6 @@
 import { Parser } from 'parsimmon'
 import { logAst } from '../src/utils/logger'
-import { AstNode } from '../src/visitor/traverse'
+import { AstNode } from '../src/backend/traverse'
 import { Program } from '../src/parsers/program'
 // import { inspect } from 'util'
 

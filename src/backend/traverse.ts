@@ -4,7 +4,7 @@ import { camelCase } from 'lodash'
 export type AstNode = Node<string, {}>
 export type IndexedAstNode = Node<string, {}> & {[index: string]: {}};
 
-export interface EnterExitCallbacks {
+interface EnterExitCallbacks {
   enter?(node?: AstNode, parent?: AstNode): void;
   between?(node?: AstNode, parent?: AstNode, index?: number): void;
   exit?(node?: AstNode, parent?: AstNode): void;
