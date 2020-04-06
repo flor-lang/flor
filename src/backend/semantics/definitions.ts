@@ -8,7 +8,7 @@ export const evaluateLocUse = (node: AstNode): void => {
     if (Env.get().symbolTable.get(identifier) === null) {
       throw new Error(`
       Módulo de Erro | TODO
-        Váriavel ${identifier} não foi definida
+        Váriavel '${identifier}' não foi definida
         Linha: ${node.start.line}
         Coluna: ${node.start.column}
       `)
