@@ -9,13 +9,17 @@ export const numberCodeGen = {
 
 export const stringCodeGen = {
   enter (node: AstNode): void {
-    Env.get().codeOutput += node.value
+    Env.get().codeOutput += `"${node.value}"`
   }
 }
 
 export const booleanCodeGen = {
   enter (node: AstNode): void {
-    Env.get().codeOutput += String(node.value)
+    if (node.value === true) {
+      Env.get().codeOutput += 'true'
+    } else if (node.value === false) {
+      Env.get().codeOutput += 'false'
+    }
   }
 }
 
