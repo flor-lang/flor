@@ -13,7 +13,7 @@ const block = {
     }
   },
   exit (node: AstNode, parent: AstNode): void {
-    console.log(Env.get().symbolTable)
+    // console.log(Env.get().symbolTable)
     if (parent.name !== 'program') {
       Env.get().symbolTable = saved
       Env.get().codeOutput += '\\n}'

@@ -6,12 +6,10 @@ import Env from './enviroment/env'
 import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
-  variavel_um = 1+2
-  variavel_dois = variavel_um
-  variavel_dois = variavel_tres
+  variavel_um = 1
 `)
 
 traverser(ast, visitor)
 logAst(ast, true)
-console.log(Env.get().symbolTable)
+// console.log(Env.get().symbolTable)
 console.log(Env.get().codeOutput)

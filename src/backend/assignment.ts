@@ -2,13 +2,14 @@ import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
 import { evaluateLocUse } from './semantics/definitions'
+import { assignmentCodeGen, identifierCodeGen } from './generator/assignment'
 
 const assignment = {
   between (): void {
-    Env.get().codeOutput += ' = '
+    assignmentCodeGen.between()
   },
   exit (): void {
-    Env.get().codeOutput += '\\n'
+    assignmentCodeGen.exit()
   }
 }
 
@@ -29,7 +30,7 @@ const loc = {
 
 const identifier = {
   enter (node: AstNode): void {
-    Env.get().codeOutput += node.value
+    identifierCodeGen.enter(node)
   }
 }
 
