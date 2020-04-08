@@ -5,9 +5,7 @@ import { traverser } from './backend/traverse'
 import Env from './enviroment/env'
 import { logAst } from './utils/logger'
 
-const ast = Program.tryParse(`
-  variavel_um = 1
-`)
+const ast = Program.tryParse('x = 5 + 1 - 1')
 
 traverser(ast, visitor)
 logAst(ast, true)

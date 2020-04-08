@@ -86,9 +86,9 @@ const mapNodeParamsWithOperator = (node: ExprNode): any => {
     }
     const operatorNode = { name: 'operator', value: node.value.operator }
     delete node.value.operator
-    node.value.params.map(mapOperator)
-    node.value.params.splice(1, 0, operatorNode)
-    return { ...node, value: node.value.params }
+    const mappedParams = node.value.params.map(mapOperator)
+    mappedParams.splice(1, 0, operatorNode)
+    return { ...node, value: mappedParams }
   }
   return mapOperator(node)
 }
