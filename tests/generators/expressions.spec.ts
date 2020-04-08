@@ -1,26 +1,20 @@
-// import { generatorTester } from '../utils'
-// import { Expression } from '../../src/parsers/expressions'
-// import { expressionCG } from '../../src/backend/generator/expressions'
+import { Expression } from '../../src/parsers/expressions'
+import { generatorTester } from '../utils'
 
-test('generate literal code', (): void => {
 
-  // const tryGenerateExpressions = generatorTester(Expression, expressionCG)
+test('generate basic expression code', (): void => {
+  const tryGenerateExpressions = generatorTester(Expression, true, 9)
 
-  // expect
-
-  // tryGenerateExpressions([
-  //   ['10', '10'],
-  //   ['"Teste"', '"Teste"'],
-  //   ['verdadeiro', 'true'],
-  //   ['falso', 'false'],
-  //   ['nulo', 'null'],
-  //   ['[0, 1, 2]', '[0,1,2]'],
-  //   ['[0, "Teste", falso, nulo]', '[0,"Teste",false,null]'],
-  //   ['{"chave": "valor"}', '{"chave":"valor"}'],
-  //   ['{"chave": 10}', '{"chave":10}'],
-  //   ['{ "chave" : [0] }', '{"chave":[0]}'],
-  // ])
-
-  const a = 1+1
-  expect(a).toBe(2);
+  tryGenerateExpressions([
+    ['identificador.key', 'identificador.key'],
+    ['identificador["key"]', 'identificador["key"]'],
+    ['identificador.chave["key"]', 'identificador.chave["key"]'],
+    ['identificador', 'identificador'],
+    ['1 + 1', '1+1'],
+    ['1 - 1', '1-1'],
+    ['5 * 8', '5*8'],
+    ['5 / 8', '5/8'],
+    ['5 + 1 - 1 * 10', '5+1-1*10'],
+    ['(5 + 1)', '(5+1)']
+  ])
 })
