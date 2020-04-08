@@ -5,7 +5,7 @@ import { Literal } from '../../src/parsers/literals'
 import { generatorTester } from '../utils'
 
 test('test assignment', () => {
-  const tryGenerateLiterals = generatorTester(Literal, true, 9)
+  const tryGenerateLiterals = generatorTester(Literal)
 
   tryGenerateLiterals([
     ['1', '1'],
