@@ -46,11 +46,7 @@ test('generate expression function declaration', (): void => {
         lista[0] = lista[1]
         lista[1] = aux
       fim`,
-      `function (lista){
-        aux = lista[0]
-        lista[0] = lista[1]
-        lista[1] = aux
-      }`
+      `function(lista){\\naux = lista[0]\\nlista[0] = lista[1]\\nlista[1] = aux\\n}`
     ]
   ])
 })
