@@ -27,6 +27,7 @@ export const cantParse = parseStrings(false)
 
 export const generatorTester = (p: Parser<any>, log: boolean = false, logIndex: number = undefined) => (inputs: [string, string][]) => {
   inputs.forEach((i, index) => {
+    Env.get().context = 'test'
     Env.get().codeOutput = ''
     const ast = p.tryParse(i[0])
     traverser(ast, visitor)
