@@ -16,7 +16,6 @@ const assignment = {
 const loc = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0) {
-      // TODO: Pensar em como desabilitar analise semantica
       evaluateLocUse(node)
     }
   },

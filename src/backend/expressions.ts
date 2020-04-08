@@ -2,7 +2,7 @@
 // import Env from '../enviroment/env'
 // import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
 // import { evaluateLocUse } from './semantics/definitions'
-import { wrappedCodeGen } from './generator/expressions'
+import { wrappedCodeGen, unaryCodeGen } from './generator/expressions'
 
 const expression = {
   enter (): void {},
@@ -14,13 +14,22 @@ const wrapped = {
   enter (): void {
     wrappedCodeGen.enter()
   },
-  between (): void {},
   exit (): void {
     wrappedCodeGen.exit()
   }
 }
 
+const unary = {
+  enter (): void {
+    unaryCodeGen.enter()
+  },
+  exit (): void {
+    unaryCodeGen.exit()
+  }
+}
+
 export default {
   expression,
-  wrapped
+  wrapped,
+  unary
 }
