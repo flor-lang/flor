@@ -1,8 +1,8 @@
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
-import { evaluateLocUse } from './semantics/definitions'
-import { assignmentCodeGen, identifierCodeGen } from './generator/assignment'
+// import { evaluateLocUse } from './semantics/definitions'
+import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen } from './generator/assignment'
 
 const assignment = {
   between (): void {
@@ -16,7 +16,8 @@ const assignment = {
 const loc = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0) {
-      evaluateLocUse(node)
+      // TODO: Pensar em como desabilitar analise semantica
+      // evaluateLocUse(node)
     }
   },
   exit (node: AstNode, parent: AstNode): void {
@@ -34,8 +35,25 @@ const identifier = {
   }
 }
 
+const objectable = {
+  enter (): void {
+    objectableCodeGen.enter()
+  }
+}
+
+const indexable = {
+  enter (): void {
+    indexableCodeGen.enter()
+  },
+  exit (): void {
+    indexableCodeGen.exit()
+  }
+}
+
 export default {
   assignment,
   loc,
-  identifier
+  identifier,
+  objectable,
+  indexable
 }

@@ -6,18 +6,18 @@ import { Program } from '../../src/parsers/program'
 import { generatorTester } from '../utils'
 
 test('test assignment', () => {
-  const tryGenerateExpressions = generatorTester(Assignment)
+  const tryGenerateAssignment = generatorTester(Assignment)
 
-  tryGenerateExpressions([
+  tryGenerateAssignment([
     ['variavel = 1', 'variavel = 1\\n'],
     ['variavel = verdadeiro', 'variavel = true\\n'],
   ])
 });
 
 test('test assignment with program', () => {
-  const tryGenerateExpressions = generatorTester(Program)
+  const tryGenerateAssignment = generatorTester(Program)
 
-  tryGenerateExpressions([
+  tryGenerateAssignment([
     ['id = 0 variavel = id', 'id = 0\\nvariavel = id\\n']
   ])
 });

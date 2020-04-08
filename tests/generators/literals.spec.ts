@@ -5,9 +5,9 @@ import { Literal } from '../../src/parsers/literals'
 import { generatorTester } from '../utils'
 
 test('test assignment', () => {
-  const tryGenerateExpressions = generatorTester(Literal, true, 9)
+  const tryGenerateLiterals = generatorTester(Literal, true, 9)
 
-  tryGenerateExpressions([
+  tryGenerateLiterals([
     ['1', '1'],
     ['"opa"', '"opa"'],
     ['verdadeiro', 'true'],
