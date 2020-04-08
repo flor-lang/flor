@@ -1,8 +1,4 @@
-// import { AstNode } from './traverse'
-// import Env from '../enviroment/env'
-// import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
-// import { evaluateLocUse } from './semantics/definitions'
-import { wrappedCodeGen, unaryCodeGen } from './generator/expressions'
+import { wrappedCodeGen, unaryCodeGen, blockFunctionCodeGen, argsCodeGen } from './generator/expressions'
 
 const expression = {
   enter (): void {},
@@ -28,8 +24,28 @@ const unary = {
   }
 }
 
+const blockFunction = {
+  enter (): void {
+    blockFunctionCodeGen.enter()
+  }
+}
+
+const args = {
+  enter (): void {
+    argsCodeGen.enter()
+  },
+  between (): void {
+    argsCodeGen.between()
+  },
+  exit (): void {
+    argsCodeGen.exit()
+  }
+}
+
 export default {
   expression,
   wrapped,
-  unary
+  unary,
+  blockFunction,
+  args
 }
