@@ -15,7 +15,7 @@ test('generate function call and return statements', (): void => {
 })
 
 test('generate while statement', (): void => {
-  const tryGenerateStatement = generatorTester(Statement, true, 0)
+  const tryGenerateStatement = generatorTester(Statement)
 
   tryGenerateStatement([
     ['enquanto i > 0 faca i = i - 1 fim', 'while(i>0){\\ni = i-1\\n}'],
@@ -29,6 +29,23 @@ test('generate while statement', (): void => {
       fim
       `,
       'while(treta!=false){\\ntreta = true\\n}'
+    ]
+  ])
+})
+
+test('generate do while statement', (): void => {
+  const tryGenerateStatement = generatorTester(Statement, true, 0)
+
+  tryGenerateStatement([
+    ['faca i = i - 1 enquanto i > 0 fim', 'do{\\ni = i-1\\n}while(i>0)'],
+    ['faca soma = soma + i enquanto i <= 10 fim', 'do{\\nsoma = soma+i\\n}while(i<=10)'],
+    [`
+      faca
+        treta = verdadeiro
+      enquanto treta != falso
+      fim
+      `,
+      'do{\\ntreta = true\\n}while(treta!=false)'
     ]
   ])
 })

@@ -1,5 +1,4 @@
 import Env from '../../enviroment/env'
-// import { AstNode } from '../traverse'
 
 export const returnCodeGen = {
   enter (): void {
@@ -24,6 +23,18 @@ export const whileCodeGen = {
     Env.get().codeOutput += 'while('
   },
   between (): void {
+    Env.get().codeOutput += ')'
+  }
+}
+
+export const doWhileCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += 'do'
+  },
+  between (): void {
+    Env.get().codeOutput += 'while('
+  },
+  exit (): void {
     Env.get().codeOutput += ')'
   }
 }

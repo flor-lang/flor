@@ -1,4 +1,4 @@
-import { returnCodeGen, labeledArgsCodeGen, whileCodeGen } from './generator/statement'
+import { returnCodeGen, labeledArgsCodeGen, whileCodeGen, doWhileCodeGen } from './generator/statement'
 
 const returnStmt = {
   enter (): void {
@@ -27,8 +27,21 @@ const whileStmt = {
   }
 }
 
+const doWhile = {
+  enter (): void {
+    doWhileCodeGen.enter()
+  },
+  between (): void {
+    doWhileCodeGen.between()
+  },
+  exit (): void {
+    doWhileCodeGen.exit()
+  }
+}
+
 export default {
   returnStmt,
   labeledArgs,
-  whileStmt
+  whileStmt,
+  doWhile
 }
