@@ -1,4 +1,4 @@
-import { returnCodeGen } from './generator/statement'
+import { returnCodeGen, labeledArgsCodeGen } from './generator/statement'
 
 const retornar = {
   enter (): void {
@@ -6,6 +6,19 @@ const retornar = {
   }
 }
 
+export const labeledArgs = {
+  enter (): void {
+    labeledArgsCodeGen.enter()
+  },
+  between (): void {
+    labeledArgsCodeGen.between()
+  },
+  exit (): void {
+    labeledArgsCodeGen.exit()
+  }
+}
+
 export default {
-  retornar
+  retornar,
+  labeledArgs
 }

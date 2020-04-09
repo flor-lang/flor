@@ -12,7 +12,8 @@ test('test assignment', () => {
     ['variavel = 1', 'variavel = 1\\n'],
     ['variavel = verdadeiro', 'variavel = true\\n'],
     ['somar = (x) := x + y', 'somar = (x) => x+y\\n'],
-    ['somar = funcao(x, y) soma = x + y fim', 'somar = function(x,y){\\nsoma = x+y\\n}\\n']
+    ['somar = funcao(x, y) soma = x + y fim', 'somar = function(x,y){\\nsoma = x+y\\n}\\n'],
+    ['somar = funcao(x, y) retornar x + y fim', 'somar = function(x,y){\\nreturn x+y}\\n']
   ])
 });
 

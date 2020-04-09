@@ -1,7 +1,7 @@
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
-import { evaluateLocUse } from './semantics/definitions'
+// import { evaluateLocUse } from './semantics/definitions'
 import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen } from './generator/assignment'
 
 const assignment = {
@@ -29,8 +29,10 @@ const loc = {
 }
 
 const identifier = {
-  enter (node: AstNode): void {
-    identifierCodeGen.enter(node)
+  enter (node: AstNode, parent: AstNode): void {
+    if (parent.name !== 'labeled-arg') {
+      identifierCodeGen.enter(node)
+    }
   }
 }
 

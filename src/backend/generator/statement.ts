@@ -6,3 +6,15 @@ export const returnCodeGen = {
     Env.get().codeOutput += 'return '
   }
 }
+
+export const labeledArgsCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += '('
+  },
+  between (): void {
+    Env.get().codeOutput += ','
+  },
+  exit (): void {
+    Env.get().codeOutput += ')'
+  }
+}
