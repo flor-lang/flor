@@ -3,7 +3,9 @@ import {
   labeledArgsCodeGen,
   whileCodeGen,
   doWhileCodeGen,
-  forEachCodeGen
+  forEachCodeGen,
+  ifThenElseCodeGen,
+  elifCodeGen
 } from './generator/statement'
 import { AstNode } from './traverse'
 
@@ -55,10 +57,30 @@ const forEach = {
   }
 }
 
+const ifThenElse = {
+  enter (): void {
+    ifThenElseCodeGen.enter()
+  },
+  between (node: AstNode, parent: AstNode, index: number): void {
+    ifThenElseCodeGen.between(node, parent, index)
+  }
+}
+
+const elif = {
+  enter (): void {
+    elifCodeGen.enter()
+  },
+  between (node: AstNode, parent: AstNode, index: number): void {
+    elifCodeGen.between(node, parent, index)
+  }
+}
+
 export default {
   returnStmt,
   labeledArgs,
   whileStmt,
   doWhile,
-  forEach
+  forEach,
+  ifThenElse,
+  elif
 }

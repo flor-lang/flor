@@ -67,3 +67,18 @@ test('generate foreach statement', (): void => {
     ]
   ])
 })
+
+test('generate if then else statement', (): void => {
+  const tryGenerateStatement = generatorTester(Statement)
+
+  tryGenerateStatement([
+    ['se peso < 0 entao peso = 0 fim', 'if(peso<0){\\npeso = 0\\n}'],
+    ['se peso < 0 entao peso = 0 senao peso = 1 fim', 'if(peso<0){\\npeso = 0\\n}else{\\npeso = 1\\n}'],
+    ['se x igual a 0 entao y = 0 senao se x igual a 1 entao y = 1 senao y = 10 fim',
+     'if(x==0){\\ny = 0\\n}else if(x==1){\\ny = 1\\n}else{\\ny = 10\\n}'
+    ],
+    ['se x igual a 0 entao y = 0 senao se x igual a 1 entao y = 1 fim',
+     'if(x==0){\\ny = 0\\n}else if(x==1){\\ny = 1\\n}'
+    ]
+  ])
+})

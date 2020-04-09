@@ -1,5 +1,6 @@
 import Env from '../../enviroment/env'
 import { AstNode } from '../traverse'
+import { isEmptyNode } from '../../utils/aux-functions'
 
 export const returnCodeGen = {
   enter (): void {
@@ -49,6 +50,32 @@ export const forEachCodeGen = {
       Env.get().codeOutput += ' of '
     }
     if (index === 1) {
+      Env.get().codeOutput += ')'
+    }
+  }
+}
+
+export const ifThenElseCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += 'if('
+  },
+  between (node: AstNode, parent: AstNode, index: number): void {
+    const elseNode = (node.value as AstNode[])[3]
+    if (index === 0) {
+      Env.get().codeOutput += ')'
+    }
+    if (index === 2 && isEmptyNode(elseNode) === false) {
+      Env.get().codeOutput += 'else'
+    }
+  }
+}
+
+export const elifCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += 'else if('
+  },
+  between (node: AstNode, parent: AstNode, index: number): void {
+    if (index === 0) {
       Env.get().codeOutput += ')'
     }
   }
