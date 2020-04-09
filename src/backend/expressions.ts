@@ -1,4 +1,4 @@
-import { wrappedCodeGen, unaryCodeGen, blockFunctionCodeGen, argsCodeGen } from './generator/expressions'
+import { wrappedCodeGen, unaryCodeGen, blockFunctionCodeGen, argsCodeGen, inlineFunctionCodeGen } from './generator/expressions'
 
 const expression = {
   enter (): void {},
@@ -42,10 +42,17 @@ const args = {
   }
 }
 
+export const inlineFunction = {
+  between (): void {
+    inlineFunctionCodeGen.between()
+  }
+}
+
 export default {
   expression,
   wrapped,
   unary,
   blockFunction,
-  args
+  args,
+  inlineFunction
 }

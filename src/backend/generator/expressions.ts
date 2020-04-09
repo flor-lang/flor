@@ -35,3 +35,9 @@ export const argsCodeGen = {
     Env.get().codeOutput += ')'
   }
 }
+
+export const inlineFunctionCodeGen = {
+  between (): void {
+    Env.get().codeOutput += ' => '
+  }
+}

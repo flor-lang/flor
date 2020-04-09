@@ -5,7 +5,7 @@ import { traverser } from './backend/traverse'
 import Env from './enviroment/env'
 import { logAst } from './utils/logger'
 
-const ast = Program.tryParse('x = 5 + 1 - 1')
+const ast = Program.tryParse('f = (x) := 2 * x')
 
 traverser(ast, visitor)
 logAst(ast, true)
