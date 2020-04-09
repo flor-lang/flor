@@ -1,4 +1,11 @@
-import { returnCodeGen, labeledArgsCodeGen, whileCodeGen, doWhileCodeGen } from './generator/statement'
+import {
+  returnCodeGen,
+  labeledArgsCodeGen,
+  whileCodeGen,
+  doWhileCodeGen,
+  forEachCodeGen
+} from './generator/statement'
+import { AstNode } from './traverse'
 
 const returnStmt = {
   enter (): void {
@@ -39,9 +46,19 @@ const doWhile = {
   }
 }
 
+const forEach = {
+  enter (): void {
+    forEachCodeGen.enter()
+  },
+  between (node: AstNode, parent: AstNode, index: number): void {
+    forEachCodeGen.between(node, parent, index)
+  }
+}
+
 export default {
   returnStmt,
   labeledArgs,
   whileStmt,
-  doWhile
+  doWhile,
+  forEach
 }

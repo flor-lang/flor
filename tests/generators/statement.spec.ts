@@ -34,7 +34,7 @@ test('generate while statement', (): void => {
 })
 
 test('generate do while statement', (): void => {
-  const tryGenerateStatement = generatorTester(Statement, true, 0)
+  const tryGenerateStatement = generatorTester(Statement)
 
   tryGenerateStatement([
     ['faca i = i - 1 enquanto i > 0 fim', 'do{\\ni = i-1\\n}while(i>0)'],
@@ -46,6 +46,24 @@ test('generate do while statement', (): void => {
       fim
       `,
       'do{\\ntreta = true\\n}while(treta!=false)'
+    ]
+  ])
+
+})
+
+test('generate foreach statement', (): void => {
+  const tryGenerateStatement = generatorTester(Statement)
+
+  tryGenerateStatement([
+    ['para cada elemento de colecao faca soma=soma+elemento fim',
+     'for(const elemento of colecao){\\nsoma = soma+elemento\\n}'],
+    [
+    `para cada i de lista faca
+      para cada j de lista faca
+        total = i + j
+      fim
+    fim`,
+    'for(const i of lista){\\nfor(const j of lista){\\ntotal = i+j\\n}}'
     ]
   ])
 })
