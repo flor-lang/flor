@@ -143,7 +143,7 @@ export const ReturnStatement: ReturnStatementParser = P
       P.optWhitespace
     ).named('expression')
   )
-  .node('return')
+  .node('retornar')
   .map(nodePropertiesMapper(['expression']))
 
 type LabeledArgsParser = P.Parser<P.Node<'labeled-args', {}>>
