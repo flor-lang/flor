@@ -58,7 +58,7 @@ export const WhileStatement: WhileStatementParser = P
     P.lazy((): BlockParser => Block).named('block'),
     End
   )
-  .node('while')
+  .node('while-stmt')
   .map(nodePropertiesMapper(['condition', 'block']))
 
 /**
@@ -143,7 +143,7 @@ export const ReturnStatement: ReturnStatementParser = P
       P.optWhitespace
     ).named('expression')
   )
-  .node('retornar')
+  .node('return-stmt')
   .map(nodePropertiesMapper(['expression']))
 
 type LabeledArgsParser = P.Parser<P.Node<'labeled-args', {}>>

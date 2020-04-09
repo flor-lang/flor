@@ -18,3 +18,12 @@ export const labeledArgsCodeGen = {
     Env.get().codeOutput += ')'
   }
 }
+
+export const whileCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += 'while('
+  },
+  between (): void {
+    Env.get().codeOutput += ')'
+  }
+}

@@ -1,12 +1,12 @@
-import { returnCodeGen, labeledArgsCodeGen } from './generator/statement'
+import { returnCodeGen, labeledArgsCodeGen, whileCodeGen } from './generator/statement'
 
-const retornar = {
+const returnStmt = {
   enter (): void {
     returnCodeGen.enter()
   }
 }
 
-export const labeledArgs = {
+const labeledArgs = {
   enter (): void {
     labeledArgsCodeGen.enter()
   },
@@ -18,7 +18,17 @@ export const labeledArgs = {
   }
 }
 
+const whileStmt = {
+  enter (): void {
+    whileCodeGen.enter()
+  },
+  between (): void {
+    whileCodeGen.between()
+  }
+}
+
 export default {
-  retornar,
-  labeledArgs
+  returnStmt,
+  labeledArgs,
+  whileStmt
 }
