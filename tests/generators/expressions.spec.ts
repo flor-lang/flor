@@ -34,7 +34,7 @@ test('generate basic expression code', (): void => {
 })
 
 test('generate expression function declaration', (): void => {
-  const tryGenerateExpressions = generatorTester(Expression, true, 4)
+  const tryGenerateExpressions = generatorTester(Expression)
 
   tryGenerateExpressions([
     ['funcao(numero) numero = 0 fim', 'function(numero){\\nnumero = 0\\n}'],

@@ -6,11 +6,13 @@ import { Program } from '../../src/parsers/program'
 import { generatorTester } from '../utils'
 
 test('test assignment', () => {
-  const tryGenerateAssignment = generatorTester(Assignment)
+  const tryGenerateAssignment = generatorTester(Assignment, true, 3)
 
   tryGenerateAssignment([
     ['variavel = 1', 'variavel = 1\\n'],
     ['variavel = verdadeiro', 'variavel = true\\n'],
+    ['somar = (x) := x + y', 'somar = (x) => x+y\\n'],
+    ['somar = funcao(x, y) soma = x + y fim', 'somar = function(x,y){\\nsoma = x+y\\n}\\n']
   ])
 });
 
