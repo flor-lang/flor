@@ -6,6 +6,7 @@ import operators from './operators'
 import program from './program'
 import expressions from './expressions'
 import statement from './statement'
+import oo from './oo'
 
 export const visitor: Visitor = {
   ...program,
@@ -13,5 +14,6 @@ export const visitor: Visitor = {
   ...expressions,
   ...literals,
   ...operators,
-  ...statement
+  ...statement,
+  ...oo
 }

@@ -11,8 +11,10 @@ export const assignmentCodeGen = {
 }
 
 export const identifierCodeGen = {
-  enter (node: AstNode): void {
-    Env.get().codeOutput += node.value
+  enter (node: AstNode, parent: AstNode): void {
+    if (['labeled-arg', 'interfaces'].includes(parent.name) === false) {
+      Env.get().codeOutput += node.value
+    }
   }
 }
 

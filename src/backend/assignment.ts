@@ -30,9 +30,7 @@ const loc = {
 
 const identifier = {
   enter (node: AstNode, parent: AstNode): void {
-    if (parent.name !== 'labeled-arg') {
-      identifierCodeGen.enter(node)
-    }
+    identifierCodeGen.enter(node, parent)
   }
 }
 
