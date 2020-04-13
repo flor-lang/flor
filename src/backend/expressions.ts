@@ -44,8 +44,11 @@ const args = {
 }
 
 export const inlineFunction = {
-  between (): void {
-    inlineFunctionCodeGen.between()
+  between (node: AstNode, parent: AstNode): void {
+    inlineFunctionCodeGen.between(node, parent)
+  },
+  exit (node: AstNode, parent: AstNode): void {
+    inlineFunctionCodeGen.exit(node, parent)
   }
 }
 

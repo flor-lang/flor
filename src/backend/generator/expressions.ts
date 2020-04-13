@@ -21,7 +21,13 @@ export const unaryCodeGen = {
 
 export const blockFunctionCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
-    Env.get().codeOutput += parent.name !== 'constructor' ? 'function' : 'constructor'
+    let code = ''
+    if (parent.name === 'constructor') {
+      code = 'constructor'
+    } else if (parent.name !== 'function') {
+      code = 'function'
+    }
+    Env.get().codeOutput += code
   }
 }
 
@@ -38,7 +44,16 @@ export const argsCodeGen = {
 }
 
 export const inlineFunctionCodeGen = {
-  between (): void {
-    Env.get().codeOutput += ' => '
+  between (node: AstNode, parent: AstNode): void {
+    if (parent.name !== 'function') {
+      Env.get().codeOutput += ' => '
+    } else {
+      Env.get().codeOutput += '{ return '
+    }
+  },
+  exit (node: AstNode, parent: AstNode): void {
+    if (parent.name === 'function') {
+      Env.get().codeOutput += '}'
+    }
   }
 }
