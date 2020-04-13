@@ -1,4 +1,5 @@
 import { wrappedCodeGen, unaryCodeGen, blockFunctionCodeGen, argsCodeGen, inlineFunctionCodeGen } from './generator/expressions'
+import { AstNode } from 'backend/traverse'
 
 const expression = {
   enter (): void {},
@@ -25,8 +26,8 @@ const unary = {
 }
 
 const blockFunction = {
-  enter (): void {
-    blockFunctionCodeGen.enter()
+  enter (node: AstNode, parent: AstNode): void {
+    blockFunctionCodeGen.enter(node, parent)
   }
 }
 

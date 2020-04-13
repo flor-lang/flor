@@ -6,7 +6,7 @@ import { Program } from '../../src/parsers/program'
 import { generatorTester } from '../utils'
 
 test('test assignment', () => {
-  const tryGenerateAssignment = generatorTester(Assignment, true, 3)
+  const tryGenerateAssignment = generatorTester(Assignment)
 
   tryGenerateAssignment([
     ['variavel = 1', 'variavel = 1\\n'],

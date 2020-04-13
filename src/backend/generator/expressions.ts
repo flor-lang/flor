@@ -1,4 +1,5 @@
 import Env from '../../enviroment/env'
+import { AstNode } from 'backend/traverse'
 
 export const wrappedCodeGen = {
   enter (): void {
@@ -19,8 +20,8 @@ export const unaryCodeGen = {
 }
 
 export const blockFunctionCodeGen = {
-  enter (): void {
-    Env.get().codeOutput += 'function'
+  enter (node: AstNode, parent: AstNode): void {
+    Env.get().codeOutput += parent.name !== 'constructor' ? 'function' : 'constructor'
   }
 }
 

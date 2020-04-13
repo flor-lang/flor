@@ -9,10 +9,15 @@ export default class Env {
 
   public symbolTable: SymbolTable
 
+  public stackMap: { [key: string]: string[] }
+
   private constructor () {
     this.context = 'dev'
     this.codeOutput = ''
     this.symbolTable = new SymbolTable(null)
+    this.stackMap = {
+      block: []
+    }
   }
 
   public static get (): Env {
