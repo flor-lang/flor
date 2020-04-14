@@ -29,10 +29,10 @@ export const reservedList: string[] = [
 /**
  * Identifier parser
  *
- * identifier -> /[_]*[a-zA-Z][a-zA-Z0-9_]*\/
+ * identifier -> /#?[_]*([a-zA-Z_][a-zA-Z0-9]+|[a-zA-Z])+/
 */
 export const Identifier: IdentifierParser = P
-  .regexp(/[_]*[a-zA-Z][a-zA-Z0-9_]*/)
+  .regexp(/#?[_]*([a-zA-Z_][a-zA-Z0-9]+|[a-zA-Z])+/)
   .assert((s: string): boolean => !reservedList.includes(s), `Erro de sintaxe: Identificador reservado`)
   .node('identifier')
 

@@ -58,16 +58,12 @@ test('parse identifier', (): void => {
   const canParseIdentifier = canParse(Identifier)
   const cantParseIdentifier = cantParse(Identifier)
 
-  canParseIdentifier(['x','_variavel','x1','snake_case'])
+  canParseIdentifier([
+    'x','_variavel','x1','snake_case', '_2D',
+    '#marca', "#f", '__main', '_a_b_c', 'super'
+  ])
   cantParseIdentifier([
-    '1',
-    '&teste',
-    'test§',
-    '"meu nome"',
-    'teste teste',
-    'espaço',
-    'verdadeiro',
-    'falso',
-    'nulo'
+    '1', '55', '_', '__', '#__', '#', '__reserved__', 'id_', '2D', '#1', '##',
+    '&teste', 'test§', '"meu nome"', 'teste teste', 'espaço', 'verdadeiro', 'falso','nulo'
   ])
 })
