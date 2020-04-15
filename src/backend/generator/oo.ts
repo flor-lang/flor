@@ -55,3 +55,9 @@ export const constructorCodeGen = {
     }
   }
 }
+
+export const classInstantiationCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += 'new '
+  }
+}

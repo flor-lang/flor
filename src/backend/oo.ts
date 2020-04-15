@@ -3,7 +3,8 @@ import {
   inheritanceCodeGen,
   propertiesCodeGen,
   propertyCodeGen,
-  constructorCodeGen
+  constructorCodeGen,
+  classInstantiationCodeGen
 } from './generator/oo'
 import { AstNode } from './traverse'
 
@@ -49,10 +50,17 @@ const constructor = {
   }
 }
 
+const classInstantiation = {
+  enter (): void {
+    classInstantiationCodeGen.enter()
+  }
+}
+
 export default {
   classDeclaration,
   inheritance,
   properties,
   property,
-  constructor
+  constructor,
+  classInstantiation
 }
