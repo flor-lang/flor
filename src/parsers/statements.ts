@@ -188,7 +188,7 @@ export const Statement: StatementParser = P
     WhileStatement,
     DoWhileStatement,
     ForEachStatement,
-    ForToStatement,
+    // ForToStatement,
     ReturnStatement,
     P.lazy((): LocParser => Loc)
   )

@@ -47,7 +47,7 @@ test('generate class declaration', (): void => {
 })
 
 test('generate class instantiation', (): void => {
-  const tryGenerateClassInstantiation = generatorTester(ClassInstantiation, true, 0)
+  const tryGenerateClassInstantiation = generatorTester(ClassInstantiation)
 
   tryGenerateClassInstantiation([
     ['novo Carro()', 'new Carro()'],

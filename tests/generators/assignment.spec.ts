@@ -1,10 +1,10 @@
-import { Assignment, Loc } from '../../src/parsers/assignment'
+import { Assignment } from '../../src/parsers/assignment'
 import { Program } from '../../src/parsers/program'
 import { generatorTester } from '../utils'
 
 
 test('test identifier', () => {
-  const tryGenerateIdentifier = generatorTester(Assignment, true, 3)
+  const tryGenerateIdentifier = generatorTester(Assignment)
 
   tryGenerateIdentifier([
     ['variavel = 0', 'variavel = 0\\n'],

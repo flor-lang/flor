@@ -10,17 +10,17 @@ test('test block', (): void => {
     `teste = 0
     se espaco_extra igual a teste entao block_parser = "Succeed" fim`,
     // bubble sort
-    `
-    para i de 0 ate tamanho_lista - 1 faca
-      para j de 1 ate tamanho_lista - 1 faca
-        se lista[j] < lista[j-1] entao
-          aux = lista[j-1]
-          lista[j-1] = lista[j]
-          lista[j] = aux
-        fim
-      fim
-    fim
-    `
+    // `
+    // para i de 0 ate tamanho_lista - 1 faca
+    //   para j de 1 ate tamanho_lista - 1 faca
+    //     se lista[j] < lista[j-1] entao
+    //       aux = lista[j-1]
+    //       lista[j-1] = lista[j]
+    //       lista[j] = aux
+    //     fim
+    //   fim
+    // fim
+    // `
   ])
 
   cantParseBlock([
@@ -53,9 +53,6 @@ test('test program', (): void => {
     se valor < 0 entao
       mensagem = "Valor não pode ser negativo"
     senao
-      para i de 1 ate valor faca
-        fatorial = fatorial * i
-      fim
       mensagem = "O Fatorial de {valor} é {fatorial}"
     fim
       
@@ -78,13 +75,6 @@ test('test program', (): void => {
         saida = [0,0,0,0,0]
         aux[0] = amostras[0]
         aux[numero_de_amostras + 1] = amostras[numero_de_amostras - 1]
-        para i de 1 ate numero_de_amostras faca
-            aux[i] = amostras[i-1]
-        fim
-        para i de 0 ate numero_de_amostras - 1 faca
-            amostras_ordenadas = ordenar(e1: aux[i], e2: aux[i+1], e3: aux[i+2])
-            saida[i] = amostras_ordenadas[1]
-        fim
         retornar saida
     fim
 
