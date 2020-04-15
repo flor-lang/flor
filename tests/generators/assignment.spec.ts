@@ -1,9 +1,18 @@
-import Env from '../../src/enviroment/env'
-import { visitor } from '../../src/backend/visitor'
-import { traverser } from '../../src/backend/traverse'
-import { Assignment } from '../../src/parsers/assignment'
+import { Assignment, Loc } from '../../src/parsers/assignment'
 import { Program } from '../../src/parsers/program'
 import { generatorTester } from '../utils'
+
+
+test('test identifier', () => {
+  const tryGenerateIdentifier = generatorTester(Assignment, true, 3)
+
+  tryGenerateIdentifier([
+    ['variavel = 0', 'variavel = 0\\n'],
+    ['teste = super.ola()', 'teste = super.ola()\\n'],
+    ['teste = super()', 'teste = super()\\n'],
+    ['#variavel = "teste"', 'this.variavel = "teste"\\n'],
+  ])
+});
 
 test('test assignment', () => {
   const tryGenerateAssignment = generatorTester(Assignment)

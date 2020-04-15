@@ -13,7 +13,7 @@ export const assignmentCodeGen = {
 export const identifierCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     if (['labeled-arg', 'interfaces'].includes(parent.name) === false) {
-      Env.get().codeOutput += node.value
+      Env.get().codeOutput += (node.value as string).replace('#', 'this.')
     }
   }
 }
