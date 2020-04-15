@@ -9,9 +9,9 @@ import { logAst } from '../utils/logger'
 import { Result, Node } from 'parsimmon'
 
 Yargs
-  .scriptName('tinp')
-  .usage('Exemplo de uso: $0 [opção] [arquivo .tinp]')
-  .example('$0 oi_mundo.tinp', '')
+  .scriptName('flor')
+  .usage('Exemplo de uso: $0 [opção] [arquivo .flor]')
+  .example('$0 oi_mundo.flor', '')
   .version(false)
   .help('m')
   .alias('m', 'manual')
@@ -26,7 +26,7 @@ Yargs
     }
   })
 
-const files = Yargs.argv._[0] ? [Yargs.argv._[0]] : glob.sync('**/*.tinp')
+const files = Yargs.argv._[0] ? [Yargs.argv._[0]] : glob.sync('**/*.flor')
 const filesContent = files
   .map((path): string => {
     try {
@@ -39,12 +39,12 @@ const filesContent = files
     }
   })
 
-const haveConfig = fs.existsSync('./tinpconfig.json')
+const haveConfig = fs.existsSync('./florconfig.json')
 let outputFormat = Yargs.argv.saida || 'js'
 
 if (haveConfig) {
   try {
-    const configFile = fs.readFileSync('./tinpconfig.json', 'utf-8')
+    const configFile = fs.readFileSync('./florconfig.json', 'utf-8')
     const configs = JSON.parse(String(configFile))
 
     if (configs.saida && !Yargs.argv.saida) outputFormat = configs.saida
