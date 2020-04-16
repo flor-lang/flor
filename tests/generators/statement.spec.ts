@@ -8,9 +8,9 @@ test('generate function call and return statements', (): void => {
   tryGenerateStatement([
     ['retornar 0', 'return 0'],
     ['retornar funcao() retornar x fim', 'return function(){\nreturn x}'],
-    ['validar()', 'validar()'],
-    ['inserir(x: 5)', 'inserir(5)'],
-    ['inserir(numero: 5, na_lista: impares)', 'inserir(5,impares)']
+    ['validar()', 'validar()\n'],
+    ['inserir(x: 5)', 'inserir(5)\n'],
+    ['inserir(numero: 5, na_lista: impares)', 'inserir(5,impares)\n']
   ])
 })
 

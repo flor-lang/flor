@@ -50,9 +50,9 @@ test('generate class instantiation', (): void => {
   const tryGenerateClassInstantiation = generatorTester(ClassInstantiation)
 
   tryGenerateClassInstantiation([
-    ['novo Carro()', 'new Carro()'],
-    ['novo Carro(nome: "Fusca")', 'new Carro("Fusca")'],
-    ['nova Pessoa()', 'new Pessoa()'],
-    ['nova Pessoa(nome: "Godofredo", idade: 18)', 'new Pessoa("Godofredo",18)']
+    ['novo Carro()', 'new Carro()\n'],
+    ['novo Carro(nome: "Fusca")', 'new Carro("Fusca")\n'],
+    ['nova Pessoa()', 'new Pessoa()\n'],
+    ['nova Pessoa(nome: "Godofredo", idade: 18)', 'new Pessoa("Godofredo",18)\n']
   ])
 })

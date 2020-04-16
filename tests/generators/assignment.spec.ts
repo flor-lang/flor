@@ -8,8 +8,8 @@ test('test identifier', () => {
 
   tryGenerateIdentifier([
     ['variavel = 0', 'variavel = 0\n'],
-    ['teste = super.ola()', 'teste = super.ola()\n'],
-    ['teste = super()', 'teste = super()\n'],
+    ['teste = super.ola()', 'teste = super.ola()\n\n'],
+    ['teste = super()', 'teste = super()\n\n'],
     ['#variavel = "teste"', 'this.variavel = "teste"\n'],
   ])
 });

@@ -16,7 +16,7 @@ export const labeledArgsCodeGen = {
     Env.get().codeOutput += ','
   },
   exit (): void {
-    Env.get().codeOutput += ')'
+    Env.get().codeOutput += ')\n'
   }
 }
 
