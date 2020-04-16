@@ -2,7 +2,7 @@ import { canParse, cantParse } from '../utils'
 import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement, ReturnStatement, FunctionCall } from '../../src/parsers/statements'
 
 test('if then else statement', (): void => {
-  const canParseIfThenElseStatement = canParse(IfThenElseStatement)
+  const canParseIfThenElseStatement = canParse(IfThenElseStatement, true, 11)
   const cantParseIfThenElseStatement = cantParse(IfThenElseStatement)
 
   canParseIfThenElseStatement([
@@ -35,9 +35,9 @@ test('if then else statement', (): void => {
     `
     se divida_atual igual a 0 entao
       mensagem = "Não há dividas"
-    senao se divida_atual < 0 entao
+    senaose divida_atual < 0 entao
       mensagem = "Cliente possui saldo"
-    senao se possui_pendencia entao
+    senaose possui_pendencia entao
       mensagem = "Cliente possui pendencia"
     senao
       mensagem = "Cliente necessita prestar contas"
@@ -46,9 +46,9 @@ test('if then else statement', (): void => {
     `
     se divida_atual igual a 0 entao
       mensagem = "Não há dividas"
-    senao se divida_atual < 0 entao
+    senaose divida_atual < 0 entao
       mensagem = "Cliente possui saldo"
-    senao se possui_pendencia entao
+    senaose possui_pendencia entao
       mensagem = "Cliente possui pendencia"
     fim
     `
@@ -67,7 +67,7 @@ test('if then else statement', (): void => {
     'se verdadeiro entao a = 5senao a = afim',
     'se igual a entao a=0 fim',
     'senao se teste entao faca_algo() fim',
-    `se teste entao teste() senaose !teste entao fim`,
+    // `se teste entao teste() senaose !teste entao fim`,
     'se teste entao teste() senao se eita() fim',
   ])
 })

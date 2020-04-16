@@ -16,7 +16,7 @@ export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 export const reservedList: string[] = [
   'verdadeiro', 'falso', 'nulo',
   'e', 'ou',
-  'se', 'senao', 'entao',
+  'se', 'senao', 'entao', 'senaose',
   'enquanto', 'faca',
   'a', 'de', 'ate', 'com',
   'igual', 'diferente', 'para', 'cada', 'passo',
