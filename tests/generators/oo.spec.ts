@@ -5,14 +5,14 @@ test('generate class declaration', (): void => {
   const tryGenerateClassDeclaration = generatorTester(ClassDeclaration)
 
   tryGenerateClassDeclaration([
-    ['definir classe Pessoa fim', 'class Pessoa{\\n__propertiesDeclarations__() {}constructor(){\\nthis.__propertiesDeclarations__()\\n}}'],
+    ['definir classe Pessoa fim', 'class Pessoa{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}}'],
     [
       `
       definir classe PessoaFisica
         heranca: Pessoa
         interfaces: Nomeavel Localizavel
       fim`  
-    , 'class PessoaFisica extends Pessoa{\\n__propertiesDeclarations__() {}constructor(){\\nthis.__propertiesDeclarations__()\\n}}'
+    , 'class PessoaFisica extends Pessoa{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}}'
     ],
     [
       `
@@ -27,9 +27,9 @@ test('generate class declaration', (): void => {
         fim
       fim
       `,
-      'class Carro{\\n__propertiesDeclarations__() {this.modelo = \"Esportivo\"\\n' + 
-      'this.marca = null\\nthis.construtora = null\\nthis.ano = 2020\\n}constructor(marca)' + 
-      '{\\nthis.__propertiesDeclarations__()\\n__marca = marca\\n}}'
+      'class Carro{\n__propertiesDeclarations__() {this.modelo = \"Esportivo\"\n' + 
+      'this.marca = null\nthis.construtora = null\nthis.ano = 2020\n}constructor(marca)' + 
+      '{\nthis.__propertiesDeclarations__()\n__marca = marca\n}}'
     ],
     [
       `
@@ -40,8 +40,8 @@ test('generate class declaration', (): void => {
           privado esta_ligado = () := __ligado igual a verdadeiro
       fim
       `,
-      'class Luz{\\n__propertiesDeclarations__() {}constructor(){\\nthis.__propertiesDeclarations__()\\n}' +
-      'ligar(){\\n__ligado = true\\n}desligar(){\\n__ligado = false\\n}esta_ligado(){ return __ligado==true}}'
+      'class Luz{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}' +
+      'ligar(){\n__ligado = true\n}desligar(){\n__ligado = false\n}esta_ligado(){ return __ligado==true}}'
     ]
   ])
 })

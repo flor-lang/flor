@@ -9,7 +9,7 @@ const block = {
     if (parent.name !== 'program') {
       saved = Env.get().symbolTable
       Env.get().symbolTable = new SymbolTable(saved)
-      Env.get().codeOutput += '{\\n'
+      Env.get().codeOutput += '{\n'
       Env.get().codeOutput += Env.get().stackMap['block'].pop() || ''
     }
   },

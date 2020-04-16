@@ -18,7 +18,7 @@ export const inheritanceCodeGen = {
     }
   },
   exit (): void {
-    Env.get().codeOutput += '{\\n'
+    Env.get().codeOutput += '{\n'
   }
 }
 
@@ -28,7 +28,7 @@ export const propertiesCodeGen = {
   },
   exit (): void {
     Env.get().codeOutput += '}'
-    Env.get().stackMap['block'].push('this.__propertiesDeclarations__()\\n')
+    Env.get().stackMap['block'].push('this.__propertiesDeclarations__()\n')
   }
 }
 
@@ -51,7 +51,7 @@ export const constructorCodeGen = {
   enter (node: AstNode): void {
     if (isEmptyNode(node)) {
       const propDeclarations = Env.get().stackMap['block'].pop()
-      Env.get().codeOutput += `constructor(){\\n${propDeclarations}}`
+      Env.get().codeOutput += `constructor(){\n${propDeclarations}}`
     }
   }
 }
