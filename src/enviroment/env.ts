@@ -1,9 +1,10 @@
 import SymbolTable from './symbol-table'
 
+type EnvContext = 'test' | 'dev' | 'prod'
 export default class Env {
   private static instance: Env
 
-  public context: 'test' | 'dev' | 'prod'
+  public context: EnvContext
 
   public codeOutput: string
 
@@ -12,12 +13,7 @@ export default class Env {
   public stackMap: { [key: string]: string[] }
 
   private constructor () {
-    this.context = 'dev'
-    this.codeOutput = ''
-    this.symbolTable = new SymbolTable(null)
-    this.stackMap = {
-      block: []
-    }
+    this.clean()
   }
 
   public static get (): Env {
@@ -25,5 +21,14 @@ export default class Env {
       Env.instance = new Env()
     }
     return Env.instance
+  }
+
+  public clean (context: EnvContext = 'dev'): void {
+    this.context = context
+    this.codeOutput = ''
+    this.symbolTable = new SymbolTable(null)
+    this.stackMap = {
+      block: []
+    }
   }
 }

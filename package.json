@@ -42,6 +42,6 @@
     "yargs": "^14.2.0"
   },
   "bin": {
-    "tinp": "./dist/cli/index.js"
+    "flor": "./dist/cli/index.js"
   }
 }

@@ -6,7 +6,12 @@ import * as glob from 'glob'
 import comments from '../utils/comments'
 import { Program } from '../parsers/program'
 import { logAst } from '../utils/logger'
-import { Result, Node } from 'parsimmon'
+import { Node } from 'parsimmon'
+import { traverser } from '../backend/traverse'
+import { visitor } from '../backend/visitor'
+import Env from '../enviroment/env'
+
+interface FileContent {filePath: string; content: string; ast?: Node<'program', {}>}
 
 Yargs
   .scriptName('flor')
@@ -28,11 +33,14 @@ Yargs
 
 const files = Yargs.argv._[0] ? [Yargs.argv._[0]] : glob.sync('**/*.flor')
 const filesContent = files
-  .map((path): string => {
+  .map((path): FileContent => {
     try {
       const content = fs.readFileSync(path, 'utf-8')
       const processed = comments.remove(String(content))
-      return processed
+      return {
+        filePath: path,
+        content: processed
+      }
     } catch (e) {
       console.log(`Não foi possível ler arquivo: ${path}`)
       process.exit(1)
@@ -54,13 +62,31 @@ if (haveConfig) {
 }
 
 if (outputFormat === 'js') {
-  console.log('Ainda não implementado :(')
+  const parse = (file: FileContent): FileContent => {
+    const ast = Program.tryParse(file.content)
+    return { ...file, ast }
+  }
+
+  const filesParsed = filesContent.map(parse)
+  filesParsed.forEach(({ filePath, ast }): void => {
+    const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
+    traverser(ast, visitor)
+    try {
+      fs.writeFileSync(outputFilePath, Env.get().codeOutput)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      Env.get().clean()
+    }
+  })
 } else if (outputFormat === 'tab-sim') {
   console.log('Ainda não implementado')
 } else if (outputFormat === 'ast') {
-  const parse =
-    (content: string): Result<Node<'program', {}>> => Program.parse(content)
+  const parse = (file: FileContent): FileContent => {
+    const ast = Program.tryParse(file.content)
+    return { ...file, ast }
+  }
 
-  const asts = filesContent.map(parse)
-  asts.forEach((ast): void => logAst(ast, true))
+  const fileParsed = filesContent.map(parse)
+  fileParsed.forEach(({ ast }): void => logAst(ast, true))
 }
