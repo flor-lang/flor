@@ -2,6 +2,7 @@
 import * as Yargs from 'yargs'
 import * as fs from 'fs'
 import * as glob from 'glob'
+import { js as beautify } from 'js-beautify'
 
 import comments from '../utils/comments'
 import { Program } from '../parsers/program'
@@ -72,7 +73,8 @@ if (outputFormat === 'js') {
     const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
     traverser(ast, visitor)
     try {
-      fs.writeFileSync(outputFilePath, Env.get().codeOutput)
+      const fileOutput = beautify(Env.get().codeOutput)
+      fs.writeFileSync(outputFilePath, fileOutput)
     } catch (error) {
       console.error(error)
     } finally {

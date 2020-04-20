@@ -11,7 +11,7 @@ definir classe Ponto
     obter_quadrante = funcao ()
       se #x > 0 entao
         se #y > 0 entao retornar 1 senao retornar 4 fim
-      senao se #y > 0 entao
+      senaose #y > 0 entao
         retornar 2 
       senao
         retornar 3
