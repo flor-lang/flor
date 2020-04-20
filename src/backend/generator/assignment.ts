@@ -6,7 +6,7 @@ export const assignmentCodeGen = {
     Env.get().codeOutput += ' = '
   },
   exit (): void {
-    Env.get().codeOutput += '\n'
+    Env.get().codeOutput += ';'
   }
 }
 

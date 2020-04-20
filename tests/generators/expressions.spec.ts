@@ -37,16 +37,16 @@ test('generate expression function declaration', (): void => {
   const tryGenerateExpressions = generatorTester(Expression)
 
   tryGenerateExpressions([
-    ['funcao(numero) numero = 0 fim', 'function(numero){\nnumero = 0\n}'],
-    ['funcao () numero = 0 fim', 'function(){\nnumero = 0\n}'],
-    ['funcao (x, y, z) x = y + z fim', 'function(x,y,z){\nx = y+z\n}'],
+    ['funcao(numero) numero = 0 fim', 'function(numero){\nnumero = 0;}'],
+    ['funcao () numero = 0 fim', 'function(){\nnumero = 0;}'],
+    ['funcao (x, y, z) x = y + z fim', 'function(x,y,z){\nx = y+z;}'],
     [
       `funcao (lista)
         aux = lista[0]
         lista[0] = lista[1]
         lista[1] = aux
       fim`,
-      `function(lista){\naux = lista[0]\nlista[0] = lista[1]\nlista[1] = aux\n}`
+      `function(lista){\naux = lista[0];lista[0] = lista[1];lista[1] = aux;}`
     ],
     ['(numero) := numero * 0', '(numero) => numero*0'],
     ['() := Pessoa', '() => Pessoa'],

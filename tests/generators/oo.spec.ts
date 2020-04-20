@@ -27,9 +27,9 @@ test('generate class declaration', (): void => {
         fim
       fim
       `,
-      'class Carro{\n__propertiesDeclarations__() {this.modelo = \"Esportivo\"\n' + 
-      'this.marca = null\nthis.construtora = null\nthis.ano = 2020\n}constructor(marca)' + 
-      '{\nthis.__propertiesDeclarations__()\n__marca = marca\n}}'
+      'class Carro{\n__propertiesDeclarations__() {this.modelo = \"Esportivo\";' + 
+      'this.marca = null;this.construtora = null;this.ano = 2020;}constructor(marca)' + 
+      '{\nthis.__propertiesDeclarations__()\n__marca = marca;}}'
     ],
     [
       `
@@ -41,7 +41,7 @@ test('generate class declaration', (): void => {
       fim
       `,
       'class Luz{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}' +
-      'ligar(){\n__ligado = true\n}desligar(){\n__ligado = false\n}esta_ligado(){ return __ligado==true}}'
+      'ligar(){\n__ligado = true;}desligar(){\n__ligado = false;}esta_ligado(){ return __ligado==true}}'
     ]
   ])
 })
