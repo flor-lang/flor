@@ -1,0 +1,30 @@
+el = Math.pow
+
+definir classe Ponto
+  propriedades: x y
+  construtor: funcao(x, y)
+    #x = x
+    #y = y
+  fim
+  metodos:
+    distancia_para = (ponto) := el(base: el(base: ponto.x - #x, exp: 2) + el(base: ponto.y - #y, exp: 2), exp: 1/2)
+    obter_quadrante = funcao ()
+      se #x > 0 entao
+        se #y > 0 entao retornar 1 senao retornar 4 fim
+      senao se #y > 0 entao
+        retornar 2 
+      senao
+        retornar 3
+      fim
+    fim
+
+fim
+
+ponto_qualquer = novo Ponto(x: 1, y: -1)
+outro_ponto = novo Ponto(x: -2, y: 2)
+
+distancia = ponto_qualquer.distancia_para(ponto: outro_ponto)
+console.log(texto: distancia)
+
+console.log(texto: ponto_qualquer.obter_quadrante())
+console.log(texto: outro_ponto.obter_quadrante())
