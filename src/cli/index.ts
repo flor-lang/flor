@@ -29,15 +29,16 @@ Yargs
 Yargs
   .options({
     saida: {
-      describe: 'saida do compilador',
+      describe: 'Saida do compilador',
       choices: ['js', 'ast']
     },
     exec: {
-      describe: 'executa código após terminar de compilar'
+      type: 'boolean',
+      describe: 'Executa o código após compilação'
     }
   })
 
-const files = Yargs.argv._[0] ? [Yargs.argv._[0]] : glob.sync('**/*.flor')
+const files = Yargs.argv._.length !== 0 ? Yargs.argv._ : glob.sync('**/*.flor')
 const filesContent = files
   .map((path): FileContent => {
     try {
