@@ -28,3 +28,5 @@ console.log(texto: distancia)
 
 console.log(texto: ponto_qualquer.obter_quadrante())
 console.log(texto: outro_ponto.obter_quadrante())
+
+escrever(l: "foda")

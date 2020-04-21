@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import * as Yargs from 'yargs'
 import * as fs from 'fs'
+import * as vm from 'vm'
 import * as glob from 'glob'
 import { js as beautify } from 'js-beautify'
 
@@ -11,6 +12,7 @@ import { Node } from 'parsimmon'
 import { traverser } from '../backend/traverse'
 import { visitor } from '../backend/visitor'
 import Env from '../enviroment/env'
+import { Standard } from '../lib/standard'
 
 interface FileContent {filePath: string; content: string; ast?: Node<'program', {}>}
 
@@ -29,6 +31,9 @@ Yargs
     saida: {
       describe: 'saida do compilador',
       choices: ['js', 'ast']
+    },
+    exec: {
+      describe: 'executa código após terminar de compilar'
     }
   })
 
@@ -75,6 +80,11 @@ if (outputFormat === 'js') {
     try {
       const fileOutput = beautify(Env.get().codeOutput)
       fs.writeFileSync(outputFilePath, fileOutput)
+      if (Yargs.argv.exec) {
+        const script = new vm.Script(fileOutput)
+        const context = { console: console, ...Standard }
+        script.runInNewContext(context)
+      }
     } catch (error) {
       console.error(error)
     } finally {
