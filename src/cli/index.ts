@@ -54,19 +54,20 @@ const filesContent = files
     }
   })
 
-const haveConfig = fs.existsSync('./florconfig.json')
-let outputFormat = Yargs.argv.saida || 'js'
+const outputFormat = Yargs.argv.saida || 'js'
 
-if (haveConfig) {
-  try {
-    const configFile = fs.readFileSync('./florconfig.json', 'utf-8')
-    const configs = JSON.parse(String(configFile))
+/* TODO: Config file when flor exports */
+// const haveConfig = fs.existsSync('./florconfig.json')
+// if (haveConfig) {
+//   try {
+//     const configFile = fs.readFileSync('./florconfig.json', 'utf-8')
+//     const configs = JSON.parse(String(configFile))
 
-    if (configs.saida && !Yargs.argv.saida) outputFormat = configs.saida
-  } catch (e) {
-    console.log(`Não foi possível ler arquivo de configuração`)
-  }
-}
+//     if (configs.saida && !Yargs.argv.saida) outputFormat = configs.saida
+//   } catch (e) {
+//     console.log(`Não foi possível ler arquivo de configuração`)
+//   }
+// }
 
 if (outputFormat === 'js') {
   const parse = (file: FileContent): FileContent => {
