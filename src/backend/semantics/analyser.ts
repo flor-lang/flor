@@ -11,11 +11,11 @@ const Analyser = {
     }
   },
   throwError (message: string, node: AstNode): void {
-    throw new Error(`
-      ${message}
-        Linha: ${node.start.line}
-        Coluna: ${node.start.column}
-      `)
+    throw new Error('\n' +
+    `${message}
+      Linha: ${node.start.line}
+      Coluna: ${node.start.column}` +
+    '')
   }
 }
 

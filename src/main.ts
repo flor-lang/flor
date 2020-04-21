@@ -3,11 +3,19 @@ import { Program } from './parsers/program'
 import { visitor } from './backend/visitor'
 import { traverser } from './backend/traverse'
 import Env from './enviroment/env'
-import { logAst } from './utils/logger'
+// import { logAst } from './utils/logger'
 
-const ast = Program.tryParse('f()')
+const ast = Program.tryParse(`
+duplicar = (x) := 2 * x
+quatro = duplicar(x: 2)
+escrever(l: quatro)
+`)
 
-traverser(ast, visitor)
-logAst(ast, true)
-// console.log(Env.get().symbolTable)
-console.log(Env.get().codeOutput)
+try {
+  traverser(ast, visitor)
+  // logAst(ast, true)
+  // console.log(Env.get().symbolTable)
+  console.log(Env.get().codeOutput)
+} catch (e) {
+  console.error((e as Error).message)
+}

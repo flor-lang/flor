@@ -1,10 +1,23 @@
 import { wrappedCodeGen, unaryCodeGen, blockFunctionCodeGen, argsCodeGen, inlineFunctionCodeGen } from './generator/expressions'
 import { AstNode } from 'backend/traverse'
+import Env from '../enviroment/env'
+import { findIdentifierAtArgsNode } from '../utils/aux-functions'
 
 const expression = {
-  enter (): void {},
-  between (): void {},
-  exit (): void {}
+  enter (node: AstNode, parent: AstNode): void {
+    if (parent && parent.name === 'inline-function') {
+      Env.get().pushSymbolTable()
+      const argsNode = (parent.value as AstNode[])[0]
+      findIdentifierAtArgsNode(argsNode).forEach(([id, node]): void => {
+        Env.get().symbolTable.put(id, node)
+      })
+    }
+  },
+  exit (node: AstNode, parent: AstNode): void {
+    if (parent && parent.name === 'inline-function') {
+      Env.get().popSymbolTable()
+    }
+  }
 }
 
 const wrapped = {
