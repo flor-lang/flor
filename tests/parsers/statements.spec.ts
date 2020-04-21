@@ -2,7 +2,7 @@ import { canParse, cantParse } from '../utils'
 import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement, ReturnStatement, FunctionCall } from '../../src/parsers/statements'
 
 test('if then else statement', (): void => {
-  const canParseIfThenElseStatement = canParse(IfThenElseStatement, true, 11)
+  const canParseIfThenElseStatement = canParse(IfThenElseStatement)
   const cantParseIfThenElseStatement = cantParse(IfThenElseStatement)
 
   canParseIfThenElseStatement([
