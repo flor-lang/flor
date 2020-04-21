@@ -7,9 +7,12 @@ import {
   classInstantiationCodeGen
 } from './generator/oo'
 import { AstNode } from './traverse'
+import Env from '../enviroment/env'
 
 const classDeclaration = {
-  enter (): void {
+  enter (node: AstNode): void {
+    const identifierNode = (node.value as AstNode[])[0]
+    Env.get().symbolTable.put(identifierNode.value as string, node)
     classDeclarationCodeGen.enter()
   },
   exit (): void {
