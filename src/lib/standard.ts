@@ -1,3 +1,3 @@
-export const Standard = {
+export const StandardLib = {
   escrever: console.log
 }

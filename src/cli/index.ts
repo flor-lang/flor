@@ -12,7 +12,7 @@ import { Node } from 'parsimmon'
 import { traverser } from '../backend/traverse'
 import { visitor } from '../backend/visitor'
 import Env from '../enviroment/env'
-import { Standard } from '../lib/standard'
+import { StandardLib } from '../lib/standard'
 
 interface FileContent {filePath: string; content: string; ast?: Node<'program', {}>}
 
@@ -84,7 +84,7 @@ if (outputFormat === 'js') {
       fs.writeFileSync(outputFilePath, fileOutput)
       if (Yargs.argv.exec) {
         const script = new vm.Script(fileOutput)
-        const context = { console: console, ...Standard }
+        const context = { console: console, ...StandardLib }
         script.runInNewContext(context)
       }
     } catch (error) {
