@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Env from '../../enviroment/env'
 import { AstNode } from '../traverse'
 
@@ -6,7 +7,7 @@ const Analyser = {
   create (analyserfn: AnalyserFunction): AnalyserFunction {
     return (node: AstNode): void => {
       if (Env.get().context !== 'test') {
-        analyserfn(node)
+        // analyserfn(node)
       }
     }
   },

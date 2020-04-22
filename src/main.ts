@@ -6,6 +6,7 @@ import { traverser } from './backend/traverse'
 // import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
+int = parseInt
 trolando = "Troll do Troll"
 definir classe Pessoa
     propriedades: nome idade
