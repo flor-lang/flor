@@ -8,12 +8,12 @@ import {
   elifCodeGen
 } from './generator/statement'
 import { AstNode } from './traverse'
-// import { evaluateFunctionCallAsClassInstantiation } from './semantics/definitions'
+import { evaluateFunctionCallAsClassInstantiation } from './semantics/definitions'
 
 const functionCall = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent.name === 'class-instantiation') {
-      // evaluateFunctionCallAsClassInstantiation(node)
+      evaluateFunctionCallAsClassInstantiation(node)
     }
   }
 }

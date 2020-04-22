@@ -3,8 +3,11 @@ import Env from '../../enviroment/env'
 import Analyser from './analyser'
 
 const identifierAsClassMember = (node: AstNode): void => {
-  if (Env.get().stackMap['classScope'].length === 0) {
-    Analyser.throwError(`Operador '#' não pode ser usado fora da definição de uma classe`, node)
+  const identifierValue = node.value as string
+  if (identifierValue.startsWith('#') || identifierValue === 'super') {
+    if (Env.get().stackMap['classScope'].length === 0) {
+      Analyser.throwError(`Operadores [#, super] não podem ser usados fora da definição de uma classe`, node)
+    }
   }
 }
 

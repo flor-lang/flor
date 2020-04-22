@@ -19,7 +19,7 @@ const classInstantiation = (node: AstNode): void => {
     Analyser.throwError(`Classe '${identifier}' não foi definida`, node)
   }
   if (classNode.name !== 'class-declaration') {
-    Analyser.throwError(`As cláusulas 'novo|nova' só podem ser usadas para instanciar classes`, node)
+    Analyser.throwError(`As cláusulas [novo, nova] só podem ser usadas para instanciar classes`, node)
   }
 }
 

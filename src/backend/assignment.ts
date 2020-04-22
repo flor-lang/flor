@@ -31,9 +31,7 @@ const loc = {
 
 const identifier = {
   enter (node: AstNode, parent: AstNode): void {
-    if ((node.value as string).startsWith('#')) {
-      evaluateIdentifierAsClassMember(node)
-    }
+    evaluateIdentifierAsClassMember(node)
     identifierCodeGen.enter(node, parent)
   }
 }
