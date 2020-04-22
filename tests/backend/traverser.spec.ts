@@ -1,5 +1,5 @@
-import { traverser, AstNode } from '../src/utils/traverse'
-import { getAssignmentProgramAst, getComplexProgramAst } from './utils'
+import { AstNode, traverser } from '../../src/backend/traverse'
+import { getAssignmentProgramAst, getComplexProgramAst } from '../utils'
 
 test('test if visitor enter', () => {
   let flag = false
@@ -7,7 +7,6 @@ test('test if visitor enter', () => {
   const visitor = {
     assignment: {
       enter (node: AstNode, parent: AstNode): void { flag = true },
-      exit (node: AstNode, parent: AstNode): void { /* não faz nada */ }
     }
   }
   traverser(fakeAstNode, visitor)
@@ -19,7 +18,6 @@ test('test if can exit', () => {
   const fakeAstNode: AstNode = getAssignmentProgramAst()
   const visitor = {
     assignment: {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
       exit (node: AstNode, parent: AstNode): void { flag = true }
     }
   }
@@ -49,8 +47,7 @@ test('test complex ast', () => {
   let flag = false
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
-    'interface-declaration': {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
+    interfaceDeclaration: {
       exit (node: AstNode, parent: AstNode): void { flag = true }
     }
   }
@@ -63,12 +60,10 @@ test('visitor more complex', () => {
   let flagForInterface = false
   const fakeAstNode: AstNode = getComplexProgramAst()
   const visitor = {
-    'class-declaration': {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
+    classDeclaration: {
       exit (node: AstNode, parent: AstNode): void { flagForClass = true }
     },
-    'interface-declaration': {
-      enter (node: AstNode, parent: AstNode): void { /* não faz nada */ },
+    interfaceDeclaration: {
       exit (node: AstNode, parent: AstNode): void { flagForInterface = true }
     }
   }
@@ -76,3 +71,21 @@ test('visitor more complex', () => {
   expect(flagForClass).toBe(true)
   expect(flagForInterface).toBe(true)
 })
+
+test('visitor test between', () => {
+  let flag = false
+  let count = 0
+  const fakeAstNode: AstNode = getAssignmentProgramAst()
+  const visitor = {
+    add: {
+      between (node: AstNode, parent: AstNode, index: number): void { 
+        flag = true
+        count++
+      }
+    }
+  }
+  traverser(fakeAstNode, visitor)
+  expect(count).toBe(2)
+  expect(flag).toBe(true)   
+})
+

@@ -1,1 +1,32 @@
+import { AstNode } from '../backend/traverse'
+
 export const findDuplicates = <T>(arr: T[]): T[] => arr.filter((item: T, index: number): boolean => arr.indexOf(item) !== index)
+
+export const isEmptyNode = (node: AstNode): boolean => /^[ ]*$/gm.test(node.value as string)
+
+export const indexOfChildInParent = (childNode: AstNode, parentNode: AstNode): number => {
+  if (Array.isArray(parentNode.value)) {
+    return (parentNode.value as AstNode[]).indexOf(childNode)
+  }
+  return -1
+}
+
+export const locSubscriptableIsIdentifier = (locNode: AstNode): boolean => ((locNode.value as AstNode[])[0].value as AstNode).name === 'identifier'
+export const identifierValueOfLocNode = (locNode: AstNode): string => ((locNode.value as AstNode[])[0].value as AstNode).value as string
+export const findIdentifierAtArgsNode = (argsNode: AstNode): [string, AstNode][] => (argsNode.value as AstNode[]).map((node: AstNode): [string, AstNode] => [node.value as string, node])
+export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, AstNode][] => {
+  const metaNode = classMetaNode.value as AstNode[]
+  const inheritanceNode = metaNode[0]
+
+  const members: [string, AstNode][] = [['super', inheritanceNode]]
+
+  const propertiesNode = metaNode[2]
+  const methodsNode = metaNode[4]
+  const membersPush = (memberNode: AstNode): void => {
+    (memberNode.value as { value: { value: string }[] }[]).forEach((memberNode): void => {
+      members.push([memberNode.value[1].value, (memberNode as unknown) as AstNode])
+    })
+  }
+  [propertiesNode, methodsNode].map(membersPush)
+  return members
+}

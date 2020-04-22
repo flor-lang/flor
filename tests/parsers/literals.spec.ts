@@ -1,5 +1,5 @@
-import { canParse, cantParse } from './utils'
-import { Literal, StringLiteral, ArrayLiteral, DictionaryLiteral } from '../src/parsers/literals'
+import { canParse, cantParse } from '../utils'
+import { Literal, StringLiteral, ArrayLiteral, DictionaryLiteral } from '../../src/parsers/literals'
 
 test('parse string', (): void => {
   const canParseString = canParse(StringLiteral)

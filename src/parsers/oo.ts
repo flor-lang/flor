@@ -5,6 +5,7 @@ import { Identifier, IdentifierParser } from './assignment'
 import { ObjectParser, BlockFunctionParser, BlockFunction, InlineFunction, BoolParser, Bool, InlineFunctionParser } from './expressions'
 import { findDuplicates } from './../utils/aux-functions'
 import { FunctionCallParser, FunctionCall } from './statements'
+import { nodePropertiesMapper, mapClassDeclarationNode } from './../utils/node-map'
 
 export type InterfaceDeclarationParser = P.Parser<P.Node<'interface-declaration', {}>>
 export type ClassDeclarationParser = P.Parser<P.Node<'class-declaration', {}>>
@@ -33,7 +34,8 @@ export const InterfaceDeclaration: InterfaceDeclarationParser = P
   }))
   .node('interface-declaration')
 
-const MetaInheritance: ObjectParser = P
+type MetaInheritanceParser = P.Parser<P.Node<'inheritance', {}>>
+const MetaInheritance: MetaInheritanceParser = P
   .seqObj(
     Inherit, P.optWhitespace,
     Colon, P.optWhitespace,
@@ -41,8 +43,10 @@ const MetaInheritance: ObjectParser = P
     P.whitespace
   )
   .node('inheritance')
+  .map(nodePropertiesMapper(['parent']))
 
-const MetaImplementations: ObjectParser = P
+type MetaImplementationsParser = P.Parser<P.Node<'implementations', {}>>
+const MetaImplementations: MetaImplementationsParser = P
   .seqObj(
     Implements, P.optWhitespace,
     Colon, P.optWhitespace,
@@ -52,56 +56,68 @@ const MetaImplementations: ObjectParser = P
     P.whitespace
   )
   .node('implementations')
+  .map(nodePropertiesMapper(['interfaces']))
 
-const MetaConstructor: ObjectParser = P
+type MetaConstructorParser = P.Parser<P.Node<'constructor', {}>>
+const MetaConstructor: MetaConstructorParser = P
   .seqObj(
     Constructor, P.optWhitespace,
     Colon, P.optWhitespace,
     P.lazy((): BlockFunctionParser => BlockFunction).named('function')
   )
   .node('constructor')
+  .map(nodePropertiesMapper(['function']))
 
-const PropertyDeclaration: ObjectParser = P
+type PropertyDeclarationParser = P.Parser<P.Node<'property', {}>>
+const PropertyDeclaration: PropertyDeclarationParser = P
   .seqObj(
-    P.alt(ClassFieldModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    ClassFieldModifier.node('modifier').named('field-modifier'),
     P.lazy((): IdentifierParser => Identifier).named('identifier'),
     P.alt(
       P.seqObj(
         P.optWhitespace, Equal, P.optWhitespace,
         P.lazy((): BoolParser => Bool).named('bool')
-      ),
+      ).node('assignment').map(nodePropertiesMapper(['bool'])),
       P.optWhitespace
     ).named('assignment')
   )
+  .node('property')
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'assignment']))
 
-const MetaProperties: ObjectParser = P
+type MetaPropertiesParser = P.Parser<P.Node<'properties', {}>>
+const MetaProperties: MetaPropertiesParser = P
   .seqObj(
     Properties, P.optWhitespace,
     Colon, P.optWhitespace,
-    PropertyDeclaration.many().named('declarations')
+    PropertyDeclaration.many().named('properties')
   )
   .node('properties')
+  .map(nodePropertiesMapper(['properties']))
 
-const MethodDeclaration: ObjectParser = P
+type MethodDeclarationParser = P.Parser<P.Node<'method', {}>>
+const MethodDeclaration: MethodDeclarationParser = P
   .seqObj(
-    P.alt(ClassFieldModifier.wspc(), P.optWhitespace).named('access-modifier'),
+    ClassFieldModifier.node('modifier').named('field-modifier'),
+    P.lazy((): IdentifierParser => Identifier).named('identifier'),
     P.seqObj(
-      P.lazy((): IdentifierParser => Identifier).named('identifier'),
       P.optWhitespace, Equal, P.optWhitespace,
       P.alt(
         P.lazy((): InlineFunctionParser => InlineFunction),
         P.lazy((): BlockFunctionParser => BlockFunction)
       ).named('function')
-    ).named('assignment')
+    ).node('function').map(nodePropertiesMapper(['function'])).named('function')
   )
+  .node('method')
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'function']))
 
 const MetaMethods: ObjectParser = P
   .seqObj(
     Methods, P.optWhitespace,
     Colon, P.optWhitespace,
-    MethodDeclaration.many().named('declarations')
+    MethodDeclaration.many().named('methods')
   )
   .node('methods')
+  .map(nodePropertiesMapper(['methods']))
 
 const Meta: ObjectParser = P
   .alt(
@@ -134,19 +150,7 @@ export const ClassDeclaration: ClassDeclarationParser = P
     const metaNames = result.metas.map((m): string => m.name)
     return findDuplicates(metaNames).length === 0
   }, 'Configuração da classe duplicada')
-  .map((ast: { identifier: {}; metas: { name: string }[] }): {} => {
-    const cAst = {
-      identifier: ast.identifier,
-      meta: {
-        inheritance: ast.metas.filter((m): boolean => m.name === 'inheritance')[0] || '',
-        implementations: ast.metas.filter((m): boolean => m.name === 'implementations')[0] || '',
-        constructor: ast.metas.filter((m): boolean => m.name === 'constructor')[0] || '',
-        properties: ast.metas.filter((m): boolean => m.name === 'properties')[0] || '',
-        methods: ast.metas.filter((m): boolean => m.name === 'methods')[0] || ''
-      }
-    }
-    return cAst
-  })
+  .map(mapClassDeclarationNode)
   .node('class-declaration')
 
 /**
@@ -159,3 +163,4 @@ export const ClassInstantiation: ClassInstantiationParser = P
     New, P.lazy((): FunctionCallParser => FunctionCall).named('constructor')
   )
   .node('class-instantiation')
+  .map(nodePropertiesMapper(['constructor']))

@@ -1,4 +1,4 @@
-import comments from '../src/utils/comments'
+import comments from '../../src/utils/comments'
 
 test('remove single line comment', (): void => {
   expect(

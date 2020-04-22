@@ -16,6 +16,8 @@
   "devDependencies": {
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.15",
+    "@types/js-beautify": "^1.8.2",
+    "@types/lodash": "^4.14.149",
     "@types/node": "^12.6.8",
     "@types/parsimmon": "^1.10.0",
     "@types/treeify": "^1.0.0",
@@ -36,10 +38,12 @@
   },
   "dependencies": {
     "glob": "^7.1.5",
+    "js-beautify": "^1.11.0",
+    "lodash": "^4.17.15",
     "parsimmon": "^1.13.0",
     "yargs": "^14.2.0"
   },
   "bin": {
-    "tinp": "./dist/cli/index.js"
+    "flor": "./dist/cli/index.js"
   }
 }

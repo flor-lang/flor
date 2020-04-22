@@ -1,10 +1,11 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon, ElseIf } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser, LocParser, Loc } from './assignment'
 import { Block, BlockParser } from './program'
 import { InterfaceDeclarationParser, InterfaceDeclaration, ClassDeclarationParser, ClassDeclaration } from './oo'
+import { nodePropertiesMapper } from './../utils/node-map'
 
 export type IfThenElseStatementParser = P.Parser<P.Node<'if-then-else', {}>>
 export type WhileStatementParser = P.Parser<P.Node<'while', {}>>
@@ -23,21 +24,25 @@ export type StatementParser = P.Parser<P.Node<'statement', {}>>
  */
 export const IfThenElseStatement: IfThenElseStatementParser = P
   .seqObj(
-    If,
-    P.lazy((): ExpressionParser => Expression).named('condition'),
-    Then,
+    If, P.lazy((): ExpressionParser => Expression).named('condition'), Then,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): BlockParser => Block).named('block'),
     P.seqObj(
+      ElseIf, P.lazy((): ExpressionParser => Expression).named('condition'), Then,
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       P.lazy((): BlockParser => Block).named('block')
-    ).named('then'),
+    ).node('elif').map(nodePropertiesMapper(['condition', 'block'])).many().named('elifs'),
     P.alt(
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      P.seqObj(Else, P.lazy((): BlockParser => Block).named('block')),
+      P.seqObj(Else, P.lazy((): BlockParser => Block).named('block'))
+        .node('else')
+        .map(nodePropertiesMapper(['block'])),
       P.optWhitespace
     ).named('else'),
     End
   )
   .node('if-then-else')
+  .map(nodePropertiesMapper(['condition', 'block', 'elifs', 'else']))
 
 /**
  * Parse While Statements
@@ -53,7 +58,8 @@ export const WhileStatement: WhileStatementParser = P
     P.lazy((): BlockParser => Block).named('block'),
     End
   )
-  .node('while')
+  .node('while-stmt')
+  .map(nodePropertiesMapper(['condition', 'block']))
 
 /**
  * Parse Do-While Statements
@@ -70,6 +76,7 @@ export const DoWhileStatement: DoWhileStatementParser = P
     End
   )
   .node('do-while')
+  .map(nodePropertiesMapper(['block', 'condition']))
 
 /**
  * Parse For-Each Statements
@@ -79,17 +86,27 @@ export const DoWhileStatement: DoWhileStatementParser = P
 export const ForEachStatement: ForEachStatementParser = P
   .seqObj(
     ForEach,
-    P.lazy((): IdentifierParser => Identifier).named('identifier'),
+    P.lazy((): IdentifierParser => Identifier).named('iterator'),
     OfExpr,
-    P.lazy((): ExpressionParser => Expression).named('iterator'),
+    P.lazy((): LocParser => Loc).named('collection'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): BlockParser => Block).named('block'),
     End
   )
   .node('for-each')
+  .map(nodePropertiesMapper(['iterator', 'collection', 'block']))
 
-const ForToLine: ObjectParser = P.seqObj(WithExpr, StepExpr, P.lazy((): ExpressionParser => Expression).named('step'))
+const ForToLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      WithExpr, StepExpr,
+      P.lazy((): ExpressionParser => Expression).named('step')
+    )
+      .node('for-to-line')
+      .map(nodePropertiesMapper(['step'])),
+    P.optWhitespace
+  )
 /**
  * Parse For-To Statements
  *
@@ -104,13 +121,14 @@ export const ForToStatement: ForToStatementParser = P
     P.lazy((): ExpressionParser => Expression).named('start-iterator'),
     ToExpr,
     P.lazy((): ExpressionParser => Expression).named('end-iterator'),
-    P.alt(ForToLine, P.optWhitespace).named('for-to-line'),
+    ForToLine.named('for-to-line'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): BlockParser => Block).named('block'),
     End
   )
   .node('for-to')
+  .map(nodePropertiesMapper(['identifier', 'start-iterator', 'end-iterator', 'for-to-line', 'block']))
 
 /**
  * Parser function returns
@@ -125,15 +143,21 @@ export const ReturnStatement: ReturnStatementParser = P
       P.optWhitespace
     ).named('expression')
   )
-  .node('return')
+  .node('return-stmt')
+  .map(nodePropertiesMapper(['expression']))
 
-const LabeledArgs: ObjectParser = P
+type LabeledArgsParser = P.Parser<P.Node<'labeled-args', {}>>
+const LabeledArgs: LabeledArgsParser = P
   .seqObj(
     P.lazy((): IdentifierParser => Identifier).named('label'),
     P.optWhitespace, Colon, P.optWhitespace,
     P.lazy((): ExpressionParser => Expression).named('value')
   )
+  .node('labeled-arg')
+  .map(nodePropertiesMapper(['label', 'value']))
   .sepWrp(',', '(', ')')
+  .node('labeled-args')
+
 /**
  * Parse function call
  *
@@ -145,6 +169,7 @@ export const FunctionCall: FunctionCallParser = P
     LabeledArgs.named('labeled-args')
   )
   .node('function-call')
+  .map(nodePropertiesMapper(['identifier', 'labeled-args']))
 
 /**
  * Parse Statements
@@ -163,7 +188,7 @@ export const Statement: StatementParser = P
     WhileStatement,
     DoWhileStatement,
     ForEachStatement,
-    ForToStatement,
+    // ForToStatement,
     ReturnStatement,
     P.lazy((): LocParser => Loc)
   )

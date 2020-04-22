@@ -1,7 +1,10 @@
 import { Parser } from 'parsimmon'
 import { logAst } from '../src/utils/logger'
-import { AstNode } from '../src/utils/traverse'
+import { AstNode } from '../src/backend/traverse'
 import { Program } from '../src/parsers/program'
+import { traverser } from '../src/backend/traverse'
+import { visitor } from '../src/backend/visitor'
+import Env from '../src/enviroment/env'
 // import { inspect } from 'util'
 
 const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false, index: number = undefined) => (a: string[]) => {
@@ -19,8 +22,28 @@ const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false,
   })
 }
 
+export const canParse = parseStrings(true)
+export const cantParse = parseStrings(false)
+
+export const generatorTester = (p: Parser<any>, log: boolean = false, logIndex: number = undefined) => (inputs: [string, string][]) => {
+  inputs.forEach((i, index) => {
+    Env.get().context = 'test'
+    Env.get().codeOutput = ''
+    const ast = p.tryParse(i[0])
+    traverser(ast, visitor)
+    const resultCode = Env.get().codeOutput
+
+    if (log && index === logIndex) {
+      const resultAst = p.parse(i[0])
+      logAst(resultAst, true)
+    }
+
+    expect(resultCode).toBe(i[1])
+  })
+}
+
 export const getAssignmentProgramAst = (): AstNode => {
-  const ast = Program.tryParse(`i = 0`)
+  const ast = Program.tryParse(`i = 1-1`)
 
   return ast
 }
@@ -66,6 +89,3 @@ export const getComplexProgramAst = (): AstNode => {
 
   return ast
 } 
-
-export const canParse = parseStrings(true)
-export const cantParse = parseStrings(false)

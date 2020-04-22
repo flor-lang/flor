@@ -14,7 +14,8 @@ function simplify<T> (ast: any): any {
   return simplifiedAst
 }
 
-export const logAst = <T>(ast: Result<Node<string, T>>, simplified: boolean = false, showValues: boolean = true): void => {
-  const result = (simplified && ast.status) ? simplify(ast.value) : ast
+export const logAst = <T>(ast: Result<Node<string, T>> | Node<string, T>, simplified: boolean = false, showValues: boolean = true): void => {
+  const tree = ('status' in ast && ast.status) ? ast.value : ast
+  const result = simplified ? simplify(tree) : tree
   console.log(asTree(result, showValues, true))
 }

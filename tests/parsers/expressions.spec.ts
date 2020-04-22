@@ -1,5 +1,5 @@
-import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction } from '../src/parsers/expressions'
-import { canParse, cantParse } from './utils'
+import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction } from '../../src/parsers/expressions'
+import { canParse, cantParse } from '../utils'
 
 
 test('parse factor', (): void => {
