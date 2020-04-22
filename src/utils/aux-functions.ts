@@ -14,3 +14,15 @@ export const indexOfChildInParent = (childNode: AstNode, parentNode: AstNode): n
 export const locSubscriptableIsIdentifier = (locNode: AstNode): boolean => ((locNode.value as AstNode[])[0].value as AstNode).name === 'identifier'
 export const identifierValueOfLocNode = (locNode: AstNode): string => ((locNode.value as AstNode[])[0].value as AstNode).value as string
 export const findIdentifierAtArgsNode = (argsNode: AstNode): [string, AstNode][] => (argsNode.value as AstNode[]).map((node: AstNode): [string, AstNode] => [node.value as string, node])
+export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, AstNode][] => {
+  const members: [string, AstNode][] = []
+  const propertiesNode = (classMetaNode.value as AstNode[])[2]
+  const methodsNode = (classMetaNode.value as AstNode[])[4]
+  const membersPush = (memberNode: AstNode): void => {
+    (memberNode.value as { value: { value: string }[] }[]).forEach((memberNode): void => {
+      members.push([memberNode.value[1].value, (memberNode as unknown) as AstNode])
+    })
+  }
+  [propertiesNode, methodsNode].map(membersPush)
+  return members
+}

@@ -1,7 +1,7 @@
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
-// import { evaluateLocUse } from './semantics/definitions'
+import { evaluateLocUse } from './semantics/definitions'
 import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen } from './generator/assignment'
 
 const assignment = {
@@ -16,7 +16,7 @@ const assignment = {
 const loc = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0) {
-      // evaluateLocUse(node)
+      evaluateLocUse(node)
     }
   },
   exit (node: AstNode, parent: AstNode): void {

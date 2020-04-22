@@ -8,6 +8,7 @@ import {
 } from './generator/oo'
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
+import { findClassMemberIndentifiers } from '../utils/aux-functions'
 
 const classDeclaration = {
   enter (node: AstNode): void {
@@ -16,6 +17,8 @@ const classDeclaration = {
     classDeclarationCodeGen.enter()
   },
   exit (): void {
+    /* Pop Class scope created at contructor::enter */
+    Env.get().popSymbolTable()
     classDeclarationCodeGen.exit()
   }
 }
@@ -48,7 +51,12 @@ const property = {
 }
 
 const constructor = {
-  enter (node: AstNode): void {
+  enter (node: AstNode, parent: AstNode): void {
+    /* Create a new scope to Classes Properties and Methods */
+    Env.get().pushSymbolTable()
+    findClassMemberIndentifiers(parent).forEach(([id, node]): void => {
+      Env.get().symbolTable.put(`#${id}`, node)
+    })
     constructorCodeGen.enter(node)
   }
 }

@@ -3,7 +3,7 @@ import { Program } from './parsers/program'
 import { visitor } from './backend/visitor'
 import { traverser } from './backend/traverse'
 // import Env from './enviroment/env'
-// import { logAst } from './utils/logger'
+import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
 trolando = "Troll do Troll"
@@ -13,7 +13,10 @@ definir classe Pessoa
         #nome = nome
         #idade = idade
     fim
+    metodos:
+        descricao = () := "Nome: " + #nome + ""
 fim
+treta = #nome
 josiel = nova Pessoa(nome: "Josiel", idade: 14)
 escrever(l: josiel)
 `)

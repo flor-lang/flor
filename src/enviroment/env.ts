@@ -4,7 +4,7 @@ type EnvContext = 'test' | 'dev' | 'prod'
 export default class Env {
   private static instance: Env
 
-  private saved: SymbolTable
+  private tableStack: SymbolTable[]
 
   private _symbolTable: SymbolTable
 
@@ -30,16 +30,16 @@ export default class Env {
   }
 
   public pushSymbolTable (): void {
-    this.saved = this._symbolTable
-    this._symbolTable = new SymbolTable(this.saved)
+    this.tableStack.push(this._symbolTable)
+    this._symbolTable = new SymbolTable(this._symbolTable)
   }
 
   public popSymbolTable (): void {
-    this._symbolTable = this.saved
+    this._symbolTable = this.tableStack.pop() || null
   }
 
   public clean (context: EnvContext = 'dev'): void {
-    this.saved = null
+    this.tableStack = []
     this.context = context
     this.codeOutput = ''
     this._symbolTable = new SymbolTable(null)

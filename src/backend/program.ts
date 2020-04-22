@@ -17,7 +17,6 @@ const block = {
     }
   },
   exit (node: AstNode, parent: AstNode): void {
-    // console.log(Env.get().symbolTable)
     if (parent.name !== 'program') {
       Env.get().popSymbolTable()
       Env.get().codeOutput += '}'
