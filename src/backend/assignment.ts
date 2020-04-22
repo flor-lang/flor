@@ -3,6 +3,7 @@ import Env from '../enviroment/env'
 import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
 import { evaluateLocUse } from './semantics/definitions'
 import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen } from './generator/assignment'
+import { evaluateIdentifierAsClassMember } from './semantics/oo'
 
 const assignment = {
   between (): void {
@@ -30,6 +31,9 @@ const loc = {
 
 const identifier = {
   enter (node: AstNode, parent: AstNode): void {
+    if ((node.value as string).startsWith('#')) {
+      evaluateIdentifierAsClassMember(node)
+    }
     identifierCodeGen.enter(node, parent)
   }
 }

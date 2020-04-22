@@ -13,10 +13,13 @@ import { findClassMemberIndentifiers } from '../utils/aux-functions'
 const classDeclaration = {
   enter (node: AstNode): void {
     const identifierNode = (node.value as AstNode[])[0]
-    Env.get().symbolTable.put(identifierNode.value as string, node)
+    const identifier = identifierNode.value as string
+    Env.get().symbolTable.put(identifier, node)
+    Env.get().stackMap['classScope'].push(identifier)
     classDeclarationCodeGen.enter()
   },
   exit (): void {
+    Env.get().stackMap['classScope'].pop()
     /* Pop Class scope created at contructor::enter */
     Env.get().popSymbolTable()
     classDeclarationCodeGen.exit()

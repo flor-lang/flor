@@ -16,7 +16,7 @@ definir classe Pessoa
     metodos:
         descricao = () := "Nome: " + #nome + ""
 fim
-treta = #nome
+#nome = "Eita"
 josiel = nova Pessoa(nome: "Josiel", idade: 14)
 escrever(l: josiel)
 `)

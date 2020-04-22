@@ -44,7 +44,8 @@ export default class Env {
     this.codeOutput = ''
     this._symbolTable = new SymbolTable(null)
     this.stackMap = {
-      block: []
+      block: [],
+      classScope: []
     }
   }
 }
