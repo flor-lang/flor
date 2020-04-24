@@ -53,6 +53,9 @@ test('test function call use', () => {
     se 5 < 10 entao
       duplicar(x: 10)
     fim
+    `,
+    `definir classe Foo fim
+    o = novo Foo()
     `
   ])
 
@@ -73,14 +76,6 @@ test('test class member identifier use', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true, /.*Operadores \[#, super\] não podem ser usados fora da definição de uma classe/)
 
-  mustThrows([
-    '#propriedade = 0', '#metodo = () := 0',
-    `definir classe Teste
-        propriedades: valor = 0
-    fim
-    #valor = 1`
-  ])
-
   mustBeAllowed([
     `definir classe Teste
         propriedades: valor = 0 duplicado
@@ -89,4 +84,35 @@ test('test class member identifier use', () => {
         fim
     fim`
   ])
+
+  mustThrows([
+    '#propriedade = 0', '#metodo = () := 0',
+    `definir classe Teste
+        propriedades: valor = 0
+    fim
+    #valor = 1`
+  ])
+
+})
+
+test('test class instantiation', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true,
+    /.*(As cláusulas \[novo, nova\] só podem ser usadas para instanciar classes|Classe '.+' não foi definida)/)
+
+  mustBeAllowed([
+    `definir classe Foo fim
+    o = novo Foo()
+    `
+  ])
+
+  mustThrows([
+    'teste = nova Pessoa(nome: "Teste")',
+    `definir classe Foo fim
+    o = novo Bar()
+    `,
+    `Foo = () := nulo
+    foo = novo Foo()`
+  ])
+
 })
