@@ -3,6 +3,7 @@ import {
   inheritanceCodeGen,
   propertiesCodeGen,
   propertyCodeGen,
+  initializeCodeGen,
   constructorCodeGen,
   classInstantiationCodeGen
 } from './generator/oo'
@@ -53,6 +54,12 @@ const property = {
   }
 }
 
+const initialize = {
+  exit (node: AstNode, parent: AstNode): void {
+    initializeCodeGen.exit(node, parent)
+  }
+}
+
 const constructor = {
   enter (node: AstNode, parent: AstNode): void {
     /* Create a new scope to Classes Properties and Methods */
@@ -75,6 +82,7 @@ export default {
   inheritance,
   properties,
   property,
+  initialize,
   constructor,
   classInstantiation
 }

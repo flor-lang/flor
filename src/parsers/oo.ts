@@ -77,12 +77,12 @@ const PropertyDeclaration: PropertyDeclarationParser = P
       P.seqObj(
         P.optWhitespace, Equal, P.optWhitespace,
         P.lazy((): BoolParser => Bool).named('bool')
-      ).node('assignment').map(nodePropertiesMapper(['bool'])),
+      ).node('initialize').map(nodePropertiesMapper(['bool'])),
       P.optWhitespace
-    ).named('assignment')
+    ).named('initialize')
   )
   .node('property')
-  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'assignment']))
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'initialize']))
 
 type MetaPropertiesParser = P.Parser<P.Node<'properties', {}>>
 const MetaProperties: MetaPropertiesParser = P
@@ -104,11 +104,11 @@ const MethodDeclaration: MethodDeclarationParser = P
       P.alt(
         P.lazy((): InlineFunctionParser => InlineFunction),
         P.lazy((): BlockFunctionParser => BlockFunction)
-      ).named('function')
-    ).node('function').map(nodePropertiesMapper(['function'])).named('function')
+      ).named('initialize')
+    ).node('initialize').map(nodePropertiesMapper(['initialize'])).named('initialize')
   )
   .node('method')
-  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'function']))
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'initialize']))
 
 const MetaMethods: ObjectParser = P
   .seqObj(

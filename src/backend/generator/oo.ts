@@ -32,6 +32,14 @@ export const propertiesCodeGen = {
   }
 }
 
+export const initializeCodeGen = {
+  exit (node: AstNode, parent: AstNode): void {
+    if (parent.name === 'property') {
+      Env.get().codeOutput += ';'
+    }
+  }
+}
+
 export const propertyCodeGen = {
   enter (): void {
     Env.get().codeOutput += `this.`

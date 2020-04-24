@@ -5,7 +5,6 @@ import { Program } from '../src/parsers/program'
 import { traverser } from '../src/backend/traverse'
 import { visitor } from '../src/backend/visitor'
 import Env from '../src/enviroment/env'
-// import { inspect } from 'util'
 
 const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false, index: number = undefined) => (a: string[]) => {
   a.map((s, i) => {
@@ -39,6 +38,14 @@ export const generatorTester = (p: Parser<any>, log: boolean = false, logIndex: 
     }
 
     expect(resultCode).toBe(i[1])
+  })
+}
+
+export const semanticTester = (errorPattern: RegExp) => (inputs: string[]): void => {
+  inputs.forEach(input => {
+    const ast = Program.tryParse(input)
+    const evaluate = () => traverser(ast, visitor)
+    expect(evaluate).toThrowError(errorPattern)
   })
 }
 

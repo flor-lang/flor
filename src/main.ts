@@ -6,10 +6,7 @@ import { traverser } from './backend/traverse'
 import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
-duplicar = (x) := 2*x
-
-duplicar(x: 5)
-triplicar(x: 5)
+valor = valor
 `)
 
 try {

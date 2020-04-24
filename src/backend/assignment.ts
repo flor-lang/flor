@@ -9,7 +9,13 @@ const assignment = {
   between (): void {
     assignmentCodeGen.between()
   },
-  exit (): void {
+  exit (node: AstNode): void {
+    // TODO: After than expression visitor evaluate type of expression,
+    // associate type to identifier at symbol table
+    const locLhsNode = (node.value as AstNode[])[0] as AstNode
+    if (locSubscriptableIsIdentifier(locLhsNode)) {
+      Env.get().symbolTable.put(identifierValueOfLocNode(locLhsNode), locLhsNode)
+    }
     assignmentCodeGen.exit()
   }
 }
@@ -18,13 +24,6 @@ const loc = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0) {
       evaluateLocUse(node)
-    }
-  },
-  exit (node: AstNode, parent: AstNode): void {
-    // TODO: After than expression visitor evaluate type of expression,
-    // associate type to identifier at symbol table
-    if (parent.name === 'assignment' && indexOfChildInParent(node, parent) === 0 && locSubscriptableIsIdentifier(node)) {
-      Env.get().symbolTable.put(identifierValueOfLocNode(node), node)
     }
   }
 }
