@@ -8,7 +8,8 @@ import {
   elifCodeGen
 } from './generator/statement'
 import { AstNode } from './traverse'
-import { evaluateFunctionCallAsClassInstantiation, evaluateFunctionCallUse } from './semantics/definitions'
+import { evaluateFunctionCallUse } from './semantics/definitions'
+import { evaluateFunctionCallAsClassInstantiation } from './semantics/oo'
 
 const functionCall = {
   enter (node: AstNode, parent: AstNode): void {

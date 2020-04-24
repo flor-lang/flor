@@ -41,12 +41,16 @@ export const generatorTester = (p: Parser<any>, log: boolean = false, logIndex: 
   })
 }
 
-export const semanticTester = (errorPattern: RegExp) => (inputs: string[]): void => {
+export const semanticTester = (toThrowError: boolean, errorPattern?: RegExp) => (inputs: string[]): void => {
   inputs.forEach(input => {
     Env.get().clean()
     const ast = Program.tryParse(input)
     const evaluate = () => traverser(ast, visitor)
-    expect(evaluate).toThrowError(errorPattern)
+    if (toThrowError) {
+      expect(evaluate).toThrowError(errorPattern)
+    } else {
+      expect(evaluate).not.toThrowError()
+    }
   })
 }
 
