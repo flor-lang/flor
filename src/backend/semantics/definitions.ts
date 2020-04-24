@@ -12,6 +12,13 @@ const locUse = (node: AstNode): void => {
   }
 }
 
+const functionCallUse = (node: AstNode): void => {
+  const identifier = (node.value as AstNode[])[0].value as string
+  if (Env.get().symbolTable.get(identifier) === null) {
+    Analyser.throwError(`Função '${identifier}' não foi definida`, node)
+  }
+}
+
 const classInstantiation = (node: AstNode): void => {
   const identifier = (node.value as AstNode[])[0].value as string
   const classNode = Env.get().symbolTable.get(identifier)
@@ -24,4 +31,5 @@ const classInstantiation = (node: AstNode): void => {
 }
 
 export const evaluateLocUse = Analyser.create(locUse)
+export const evaluateFunctionCallUse = Analyser.create(functionCallUse)
 export const evaluateFunctionCallAsClassInstantiation = Analyser.create(classInstantiation)

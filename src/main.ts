@@ -3,15 +3,18 @@ import { Program } from './parsers/program'
 import { visitor } from './backend/visitor'
 import { traverser } from './backend/traverse'
 // import Env from './enviroment/env'
-// import { logAst } from './utils/logger'
+import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
-log(l: "")
+duplicar = (x) := 2*x
+
+duplicar(x: 5)
+triplicar(x: 5)
 `)
 
 try {
   traverser(ast, visitor)
-  // logAst(ast, true)
+  logAst(ast, true)
   // console.log(Env.get().symbolTable)
   // console.log(Env.get().codeOutput)
 } catch (e) {
