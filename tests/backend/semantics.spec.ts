@@ -30,7 +30,11 @@ test('test variable definition and your use', () => {
       teste = "aux"
     fim
     teste = teste
-    `
+    `,
+    `definir classe Teste
+        propriedades: valor = 0
+    fim
+    teste = #valor`
   ])
 })
 
@@ -62,5 +66,27 @@ test('test function call use', () => {
     fim
     funcao_interna(x: 0)
     `
+  ])
+})
+
+test('test class member identifier use', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true, /.*Operadores \[#, super\] não podem ser usados fora da definição de uma classe/)
+
+  mustThrows([
+    '#propriedade = 0', '#metodo = () := 0',
+    `definir classe Teste
+        propriedades: valor = 0
+    fim
+    #valor = 1`
+  ])
+
+  mustBeAllowed([
+    `definir classe Teste
+        propriedades: valor = 0 duplicado
+        construtor: funcao ()
+          #duplicado = #valor * 2
+        fim
+    fim`
   ])
 })
