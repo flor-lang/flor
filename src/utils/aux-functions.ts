@@ -2,7 +2,9 @@ import { AstNode } from '../backend/traverse'
 
 export const findDuplicates = <T>(arr: T[]): T[] => arr.filter((item: T, index: number): boolean => arr.indexOf(item) !== index)
 
-export const isEmptyNode = (node: AstNode): boolean => /^[ ]*$/gm.test(node.value as string)
+export const isEmptyNode = (node: AstNode): boolean => Array.isArray(node.value)
+  ? node.value.length === 0
+  : /^[ ]*$/gm.test(node.value as string)
 
 export const indexOfChildInParent = (childNode: AstNode, parentNode: AstNode): number => {
   if (Array.isArray(parentNode.value)) {

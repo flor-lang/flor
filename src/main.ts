@@ -2,7 +2,7 @@
 import { Program } from './parsers/program'
 import { visitor } from './backend/visitor'
 import { traverser } from './backend/traverse'
-// import Env from './enviroment/env'
+import Env from './enviroment/env'
 import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
@@ -11,6 +11,7 @@ definir classe Foo
   construtor: funcao ()
     #variavel_teste = 0
   fim
+  metodos: f = (x,y) := x + y
 fim
 
 definir classe Bar
@@ -27,7 +28,7 @@ try {
   traverser(ast, visitor)
   logAst(ast, true)
   // console.log(Env.get().symbolTable)
-  // console.log(Env.get().codeOutput)
+  console.log(Env.get().codeOutput)
 } catch (e) {
   console.error((e as Error).message)
 }

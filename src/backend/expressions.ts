@@ -51,8 +51,8 @@ const args = {
   between (): void {
     argsCodeGen.between()
   },
-  exit (): void {
-    argsCodeGen.exit()
+  exit (node: AstNode): void {
+    argsCodeGen.exit(node)
   }
 }
 

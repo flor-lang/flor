@@ -1,5 +1,6 @@
 import Env from '../../enviroment/env'
 import { AstNode } from 'backend/traverse'
+import { isEmptyNode } from '../../utils/aux-functions'
 
 export const wrappedCodeGen = {
   enter (): void {
@@ -36,10 +37,10 @@ export const argsCodeGen = {
     Env.get().codeOutput += '('
   },
   between (): void {
-    Env.get().codeOutput += ','
+    Env.get().codeOutput += '=null,'
   },
-  exit (): void {
-    Env.get().codeOutput += ')'
+  exit (node: AstNode): void {
+    Env.get().codeOutput += `${isEmptyNode(node) ? '' : '=null'})`
   }
 }
 

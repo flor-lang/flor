@@ -20,9 +20,9 @@ test('test assignment', () => {
   tryGenerateAssignment([
     ['variavel = 1', 'variavel = 1;'],
     ['variavel = verdadeiro', 'variavel = true;'],
-    ['somar = (x) := x + y', 'somar = (x) => x+y;'],
-    ['somar = funcao(x, y) soma = x + y fim', 'somar = function(x,y){\nsoma = x+y;};'],
-    ['somar = funcao(x, y) retornar x + y fim', 'somar = function(x,y){\nreturn x+y};']
+    ['somar = (x) := x + y', 'somar = (x=null) => x+y;'],
+    ['somar = funcao(x, y) soma = x + y fim', 'somar = function(x=null,y=null){\nsoma = x+y;};'],
+    ['somar = funcao(x, y) retornar x + y fim', 'somar = function(x=null,y=null){\nreturn x+y};']
   ])
 });
 

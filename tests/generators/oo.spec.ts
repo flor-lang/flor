@@ -28,7 +28,7 @@ test('generate class declaration', (): void => {
       fim
       `,
       'class Carro{\n__propertiesDeclarations__() {this.modelo = \"Esportivo\";' + 
-      'this.marca = null;this.construtora = null;this.ano = 2020;}constructor(marca)' + 
+      'this.marca = null;this.construtora = null;this.ano = 2020;}constructor(marca=null)' + 
       '{\nthis.__propertiesDeclarations__()\n__marca = marca;}}'
     ],
     [
