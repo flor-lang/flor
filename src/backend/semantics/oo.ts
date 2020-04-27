@@ -22,5 +22,20 @@ const classInstantiation = (node: AstNode): void => {
   }
 }
 
+const superCallAtConstructorSubclass = (node: AstNode): void => {
+  try {
+    const block = ((node.value as AstNode).value as AstNode[])[1]
+    const firstStmt = (block.value as AstNode[])[0]
+    const stmtValue = firstStmt.value as AstNode
+    if (stmtValue.name !== 'function-call' || (stmtValue.value as AstNode[])[0].value !== 'super') {
+      throw new Error()
+    }
+  } catch (e) {
+    // TODO:? Detectar acesso a variaveis membros das classes para posicionamento do super(...)
+    Analyser.throwError(`Em construtores de subclasses, 'super(...)' deve ser chamado no início da função`, node)
+  }
+}
+
 export const evaluateIdentifierAsClassMember = Analyser.create(identifierAsClassMember)
 export const evaluateFunctionCallAsClassInstantiation = Analyser.create(classInstantiation)
+export const evaluateSuperCallAtConstructorSubclass = Analyser.create(superCallAtConstructorSubclass)

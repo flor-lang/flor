@@ -9,7 +9,8 @@ import {
 } from './generator/oo'
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
-import { findClassMemberIndentifiers } from '../utils/aux-functions'
+import { findClassMemberIndentifiers, isEmptyNode } from '../utils/aux-functions'
+import { evaluateSuperCallAtConstructorSubclass } from './semantics/oo'
 
 const classDeclaration = {
   enter (node: AstNode): void {
@@ -65,8 +66,12 @@ const constructor = {
     /* Create a new scope to Classes Properties and Methods */
     Env.get().pushSymbolTable()
     findClassMemberIndentifiers(parent).forEach(([id, node]): void => {
-      Env.get().symbolTable.put(`#${id}`, node)
+      Env.get().symbolTable.put(id !== 'super' ? `#${id}` : id, node)
     })
+    const inheritanceNode = (parent.value as AstNode[])[0]
+    if (isEmptyNode(node) === false && isEmptyNode(inheritanceNode) === false) {
+      evaluateSuperCallAtConstructorSubclass(node)
+    }
     constructorCodeGen.enter(node, parent)
   }
 }

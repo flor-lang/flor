@@ -6,7 +6,21 @@ import { traverser } from './backend/traverse'
 import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
-valor = valor
+definir classe Foo
+  propriedades: variavel_teste
+  construtor: funcao ()
+    #variavel_teste = 0
+  fim
+fim
+
+definir classe Bar
+  heranca: Foo
+  propriedades: random
+  construtor: funcao ()
+    super()
+    #random = 0
+  fim
+fim
 `)
 
 try {

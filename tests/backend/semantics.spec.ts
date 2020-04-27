@@ -116,3 +116,45 @@ test('test class instantiation', () => {
   ])
 
 })
+
+test('teste super call at subclasses', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true, /.*Em construtores de subclasses, 'super\(\.\.\.\)' deve ser chamado no início da função/)
+
+  mustBeAllowed([
+    `definir classe Foo
+      propriedades: variavel_teste
+      construtor: funcao ()
+        #variavel_teste = 0
+      fim
+    fim
+    
+    definir classe Bar
+      heranca: Foo
+      propriedades: random
+      construtor: funcao ()
+        super()
+        #random = 0
+      fim
+    fim`
+  ])
+
+  mustThrows([
+    `definir classe Foo
+      propriedades: variavel_teste
+      construtor: funcao ()
+        #variavel_teste = 0
+      fim
+    fim
+    
+    definir classe Bar
+      heranca: Foo
+      propriedades: random
+      construtor: funcao ()
+        #random = 0
+        super()
+      fim
+    fim`
+  ])
+
+})

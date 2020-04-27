@@ -7,6 +7,7 @@ const block = {
     if (parent.name !== 'program') {
       Env.get().pushSymbolTable()
       Env.get().codeOutput += '{\n'
+      // TODO: super() tem que vir antes do properties
       Env.get().codeOutput += Env.get().stackMap['block'].pop() || ''
     }
     if (parent.name === 'block-function') {
