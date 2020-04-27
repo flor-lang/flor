@@ -12,7 +12,7 @@ test('generate class declaration', (): void => {
         heranca: Pessoa
         interfaces: Nomeavel Localizavel
       fim`  
-    , 'class PessoaFisica extends Pessoa{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}}'
+    , 'class PessoaFisica extends Pessoa{\n__propertiesDeclarations__() {}constructor(){\nsuper();\nthis.__propertiesDeclarations__()\n}}'
     ],
     [
       `

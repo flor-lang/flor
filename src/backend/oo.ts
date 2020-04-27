@@ -67,7 +67,7 @@ const constructor = {
     findClassMemberIndentifiers(parent).forEach(([id, node]): void => {
       Env.get().symbolTable.put(`#${id}`, node)
     })
-    constructorCodeGen.enter(node)
+    constructorCodeGen.enter(node, parent)
   }
 }
 

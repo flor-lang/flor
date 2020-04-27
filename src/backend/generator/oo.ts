@@ -56,10 +56,12 @@ export const propertyCodeGen = {
 }
 
 export const constructorCodeGen = {
-  enter (node: AstNode): void {
+  enter (node: AstNode, parent: AstNode): void {
+    const inheritanceNode = (parent.value as AstNode[])[0]
     if (isEmptyNode(node)) {
       const propDeclarations = Env.get().stackMap['block'].pop()
-      Env.get().codeOutput += `constructor(){\n${propDeclarations}}`
+      Env.get().codeOutput += `constructor(){\n${
+        isEmptyNode(inheritanceNode) ? '' : 'super();\n'}${propDeclarations}}`
     }
   }
 }
