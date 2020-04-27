@@ -136,6 +136,10 @@ test('teste super call at subclasses', () => {
         super()
         #random = 0
       fim
+    fim`,
+    `definir classe Foo fim
+    definir classe Bar
+      heranca: Foo
     fim`
   ])
 

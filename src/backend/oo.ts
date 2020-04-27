@@ -29,6 +29,8 @@ const classDeclaration = {
 }
 
 const inheritance = {
+  // TODO: Check if parent exists
+  // TODO: Check if interface exists and if subclass match with your members
   enter (node: AstNode): void {
     inheritanceCodeGen.enter(node)
   },
