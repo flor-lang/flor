@@ -17,9 +17,10 @@ const classInstantiation = (node: AstNode): void => {
   if (classNode === null) {
     Analyser.throwError(`Classe '${identifier}' não foi definida`, node)
   }
-  if (classNode.name !== 'class-declaration') {
-    Analyser.throwError(`As cláusulas [novo, nova] só podem ser usadas para instanciar classes`, node)
-  }
+  // FIXME: To after type check
+  // if (classNode.name !== 'class-declaration') {
+  //   Analyser.throwError(`As cláusulas [novo, nova] só podem ser usadas para instanciar classes`, node)
+  // }
 }
 
 const superCallAtConstructorSubclass = (node: AstNode): void => {
@@ -36,6 +37,19 @@ const superCallAtConstructorSubclass = (node: AstNode): void => {
   }
 }
 
+const inheritanceParent = (node: AstNode): void => {
+  const parentIdentifier = (node.value as AstNode).value as string
+  const parentNode = Env.get().symbolTable.get(parentIdentifier)
+  if (parentNode === null) {
+    Analyser.throwError(`Classe '${parentIdentifier}' não foi definida`, node)
+  }
+  // FIXME: To after type check
+  // if (parentNode.name !== 'class-declaration') {
+  //   Analyser.throwError(`Classes só podem herdar de outras classes`, node)
+  // }
+}
+
 export const evaluateIdentifierAsClassMember = Analyser.create(identifierAsClassMember)
 export const evaluateFunctionCallAsClassInstantiation = Analyser.create(classInstantiation)
 export const evaluateSuperCallAtConstructorSubclass = Analyser.create(superCallAtConstructorSubclass)
+export const evaluateInheritanceParent = Analyser.create(inheritanceParent)

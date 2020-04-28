@@ -111,8 +111,8 @@ test('test class instantiation', () => {
     `definir classe Foo fim
     o = novo Bar()
     `,
-    `Foo = () := nulo
-    foo = novo Foo()`
+    // `Foo = () := nulo
+    // foo = novo Foo()`
   ])
 
 })
@@ -137,6 +137,7 @@ test('teste super call at subclasses', () => {
         #random = 0
       fim
     fim`,
+
     `definir classe Foo fim
     definir classe Bar
       heranca: Foo
@@ -159,6 +160,23 @@ test('teste super call at subclasses', () => {
         super()
       fim
     fim`
+  ])
+
+})
+
+test('teste super call at subclasses', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true, /.*Classe '.+' não foi definida/)
+
+  mustBeAllowed([
+    `definir classe Foo fim
+    definir classe Bar
+      heranca: Foo
+    fim`
+  ])
+
+  mustThrows([
+    `definir classe Bar heranca: Foo fim`
   ])
 
 })

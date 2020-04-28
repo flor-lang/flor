@@ -10,7 +10,7 @@ import {
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { findClassMemberIndentifiers, isEmptyNode } from '../utils/aux-functions'
-import { evaluateSuperCallAtConstructorSubclass } from './semantics/oo'
+import { evaluateSuperCallAtConstructorSubclass, evaluateInheritanceParent } from './semantics/oo'
 
 const classDeclaration = {
   enter (node: AstNode): void {
@@ -32,6 +32,9 @@ const inheritance = {
   // TODO: Check if parent exists
   // TODO: Check if interface exists and if subclass match with your members
   enter (node: AstNode): void {
+    if (isEmptyNode(node) === false) {
+      evaluateInheritanceParent(node)
+    }
     inheritanceCodeGen.enter(node)
   },
   exit (): void {
