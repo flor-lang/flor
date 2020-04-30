@@ -35,4 +35,12 @@ export default class SymbolTable {
     })
     return node
   }
+
+  public get depth (): number {
+    let depth = 0
+    this.iterateSymbolTable((): void => {
+      depth += 1
+    })
+    return depth
+  }
 }

@@ -187,7 +187,7 @@ test('teste super call at subclasses', () => {
 
 })
 
-test('teste static members', () => {
+test('test static members', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true,
     /(.*Váriavel '.+' não foi definida)|(.*Membros \[#, super\] não podem ser usados dentro de um método estático)/)
@@ -225,3 +225,30 @@ test('teste static members', () => {
   ])
 
 })
+
+test('test class declarations', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true, /.*Uma classe só pode ser definida globalmente/)
+
+  mustBeAllowed([
+    `definir classe Bar
+      propriedades:
+        estatico prop = 0
+    fim`
+  ])
+
+  mustThrows([
+    `definir classe PessoaJuridica
+      propriedades:
+        cnpj
+      construtor: funcao (cnpj)
+        #cnpj = cnpj
+        definir classe Foo
+          propriedades: bar = 0
+        fim
+      fim
+    fim`
+  ])
+
+})
+

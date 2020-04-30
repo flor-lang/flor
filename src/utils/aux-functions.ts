@@ -22,6 +22,7 @@ export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, As
   const inheritanceNode = metaNode[0]
 
   if (isEmptyNode(inheritanceNode) === false) {
+    // TODO: Insert parent members
     members.push(['super', inheritanceNode])
   }
 

@@ -2,6 +2,12 @@ import { AstNode } from '../../backend/traverse'
 import Env from '../../enviroment/env'
 import Analyser from './analyser'
 
+const classDeclaration = (node: AstNode): void => {
+  if (Env.get().symbolTable.depth > 1) {
+    Analyser.throwError('Uma classe só pode ser definida globalmente', node)
+  }
+}
+
 const identifierAsClassMember = (node: AstNode): void => {
   const identifierValue = node.value as string
   if (identifierValue.startsWith('#') || identifierValue === 'super') {
@@ -55,3 +61,4 @@ export const evaluateIdentifierAsClassMember = Analyser.create(identifierAsClass
 export const evaluateFunctionCallAsClassInstantiation = Analyser.create(classInstantiation)
 export const evaluateSuperCallAtConstructorSubclass = Analyser.create(superCallAtConstructorSubclass)
 export const evaluateInheritanceParent = Analyser.create(inheritanceParent)
+export const evaluateClassDeclaration = Analyser.create(classDeclaration)

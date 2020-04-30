@@ -10,10 +10,11 @@ import {
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { findClassMemberIndentifiers, isEmptyNode } from '../utils/aux-functions'
-import { evaluateSuperCallAtConstructorSubclass, evaluateInheritanceParent } from './semantics/oo'
+import { evaluateSuperCallAtConstructorSubclass, evaluateInheritanceParent, evaluateClassDeclaration } from './semantics/oo'
 
 const classDeclaration = {
   enter (node: AstNode): void {
+    evaluateClassDeclaration(node)
     const identifierNode = (node.value as AstNode[])[0]
     const identifier = identifierNode.value as string
     Env.get().symbolTable.put(identifier, node)
