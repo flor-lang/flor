@@ -3,8 +3,8 @@ import {
   inheritanceCodeGen,
   propertiesCodeGen,
   propertyCodeGen,
-  initializeCodeGen,
   constructorCodeGen,
+  methodCodeGen,
   classInstantiationCodeGen
 } from './generator/oo'
 import { AstNode } from './traverse'
@@ -21,15 +21,14 @@ const classDeclaration = {
     classDeclarationCodeGen.enter()
   },
   exit (): void {
-    Env.get().stackMap['classScope'].pop()
     /* Pop Class scope created at contructor::enter */
     Env.get().popSymbolTable()
     classDeclarationCodeGen.exit()
+    Env.get().stackMap['classScope'].pop()
   }
 }
 
 const inheritance = {
-  // TODO: Check if parent exists
   // TODO: Check if interface exists and if subclass match with your members
   enter (node: AstNode): void {
     if (isEmptyNode(node) === false) {
@@ -52,17 +51,14 @@ const properties = {
 }
 
 const property = {
-  enter (): void {
-    propertyCodeGen.enter()
+  enter (node: AstNode): void {
+    propertyCodeGen.enter(node)
   },
   between (node: AstNode, parent: AstNode, index: number): void {
     propertyCodeGen.between(node, parent, index)
-  }
-}
-
-const initialize = {
-  exit (node: AstNode, parent: AstNode): void {
-    initializeCodeGen.exit(node, parent)
+  },
+  exit (): void {
+    propertyCodeGen.exit()
   }
 }
 
@@ -81,6 +77,25 @@ const constructor = {
   }
 }
 
+const method = {
+  enter (node: AstNode): void {
+    const nodeValue = node.value as AstNode[]
+    const modifierValue = nodeValue[0].value
+    const methodName = nodeValue[1].value as string
+    if (modifierValue === 'estatico') {
+      Env.get().stackMap['staticScope'].push(methodName)
+    }
+    methodCodeGen.enter(node)
+  },
+  exit (node: AstNode): void {
+    const nodeValue = node.value as AstNode[]
+    const modifierValue = nodeValue[0].value
+    if (modifierValue === 'estatico') {
+      Env.get().stackMap['staticScope'].pop()
+    }
+  }
+}
+
 const classInstantiation = {
   enter (): void {
     classInstantiationCodeGen.enter()
@@ -92,7 +107,7 @@ export default {
   inheritance,
   properties,
   property,
-  initialize,
   constructor,
+  method,
   classInstantiation
 }

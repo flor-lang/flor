@@ -7,7 +7,10 @@ export const classDeclarationCodeGen = {
     Env.get().codeOutput += 'class '
   },
   exit (): void {
-    Env.get().codeOutput += '}'
+    Env.get().codeOutput += '}\n'
+    const classStack = Env.get().stackMap['classScope']
+    const className = classStack[classStack.length - 1]
+    Env.get().codeOutput += `${className}.__propertiesDeclarations__.bind(null)()`
   }
 }
 
@@ -24,25 +27,30 @@ export const inheritanceCodeGen = {
 
 export const propertiesCodeGen = {
   enter (): void {
-    Env.get().codeOutput += '__propertiesDeclarations__() {'
+    Env.get().codeOutput += 'static __propertiesDeclarations__() {'
   },
   exit (): void {
     Env.get().codeOutput += '}'
-    Env.get().stackMap['block'].push('this.__propertiesDeclarations__()\n')
-  }
-}
-
-export const initializeCodeGen = {
-  exit (node: AstNode, parent: AstNode): void {
-    if (parent.name === 'property') {
-      Env.get().codeOutput += ';'
-    }
+    const classStack = Env.get().stackMap['classScope']
+    const className = classStack[classStack.length - 1]
+    Env.get().stackMap['block'].push(`${className}.__propertiesDeclarations__.bind(this)()\n`)
   }
 }
 
 export const propertyCodeGen = {
-  enter (): void {
-    Env.get().codeOutput += `this.`
+  enter (node: AstNode): void {
+    const nodeValue = node.value as AstNode[]
+    const modifierValue = nodeValue[0].value
+    let owner = 'this'
+    if (modifierValue === 'estatico') {
+      const classStack = Env.get().stackMap['classScope']
+      const className = classStack[classStack.length - 1]
+      Env.get().codeOutput += `if ('${nodeValue[1].value}' in ${className} === false) {`
+      owner = className
+    } else {
+      Env.get().codeOutput += 'if (this) {'
+    }
+    Env.get().codeOutput += `${owner}.`
   },
   between (node: AstNode, parent: AstNode, index: number): void {
     const assignmentNode = (node.value as AstNode[])[2]
@@ -52,6 +60,9 @@ export const propertyCodeGen = {
         Env.get().codeOutput += 'null'
       }
     }
+  },
+  exit (): void {
+    Env.get().codeOutput += '}\n'
   }
 }
 
@@ -62,6 +73,20 @@ export const constructorCodeGen = {
       const propDeclarations = Env.get().stackMap['block'].pop()
       Env.get().codeOutput += `constructor(){\n${
         isEmptyNode(inheritanceNode) ? '' : 'super();\n'}${propDeclarations}}`
+    } else {
+      if (isEmptyNode(inheritanceNode) === false) {
+        // do stuff
+      }
+    }
+  }
+}
+
+export const methodCodeGen = {
+  enter (node: AstNode): void {
+    const nodeValue = node.value as AstNode[]
+    const modifierValue = nodeValue[0].value
+    if (modifierValue === 'estatico') {
+      Env.get().codeOutput += ' static '
     }
   }
 }

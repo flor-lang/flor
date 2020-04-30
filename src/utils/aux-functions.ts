@@ -26,7 +26,9 @@ export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, As
   const methodsNode = metaNode[4]
   const membersPush = (memberNode: AstNode): void => {
     (memberNode.value as { value: { value: string }[] }[]).forEach((memberNode): void => {
-      members.push([memberNode.value[1].value, (memberNode as unknown) as AstNode])
+      if (memberNode.value[0].value !== 'estatico') {
+        members.push([memberNode.value[1].value, (memberNode as unknown) as AstNode])
+      }
     })
   }
   [propertiesNode, methodsNode].map(membersPush)

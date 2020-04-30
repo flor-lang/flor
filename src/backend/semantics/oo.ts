@@ -7,6 +7,8 @@ const identifierAsClassMember = (node: AstNode): void => {
   if (identifierValue.startsWith('#') || identifierValue === 'super') {
     if (Env.get().stackMap['classScope'].length === 0) {
       Analyser.throwError(`Operadores [#, super] não podem ser usados fora da definição de uma classe`, node)
+    } else if (Env.get().stackMap['staticScope'].length > 0) {
+      Analyser.throwError(`Membros [#, super] não podem ser usados dentro de um método estático`, node)
     }
   }
 }

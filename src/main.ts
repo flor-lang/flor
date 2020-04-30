@@ -6,20 +6,27 @@ import Env from './enviroment/env'
 import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
-definir classe Foo
-  propriedades: variavel_teste
+definir classe Pessoa
+  propriedades:
+    estatico id_registro = 1
+    id
+    nome
   construtor: funcao ()
-    #variavel_teste = 0
+    #id = Pessoa.id_registro
+    Pessoa.id_registro = Pessoa.id_registro + 1
   fim
-  metodos: f = (x,y) := x + y
+  metodos:
+    estatico resetar_registro = funcao ()
+      Pessoa.id_registro = 1
+    fim
 fim
-
-definir classe Bar
-  heranca: Foo
-  propriedades: random
-  construtor: funcao ()
+definir classe PessoaJuridica
+  heranca: Pessoa
+  propriedades:
+    cnpj
+  construtor: funcao (cnpj)
     super()
-    #random = 0
+    #cnpj = cnpj
   fim
 fim
 `)
