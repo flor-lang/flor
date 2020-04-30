@@ -33,7 +33,7 @@ export const propertiesCodeGen = {
     Env.get().codeOutput += '}'
     const classStack = Env.get().stackMap['classScope']
     const className = classStack[classStack.length - 1]
-    Env.get().stackMap['block'].push(`${className}.__propertiesDeclarations__.bind(this)()\n`)
+    Env.get().stackMap['propDeclarations'].push(`${className}.__propertiesDeclarations__.bind(this)()\n`)
   }
 }
 
@@ -70,13 +70,11 @@ export const constructorCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     const inheritanceNode = (parent.value as AstNode[])[0]
     if (isEmptyNode(node)) {
-      const propDeclarations = Env.get().stackMap['block'].pop()
+      const propDeclarations = Env.get().stackMap['propDeclarations'].pop()
       Env.get().codeOutput += `constructor(){\n${
         isEmptyNode(inheritanceNode) ? '' : 'super();\n'}${propDeclarations}}`
-    } else {
-      if (isEmptyNode(inheritanceNode) === false) {
-        // do stuff
-      }
+    } else if (isEmptyNode(inheritanceNode) === false) {
+      Env.get().stackMap['superFirst'].push('super')
     }
   }
 }

@@ -7,14 +7,21 @@ const block = {
     if (parent.name !== 'program') {
       Env.get().pushSymbolTable()
       Env.get().codeOutput += '{\n'
-      // TODO: super() tem que vir antes do properties
-      Env.get().codeOutput += Env.get().stackMap['block'].pop() || ''
+      if (Env.get().stackMap['superFirst'].length === 0) {
+        Env.get().codeOutput += Env.get().stackMap['propDeclarations'].pop() || ''
+      }
     }
     if (parent.name === 'block-function') {
       const argsNode = (parent.value as AstNode[])[0]
       findIdentifierAtArgsNode(argsNode).forEach(([id, node]): void => {
         Env.get().symbolTable.put(id, node)
       })
+    }
+  },
+  between (node: AstNode, parent: AstNode, index: number): void {
+    if (index === 0 && Env.get().stackMap['superFirst'].length > 0) {
+      Env.get().codeOutput += Env.get().stackMap['propDeclarations'].pop()
+      Env.get().stackMap['superFirst'].pop()
     }
   },
   exit (node: AstNode, parent: AstNode): void {
