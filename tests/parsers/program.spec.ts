@@ -97,8 +97,8 @@ test('test program', (): void => {
       propriedades:
         time_a
         time_b
-        privado numero_gols_a = 0
-        privado numero_gols_b = 0
+        numero_gols_a = 0
+        numero_gols_b = 0
       
       construtor: funcao(time_a, time_b)
         __time_a = time_a

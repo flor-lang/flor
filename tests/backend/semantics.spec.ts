@@ -119,7 +119,8 @@ test('test class instantiation', () => {
 
 test('teste super call at subclasses', () => {
   const mustBeAllowed = semanticTester(false)
-  const mustThrows = semanticTester(true, /.*Em construtores de subclasses, 'super\(\.\.\.\)' deve ser chamado no início da função/)
+  const mustThrows = semanticTester(true,
+    /(.*Em construtores de subclasses, 'super\(\.\.\.\)' deve ser chamado no início da função)|(.*Função 'super' não foi definida)/)
 
   mustBeAllowed([
     `definir classe Foo
@@ -159,6 +160,11 @@ test('teste super call at subclasses', () => {
         #random = 0
         super()
       fim
+    fim`,
+    `definir classe Foo
+      construtor: funcao ()
+        super()
+      fim
     fim`
   ])
 
@@ -177,6 +183,45 @@ test('teste super call at subclasses', () => {
 
   mustThrows([
     `definir classe Bar heranca: Foo fim`
+  ])
+
+})
+
+test('teste static members', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true,
+    /(.*Váriavel '.+' não foi definida)|(.*Membros \[#, super\] não podem ser usados dentro de um método estático)/)
+
+  mustBeAllowed([
+    `definir classe Bar
+      propriedades:
+        estatico prop = 0
+      metodos:
+        estatico foo = (x) := x
+    fim`
+  ])
+
+  mustThrows([
+    `definir classe Bar
+      propriedades:
+        estatico prop = 0
+      metodos:
+        estatico foo = (x) := x * #prop
+    fim`,
+    `definir classe Bar
+      propriedades:
+        estatico prop = 0
+        teste = 0
+      metodos:
+        estatico foo = (x) := x * #teste
+    fim`,
+    `definir classe Bar
+      propriedades:
+        estatico prop = 0
+        teste = 0
+      metodos:
+        estatico foo = (x) := x * super.teste
+    fim`
   ])
 
 })

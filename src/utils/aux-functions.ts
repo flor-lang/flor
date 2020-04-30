@@ -17,10 +17,13 @@ export const locSubscriptableIsIdentifier = (locNode: AstNode): boolean => ((loc
 export const identifierValueOfLocNode = (locNode: AstNode): string => ((locNode.value as AstNode[])[0].value as AstNode).value as string
 export const findIdentifierAtArgsNode = (argsNode: AstNode): [string, AstNode][] => (argsNode.value as AstNode[]).map((node: AstNode): [string, AstNode] => [node.value as string, node])
 export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, AstNode][] => {
+  const members: [string, AstNode][] = []
   const metaNode = classMetaNode.value as AstNode[]
   const inheritanceNode = metaNode[0]
 
-  const members: [string, AstNode][] = [['super', inheritanceNode]]
+  if (isEmptyNode(inheritanceNode) === false) {
+    members.push(['super', inheritanceNode])
+  }
 
   const propertiesNode = metaNode[2]
   const methodsNode = metaNode[4]

@@ -5,20 +5,21 @@ test('generate class declaration', (): void => {
   const tryGenerateClassDeclaration = generatorTester(ClassDeclaration)
 
   tryGenerateClassDeclaration([
-    ['definir classe Pessoa fim', 'class Pessoa{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}}'],
+    ['definir classe Pessoa fim',
+    'class Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nPessoa.__propertiesDeclarations__.bind(this)()\n}}\nPessoa.__propertiesDeclarations__.bind(null)()'],
     [
       `
       definir classe PessoaFisica
         heranca: Pessoa
         interfaces: Nomeavel Localizavel
       fim`  
-    , 'class PessoaFisica extends Pessoa{\n__propertiesDeclarations__() {}constructor(){\nsuper();\nthis.__propertiesDeclarations__()\n}}'
+    , 'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()'
     ],
     [
       `
       definir classe Carro
         propriedades:
-          privado modelo = "Esportivo"
+          modelo = "Esportivo"
           marca
           construtora
           estatico ano = 2020
@@ -27,9 +28,9 @@ test('generate class declaration', (): void => {
         fim
       fim
       `,
-      'class Carro{\n__propertiesDeclarations__() {this.modelo = \"Esportivo\";' + 
-      'this.marca = null;this.construtora = null;this.ano = 2020;}constructor(marca=null)' + 
-      '{\nthis.__propertiesDeclarations__()\n__marca = marca;}}'
+      'class Carro{\nstatic __propertiesDeclarations__() {if (this) {this.modelo = \"Esportivo\"}\n' + 
+      'if (this) {this.marca = null}\nif (this) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = 2020}\n}constructor(marca=null)' + 
+      '{\nCarro.__propertiesDeclarations__.bind(this)()\n__marca = marca;}}\nCarro.__propertiesDeclarations__.bind(null)()'
     ],
     [
       `
@@ -37,11 +38,11 @@ test('generate class declaration', (): void => {
         metodos:
           ligar = funcao () __ligado = verdadeiro fim
           desligar = funcao () __ligado = falso fim
-          privado esta_ligado = () := __ligado igual a verdadeiro
+          estatico esta_ligado = () := __ligado igual a verdadeiro
       fim
       `,
-      'class Luz{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}' +
-      'ligar(){\n__ligado = true;}desligar(){\n__ligado = false;}esta_ligado(){ return __ligado==true}}'
+      'class Luz{\nstatic __propertiesDeclarations__() {}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}' +
+      'ligar(){\n__ligado = true;}desligar(){\n__ligado = false;} static esta_ligado(){ return __ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()'
     ]
   ])
 })
