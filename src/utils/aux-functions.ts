@@ -1,4 +1,5 @@
 import { AstNode } from '../backend/traverse'
+import Env from '../enviroment/env'
 
 export const findDuplicates = <T>(arr: T[]): T[] => arr.filter((item: T, index: number): boolean => arr.indexOf(item) !== index)
 
@@ -22,10 +23,14 @@ export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, As
   const inheritanceNode = metaNode[0]
 
   if (isEmptyNode(inheritanceNode) === false) {
-    // TODO: Insert parent members
     members.push(['super', inheritanceNode])
+    // TODO: Insert parent members
+    const parentName = (inheritanceNode.value as AstNode).value as string
+    const parentNode = Env.get().symbolTable.get(parentName)
+    const metaNode = (parentNode.value as AstNode[])[1]
+    members.push(...findClassMemberIndentifiers(metaNode).filter(([id]): boolean => id !== 'super'))
   }
-
+  // FIXME: Tah trolando
   const propertiesNode = metaNode[2]
   const methodsNode = metaNode[4]
   const membersPush = (memberNode: AstNode): void => {
@@ -36,5 +41,6 @@ export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, As
     })
   }
   [propertiesNode, methodsNode].map(membersPush)
+
   return members
 }

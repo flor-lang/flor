@@ -6,7 +6,11 @@ import { traverser } from './backend/traverse'
 // import { logAst } from './utils/logger'
 
 const ast = Program.tryParse(`
+definir classe Pessoa
+  propriedades: nome
+fim
 definir classe PessoaJuridica
+  heranca: Pessoa
   propriedades:
     cnpj
   construtor: funcao (cnpj)

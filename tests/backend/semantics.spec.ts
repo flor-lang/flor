@@ -74,13 +74,25 @@ test('test function call use', () => {
 
 test('test class member identifier use', () => {
   const mustBeAllowed = semanticTester(false)
-  const mustThrows = semanticTester(true, /.*Operadores \[#, super\] não podem ser usados fora da definição de uma classe/)
+  const mustThrows = semanticTester(true, 
+    /(.*Operadores \[#, super\] não podem ser usados fora da definição de uma classe|.*Váriavel '.*' não foi definida)/)
 
   mustBeAllowed([
     `definir classe Teste
         propriedades: valor = 0 duplicado
         construtor: funcao ()
           #duplicado = #valor * 2
+        fim
+    fim`,
+    `definir classe Pai
+      propriedades: hey
+    fim
+    definir classe Teste
+        heranca: Pai
+        propriedades: valor = 0 duplicado
+        construtor: funcao ()
+            super()
+            #duplicado = #hey
         fim
     fim`
   ])
@@ -90,7 +102,18 @@ test('test class member identifier use', () => {
     `definir classe Teste
         propriedades: valor = 0
     fim
-    #valor = 1`
+    #valor = 1`,
+    `definir classe Pai
+        propriedades: hey
+    fim
+    definir classe Teste
+        heranca: Pai
+        propriedades: valor = 0 duplicado
+        construtor: funcao ()
+            super()
+            #duplicado = #show
+        fim
+    fim`
   ])
 
 })
@@ -170,7 +193,7 @@ test('teste super call at subclasses', () => {
 
 })
 
-test('teste super call at subclasses', () => {
+test('teste parent class definition', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true, /.*Classe '.+' não foi definida/)
 
