@@ -7,11 +7,16 @@ import {
   methodCodeGen,
   classInstantiationCodeGen
 } from './generator/oo'
+import {
+  evaluateSuperCallAtConstructorSubclass,
+  evaluateInheritanceParent,
+  evaluateInterfaceUse,
+  evaluateInterfaceImplementations
+} from './semantics/oo'
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { findClassMemberIndentifiers, isEmptyNode } from '../utils/aux-functions'
 import { evaluateGlobalDeclaration } from './semantics/definitions'
-import { evaluateSuperCallAtConstructorSubclass, evaluateInheritanceParent, evaluateInterfaceUse } from './semantics/oo'
 
 const interfaceDeclaration = {
   enter (node: AstNode): void {
@@ -84,12 +89,21 @@ const property = {
 
 const constructor = {
   enter (node: AstNode, parent: AstNode): void {
+    const metaNode = (parent.value as AstNode[])
     /* Create a new scope to Classes Properties and Methods */
     Env.get().pushSymbolTable()
     findClassMemberIndentifiers(parent).forEach(([id, node]): void => {
       Env.get().symbolTable.put(id !== 'super' ? `#${id}` : id, node)
     })
-    const inheritanceNode = (parent.value as AstNode[])[0]
+
+    /* Evaluate if class implements interfaces */
+    const implementationsNode = metaNode[1]
+    if (isEmptyNode(implementationsNode) === false) {
+      evaluateInterfaceImplementations(implementationsNode)
+    }
+
+    /* Evaluate 'super' call in not empty constructor */
+    const inheritanceNode = metaNode[0]
     if (isEmptyNode(node) === false && isEmptyNode(inheritanceNode) === false) {
       evaluateSuperCallAtConstructorSubclass(node)
     }

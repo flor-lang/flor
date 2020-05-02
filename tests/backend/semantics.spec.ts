@@ -315,3 +315,46 @@ test('test interface use', () => {
   ])
 
 })
+
+test('test interfaces implementations', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true, /.+não está em conforme com a interface.+'/)
+
+  mustBeAllowed([
+    `
+    definir interface Autenticavel
+      usuario senha login
+    fim
+    definir classe Cliente
+      interfaces: Autenticavel
+      propriedades:
+        nome
+        data_de_nascimento
+        usuario
+        senha
+      metodos:
+        login = (senha) := #senha igual a senha
+    fim
+    `,
+    `definir interface Foo foo fim
+    definir interface Bar bar fim
+    definir classe Teste
+      interfaces: Foo Bar
+      propriedades: foo bar
+    fim`
+  ])
+
+  mustThrows([
+    `definir interface Foo foo fim
+    definir classe Teste
+      interfaces: Foo
+      propriedades: hey
+    fim`,
+    `definir interface Foo foo fim
+    definir interface Bar bar fim
+    definir classe Teste
+      interfaces: Foo Bar
+      propriedades: foo
+    fim`,
+  ])
+})
