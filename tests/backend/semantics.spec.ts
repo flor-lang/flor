@@ -249,9 +249,9 @@ test('test static members', () => {
 
 })
 
-test('test class declarations', () => {
+test('test global declarations', () => {
   const mustBeAllowed = semanticTester(false)
-  const mustThrows = semanticTester(true, /.*Uma classe só pode ser definida globalmente/)
+  const mustThrows = semanticTester(true, /.*Uma .* só pode ser definida globalmente/)
 
   mustBeAllowed([
     `definir classe Bar
@@ -270,8 +270,48 @@ test('test class declarations', () => {
           propriedades: bar = 0
         fim
       fim
+    fim`,
+    `foo = funcao ()
+      definir interface Foo foo fim
     fim`
   ])
 
 })
 
+test('test interface use', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true, /.*Interface '.+' não foi definida/)
+
+  mustBeAllowed([
+    `definir interface Autenticavel
+      usuario senha
+    fim
+    definir classe Cliente
+      interfaces: Autenticavel
+      propriedades:
+        nome
+        data_de_nascimento
+        usuario
+        senha
+    fim`,
+    `definir interface Foo foo fim
+    definir interface Bar bar fim
+    definir classe Teste
+      interfaces: Foo Bar
+      propriedades: foo bar
+    fim`
+  ])
+
+  mustThrows([
+    `definir classe Teste
+      interfaces: Hey
+    fim`,
+    `definir interface Foo foo fim
+    definir interface Bar bar fim
+    definir classe Teste
+      interfaces: Foo Outra Fim
+      propriedades: foo bar
+    fim`
+  ])
+
+})

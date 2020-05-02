@@ -24,13 +24,12 @@ export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, As
 
   if (isEmptyNode(inheritanceNode) === false) {
     members.push(['super', inheritanceNode])
-    // TODO: Insert parent members
     const parentName = (inheritanceNode.value as AstNode).value as string
     const parentNode = Env.get().symbolTable.get(parentName)
     const metaNode = (parentNode.value as AstNode[])[1]
     members.push(...findClassMemberIndentifiers(metaNode).filter(([id]): boolean => id !== 'super'))
   }
-  // FIXME: Tah trolando
+
   const propertiesNode = metaNode[2]
   const methodsNode = metaNode[4]
   const membersPush = (memberNode: AstNode): void => {

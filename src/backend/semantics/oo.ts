@@ -2,12 +2,6 @@ import { AstNode } from '../../backend/traverse'
 import Env from '../../enviroment/env'
 import Analyser from './analyser'
 
-const classDeclaration = (node: AstNode): void => {
-  if (Env.get().symbolTable.depth > 1) {
-    Analyser.throwError('Uma classe só pode ser definida globalmente', node)
-  }
-}
-
 const identifierAsClassMember = (node: AstNode): void => {
   const identifierValue = node.value as string
   if (identifierValue.startsWith('#') || identifierValue === 'super') {
@@ -29,6 +23,15 @@ const classInstantiation = (node: AstNode): void => {
   // if (classNode.name !== 'class-declaration') {
   //   Analyser.throwError(`As cláusulas [novo, nova] só podem ser usadas para instanciar classes`, node)
   // }
+}
+
+const interfaceUse = (node: AstNode): void => {
+  const identifier = node.value as string
+  const interfaceNode = Env.get().symbolTable.get(identifier)
+  if (interfaceNode === null) {
+    Analyser.throwError(`Interface '${identifier}' não foi definida`, node)
+  }
+  // TODO: Check if interface after type check
 }
 
 const superCallAtConstructorSubclass = (node: AstNode): void => {
@@ -59,6 +62,6 @@ const inheritanceParent = (node: AstNode): void => {
 
 export const evaluateIdentifierAsClassMember = Analyser.create(identifierAsClassMember)
 export const evaluateFunctionCallAsClassInstantiation = Analyser.create(classInstantiation)
+export const evaluateInterfaceUse = Analyser.create(interfaceUse)
 export const evaluateSuperCallAtConstructorSubclass = Analyser.create(superCallAtConstructorSubclass)
 export const evaluateInheritanceParent = Analyser.create(inheritanceParent)
-export const evaluateClassDeclaration = Analyser.create(classDeclaration)

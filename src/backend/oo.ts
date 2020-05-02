@@ -10,13 +10,21 @@ import {
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { findClassMemberIndentifiers, isEmptyNode } from '../utils/aux-functions'
-import { evaluateSuperCallAtConstructorSubclass, evaluateInheritanceParent, evaluateClassDeclaration } from './semantics/oo'
+import { evaluateGlobalDeclaration } from './semantics/definitions'
+import { evaluateSuperCallAtConstructorSubclass, evaluateInheritanceParent, evaluateInterfaceUse } from './semantics/oo'
+
+const interfaceDeclaration = {
+  enter (node: AstNode): void {
+    evaluateGlobalDeclaration(node)
+    const identifier = (node.value as AstNode[])[0].value as string
+    Env.get().symbolTable.put(identifier, node)
+  }
+}
 
 const classDeclaration = {
   enter (node: AstNode): void {
-    evaluateClassDeclaration(node)
-    const identifierNode = (node.value as AstNode[])[0]
-    const identifier = identifierNode.value as string
+    evaluateGlobalDeclaration(node)
+    const identifier = (node.value as AstNode[])[0].value as string
     Env.get().symbolTable.put(identifier, node)
     Env.get().stackMap['classScope'].push(identifier)
     classDeclarationCodeGen.enter()
@@ -39,6 +47,17 @@ const inheritance = {
   },
   exit (): void {
     inheritanceCodeGen.exit()
+  }
+}
+
+const interfaces = {
+  enter (node: AstNode): void {
+    const identifierNode = (node.value as AstNode[])[0]
+    evaluateInterfaceUse(identifierNode)
+  },
+  between (node: AstNode, parent: AstNode, index: number): void {
+    const identifierNode = (node.value as AstNode[])[index + 1]
+    evaluateInterfaceUse(identifierNode)
   }
 }
 
@@ -104,8 +123,10 @@ const classInstantiation = {
 }
 
 export default {
+  interfaceDeclaration,
   classDeclaration,
   inheritance,
+  interfaces,
   properties,
   property,
   constructor,

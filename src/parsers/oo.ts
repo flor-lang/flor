@@ -28,10 +28,10 @@ export const InterfaceDeclaration: InterfaceDeclarationParser = P
     (result: { properties: never[] }): boolean => result.properties.length > 1,
     'Definir interface exige um identificador e no mínimo uma variável'
   )
-  .map((ast: { properties: never[] }): { identifier: {}; properties: never[] } => ({
-    identifier: ast.properties[0],
-    properties: ast.properties.splice(1)
-  }))
+  .map((ast: { properties: never[] }): {}[] => [
+    ast.properties[0],
+    { name: 'members', value: ast.properties.splice(1) }
+  ])
   .node('interface-declaration')
 
 type MetaInheritanceParser = P.Parser<P.Node<'inheritance', {}>>
