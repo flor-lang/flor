@@ -76,8 +76,12 @@ const PropertyDeclaration: PropertyDeclarationParser = P
     P.alt(
       P.seqObj(
         P.optWhitespace, Equal, P.optWhitespace,
-        P.lazy((): BoolParser => Bool).named('bool')
-      ).node('initialize').map(nodePropertiesMapper(['bool'])),
+        P.alt(
+          P.lazy((): BoolParser => Bool),
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          P.lazy((): ClassInstantiationParser => ClassInstantiation)
+        ).named('prop-rhs')
+      ).node('initialize').map(nodePropertiesMapper(['prop-rhs'])),
       P.optWhitespace
     ).named('initialize')
   )

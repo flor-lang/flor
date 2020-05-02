@@ -72,6 +72,12 @@ test('parse class declaration', (): void => {
         desligar = funcao () __ligado = falso fim
         esta_ligado = () := __ligado igual a verdadeiro
     fim
+    `,
+    `
+    definir classe Teste
+      propriedades:
+        instancia = novo Teste()
+    fim
     `
   ])
 

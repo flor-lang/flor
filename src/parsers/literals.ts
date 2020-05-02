@@ -37,7 +37,7 @@ export const ArrayLiteral: ArrayLiteralParser = P
   .sepWrp(',', '[', ']')
   .node('array')
 
-const Serializable: ObjectParser = P.alt(StringLiteral, NumberLiteral)
+const Serializable: ObjectParser = P.alt(StringLiteral /*, NumberLiteral */)
 export const DictionaryLiteral: DictionaryLiteralParser = P
   .seqObj(
     Serializable.node('serializable').named('key'),
