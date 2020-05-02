@@ -1,3 +1,4 @@
 dist/
 doc/examples
+src/lib/jsimpl
 tests/
