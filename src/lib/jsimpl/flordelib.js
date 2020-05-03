@@ -79,6 +79,11 @@ Boolean.prototype.toString = function () {
  * Listas: Arrays
  */
 
+// Statics
+Lista = {
+  e_lista: Array.isArray
+}
+
 // Prototype Definitions
 Array.prototype.concatenar = Array.prototype.concat
 Array.prototype.verificar_todo_elemento = Array.prototype.every
@@ -128,6 +133,10 @@ Array.prototype.tamanho = function () {
  * Dicionarios: Object|Dictionary
  */
 
+// Prototype Declarations
+Object.prototype.possui = Object.prototype.hasOwnProperty
+
+// Prototype overrides
 Object.prototype.toString = function () {
   return this
 }
