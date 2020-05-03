@@ -144,6 +144,46 @@ Object.prototype.toString = function () {
 /** **************************************************************************** */
 
 /**
+ * Matematica: Math
+ */
+
+// Aliases Declarations
+Math.absoluto = Math.abs
+Math.arco_cosseno = Math.acos
+Math.arco_cosseno_hiperbolico = Math.acosh
+Math.arco_seno = Math.asin
+Math.arco_seno_hiperbolico = Math.asinh
+Math.arco_tangente = Math.atan
+Math.arco_tangente_2 = Math.atan2
+Math.arco_tangente_hiperbolico = Math.atanh
+Math.raiz_cubica = Math.cbrt
+Math.teto_de = Math.ceil
+Math.cosseno = Math.cos
+Math.cosseno_hiperbolico = Math.cosh
+Math.c_euler_el = Math.exp
+Math.e_el = Math.exp
+Math.chao = Math.floor
+Math.hipotenusa = Math.hypot
+Math.log_base_10 = Math.log10
+Math.log_base_2 = Math.log2
+Math.el = Math.pow
+Math.elevar = Math.pow
+Math.num_aleatorio = Math.random
+Math.arredondar = Math.round
+Math.sinal = Math.sign
+Math.seno = Math.sin
+Math.seno_hiperbolico = Math.sinh
+Math.raiz = Math.sqrt
+Math.raiz_quadrada = Math.sqrt
+Math.tangente = Math.tan
+Math.tangente_hiperbolica = Math.tanh
+Math.truncar = Math.trunc
+
+Matematica = Math
+
+/** **************************************************************************** */
+
+/**
  * Global
  */
 
