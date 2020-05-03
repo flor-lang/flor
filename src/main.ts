@@ -5,7 +5,7 @@ import { traverser, AstNode } from './backend/traverse'
 import Env from './enviroment/env'
 import SymbolTable from 'enviroment/symbol-table'
 import { FlorErrorMessage } from './utils/errors'
-import { FlorDeLib } from './lib/flordelib.flib'
+import { StandardLib } from './lib/standard.flib'
 
 /**
  * Parse input code generating abstract syntax tree
@@ -15,10 +15,10 @@ import { FlorDeLib } from './lib/flordelib.flib'
 export const parseCode = (code: string): AstNode => Program.tryParse(code)
 
 const loadStandardLib = (): void => {
-  for (const key in FlorDeLib) {
+  for (const key in StandardLib) {
     // eslint-disable-next-line no-prototype-builtins
-    if (FlorDeLib.hasOwnProperty(key)) {
-      Env.get().symbolTable.put(key, FlorDeLib[key])
+    if (StandardLib.hasOwnProperty(key)) {
+      Env.get().symbolTable.put(key, StandardLib[key])
     }
   }
 }
