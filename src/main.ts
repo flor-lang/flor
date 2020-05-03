@@ -1,22 +1,31 @@
 // Playground code
 import { Program } from './parsers/program'
 import { visitor } from './backend/visitor'
-import { traverser } from './backend/traverse'
+import { traverser, AstNode } from './backend/traverse'
 import Env from './enviroment/env'
+import SymbolTable from 'enviroment/symbol-table'
+import { FlorErrorMessage } from './utils/errors'
 // import { logAst } from './utils/logger'
 
-const ast = Program.tryParse(`
-definir classe Singleton
-  propriedades:
-    estatico instancia = novo Singleton()
-fim
-`)
+export const parseCode = (code: string): AstNode => Program.tryParse(code)
 
-try {
-  traverser(ast, visitor)
-  // logAst(ast, true)
-  // console.log(Env.get().symbolTable)
-  console.log(Env.get().codeOutput)
-} catch (e) {
-  console.error((e as Error).message)
+const traverseAstFrom = (code: string): void => traverser(parseCode(code), visitor)
+
+export const getSymbolTable = (code: string): SymbolTable => {
+  traverseAstFrom(code)
+  return Env.get().symbolTable
+}
+
+export const compile = (code: string): string => {
+  traverseAstFrom(code)
+  return Env.get().codeOutput
+}
+
+export const tryCompile = (code: string): { success: boolean; result: string } => {
+  try {
+    traverseAstFrom(code)
+    return { success: true, result: Env.get().codeOutput }
+  } catch (error) {
+    return { success: false, result: FlorErrorMessage(error) }
+  }
 }
