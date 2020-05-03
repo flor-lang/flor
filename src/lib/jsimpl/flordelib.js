@@ -79,10 +79,47 @@ Boolean.prototype.toString = function () {
  * Listas: Arrays
  */
 
-__old_array_to_string__ = Array.prototype.toString
+// Prototype Definitions
+Array.prototype.concatenar = Array.prototype.concat
+Array.prototype.verificar_todo_elemento = Array.prototype.every
+Array.prototype.preencher_com = Array.prototype.fill
+Array.prototype.filtrar = Array.prototype.filter
+Array.prototype.encontrar = Array.prototype.find
+Array.prototype.encontrarIndice = Array.prototype.findIndex
+Array.prototype.para_cada = Array.prototype.forEach
+Array.prototype.possui = Array.prototype.includes
+Array.prototype.indice = Array.prototype.indexOf
+Array.prototype.unir_em_texto = Array.prototype.join
+Array.prototype.ultimo_indice = Array.prototype.lastIndexOf
+Array.prototype.mapear = Array.prototype.map
+Array.prototype.remover_ultimo_elemento = Array.prototype.pop
+Array.prototype.adicionar = Array.prototype.push
+Array.prototype.reduzir = Array.prototype.reduce
+Array.prototype.inverter = Array.prototype.reverse
+Array.prototype.remover_primeiro_elemento = Array.prototype.shift
+Array.prototype.obter_sublista = Array.prototype.slice
+Array.prototype.verificar_algum_elemento = Array.prototype.some
 Array.prototype.ordenar = Array.prototype.sort
+Array.prototype.remover_elementos = Array.prototype.splice
+Array.prototype.adicionar_no_inicio = Array.prototype.unshift
+
+
+// Prototype Overrides
+__old_array_to_string__ = Array.prototype.toString
 Array.prototype.toString = function () {
   return `[${this.__old_array_to_string__()}]`
+}
+
+Array.prototype.inserir = function(elemento, posicao) {
+  return this.splice(posicao, 0, elemento)
+}
+
+Array.prototype.remover_elemento = function(posicao) {
+  return this.splice(posicao, 1)
+}
+
+Array.prototype.tamanho = function () {
+  return this.length
 }
 
 /** **************************************************************************** */
