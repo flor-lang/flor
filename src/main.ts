@@ -7,6 +7,8 @@ import SymbolTable from 'enviroment/symbol-table'
 import { FlorErrorMessage } from './utils/errors'
 import { StandardLib } from './lib/standard.flib'
 
+export { StandardLibJSImpl } from './lib/jsimpl/standard'
+
 /**
  * Parse input code generating abstract syntax tree
  * @param code Input flor code

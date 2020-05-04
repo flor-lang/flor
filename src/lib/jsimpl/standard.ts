@@ -1,4 +1,7 @@
-// Standard LIB Definitions
+/**
+ * JS Implementation of Flor Standard Lib
+ */
+export const StandardLibJSImpl = `// Standard LIB Definitions
 /** **************************************************************************** */
 
 /**
@@ -70,7 +73,7 @@ Number.prototype.notacao_cientifica = function () {
  */
 
 Boolean.prototype.toString = function () {
-  return `${this.valueOf() === true ? 'verdadeiro' : 'falso'}`
+  return` + " `${this.valueOf() === true ? 'verdadeiro' : 'falso'}` " + `
 }
 
 /** **************************************************************************** */
@@ -112,7 +115,7 @@ Array.prototype.adicionar_no_inicio = Array.prototype.unshift
 // Prototype Overrides
 __old_array_to_string__ = Array.prototype.toString
 Array.prototype.toString = function () {
-  return `[${this.__old_array_to_string__()}]`
+  return` + "`[${this.__old_array_to_string__()}]` " + `
 }
 
 Array.prototype.inserir = function(elemento, posicao) {
@@ -212,3 +215,4 @@ escrever = function (message) {
   }
   console.log(log)
 }
+`
