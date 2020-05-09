@@ -17,6 +17,10 @@ const block = {
         Env.get().symbolTable.put(id, node)
       })
     }
+    if (parent.name === 'for-each') {
+      const iteratorIdentifierNode = (parent.value as AstNode[])[0]
+      Env.get().symbolTable.put(iteratorIdentifierNode.value as string, iteratorIdentifierNode)
+    }
   },
   between (node: AstNode, parent: AstNode, index: number): void {
     if (index === 0 && Env.get().stackMap['superFirst'].length > 0) {
