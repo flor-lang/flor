@@ -5,16 +5,18 @@ import * as vm from 'vm'
 import * as glob from 'glob'
 import { js as beautify } from 'js-beautify'
 
-import comments from '../utils/comments'
-import { Program } from '../parsers/program'
-import { logAst } from '../utils/logger'
-import { Node } from 'parsimmon'
-import { traverser } from '../backend/traverse'
-import { visitor } from '../backend/visitor'
-import Env from '../enviroment/env'
-import { StandardLib } from '../lib/standard'
+import {
+  StandardLibJSImpl,
+  parseCode,
+  AstNode,
+  SymbolTable,
+  getSymbolTable,
+  logAst,
+  logSymbolTable,
+  tryCompile
+} from '../main'
 
-interface FileContent {filePath: string; content: string; ast?: Node<'program', {}>}
+interface FileContent { filePath: string; content: string; ast?: AstNode; symbolTable?: SymbolTable }
 
 Yargs
   .scriptName('flor')
@@ -30,11 +32,15 @@ Yargs
   .options({
     saida: {
       describe: 'Saida do compilador',
-      choices: ['js', 'ast']
+      choices: ['js', 'ast', 'tab-sim']
     },
     exec: {
       type: 'boolean',
       describe: 'Executa o código após compilação'
+    },
+    pdr: {
+      type: 'boolean',
+      describe: 'Insere a biblioteca padrão de Flor no processo de compilação'
     }
   })
 
@@ -43,7 +49,7 @@ const filesContent = files
   .map((path): FileContent => {
     try {
       const content = fs.readFileSync(path, 'utf-8')
-      const processed = comments.remove(String(content))
+      const processed = String(content)
       return {
         filePath: path,
         content: processed
@@ -69,38 +75,48 @@ const outputFormat = Yargs.argv.saida || 'js'
 //   }
 // }
 
-if (outputFormat === 'js') {
-  const parse = (file: FileContent): FileContent => {
-    const ast = Program.tryParse(file.content)
-    return { ...file, ast }
+if (Yargs.argv.pdr) {
+  try {
+    const pathJoin = require('path').join
+    const homeDir = require('os').homedir()
+    const libDir = pathJoin(homeDir, '.flor', 'lib')
+    const libPath = pathJoin(libDir, 'pdr.js')
+    fs.mkdirSync(libDir, { recursive: true })
+    fs.writeFileSync(libPath, StandardLibJSImpl)
+  } catch (error) {
+    console.log(error)
   }
+}
 
-  const filesParsed = filesContent.map(parse)
-  filesParsed.forEach(({ filePath, ast }): void => {
+const executeOutput = (jsCode: string): void => {
+  const script = new vm.Script(jsCode)
+  const context = { console: console }
+  script.runInNewContext(context)
+}
+
+if (outputFormat === 'js') {
+  filesContent.forEach(({ filePath, content }): void => {
     const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
-    traverser(ast, visitor)
-    try {
-      const fileOutput = beautify(Env.get().codeOutput)
+    const { success, result } = tryCompile(content, Yargs.argv.pdr === true)
+    if (success) {
+      // eslint-disable-next-line no-template-curly-in-string
+      const libPath = Yargs.argv.pdr ? "require(`${require('os').homedir()}/.flor/lib/pdr`);" : ''
+      const code = `${libPath}\n${result}`
+      const fileOutput = beautify(code)
       fs.writeFileSync(outputFilePath, fileOutput)
       if (Yargs.argv.exec) {
-        const script = new vm.Script(fileOutput)
-        const context = { console: console, ...StandardLib }
-        script.runInNewContext(context)
+        executeOutput(fileOutput)
       }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      Env.get().clean()
+    } else {
+      console.error(result)
     }
   })
 } else if (outputFormat === 'tab-sim') {
-  console.log('Ainda não implementado')
+  filesContent
+    .map((file): SymbolTable => getSymbolTable(file.content, Yargs.argv.pdr === true))
+    .forEach((table): void => logSymbolTable(table))
 } else if (outputFormat === 'ast') {
-  const parse = (file: FileContent): FileContent => {
-    const ast = Program.tryParse(file.content)
-    return { ...file, ast }
-  }
-
-  const fileParsed = filesContent.map(parse)
-  fileParsed.forEach(({ ast }): void => logAst(ast, true))
+  filesContent
+    .map((file): AstNode => parseCode(file.content))
+    .forEach((ast): void => logAst(ast, true))
 }

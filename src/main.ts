@@ -3,11 +3,14 @@ import { Program } from './parsers/program'
 import { visitor } from './backend/visitor'
 import { traverser, AstNode } from './backend/traverse'
 import Env from './enviroment/env'
-import SymbolTable from 'enviroment/symbol-table'
+import SymbolTable from './enviroment/symbol-table'
 import { FlorErrorMessage } from './utils/errors'
 import { StandardLib } from './lib/standard.flib'
+import comments from './utils/comments'
 
+export { logAst, logSymbolTable } from './utils/logger'
 export { StandardLibJSImpl } from './lib/jsimpl/standard'
+export { SymbolTable, AstNode }
 
 /**
  * Parse input code generating abstract syntax tree
@@ -29,7 +32,8 @@ const traverseAstFrom = (code: string, toLoadStandardLib = false): void => {
   if (toLoadStandardLib) {
     loadStandardLib()
   }
-  traverser(parseCode(code), visitor)
+  const executableCode = comments.remove(code)
+  traverser(parseCode(executableCode), visitor)
 }
 
 /**
@@ -40,7 +44,9 @@ const traverseAstFrom = (code: string, toLoadStandardLib = false): void => {
  */
 export const getSymbolTable = (code: string, toLoadStandardLib = false): SymbolTable => {
   traverseAstFrom(code, toLoadStandardLib)
-  return Env.get().symbolTable
+  const table = Env.get().symbolTable
+  Env.get().clean()
+  return table
 }
 
 /**
@@ -51,7 +57,9 @@ export const getSymbolTable = (code: string, toLoadStandardLib = false): SymbolT
  */
 export const compile = (code: string, toLoadStandardLib = false): string => {
   traverseAstFrom(code, toLoadStandardLib)
-  return Env.get().codeOutput
+  const output = Env.get().codeOutput
+  Env.get().clean()
+  return output
 }
 
 /**
@@ -64,8 +72,12 @@ export const compile = (code: string, toLoadStandardLib = false): string => {
 export const tryCompile = (code: string, toLoadStandardLib = false): { success: boolean; result: string } => {
   try {
     traverseAstFrom(code, toLoadStandardLib)
-    return { success: true, result: Env.get().codeOutput }
+    const result = Env.get().codeOutput
+    Env.get().clean()
+    return { success: true, result }
   } catch (error) {
-    return { success: false, result: FlorErrorMessage(error) }
+    const result = FlorErrorMessage(error)
+    Env.get().clean()
+    return { success: false, result }
   }
 }
