@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import * as Yargs from 'yargs'
 import * as fs from 'fs'
-import * as vm from 'vm'
+import { spawn } from 'child_process'
+import { createInterface } from 'readline'
 import * as glob from 'glob'
 import { js as beautify } from 'js-beautify'
 
@@ -88,10 +89,14 @@ if (Yargs.argv.pdr) {
   }
 }
 
-const executeOutput = (jsCode: string): void => {
-  const script = new vm.Script(jsCode)
-  const context = { console: console }
-  script.runInNewContext(context)
+const executeOutput = (filePath: string): void => {
+  const jsExec = spawn('node', [filePath])
+  createInterface({ input: jsExec.stdout }).on('line', console.log)
+  createInterface({ input: jsExec.stderr }).on('line', console.error)
+  jsExec.on('error', (error: Error): void => console.error(error.message))
+  jsExec.on('close', (code: number): void => console.info(
+    `\n******************** Execução finalizada com ${code === 0 ? 'sucesso' : 'erros'} ********************\n`)
+  )
 }
 
 if (outputFormat === 'js') {
@@ -105,7 +110,7 @@ if (outputFormat === 'js') {
       const fileOutput = beautify(code)
       fs.writeFileSync(outputFilePath, fileOutput)
       if (Yargs.argv.exec) {
-        executeOutput(fileOutput)
+        executeOutput(outputFilePath)
       }
     } else {
       console.error(result)
