@@ -10,7 +10,7 @@ export const classDeclarationCodeGen = {
     Env.get().codeOutput += '}\n'
     const classStack = Env.get().stackMap['classScope']
     const className = classStack[classStack.length - 1]
-    Env.get().codeOutput += `${className}.__propertiesDeclarations__.bind(null)()`
+    Env.get().codeOutput += `${className}.__propertiesDeclarations__.bind(null)()\n`
   }
 }
 
