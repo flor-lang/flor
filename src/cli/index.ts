@@ -22,7 +22,11 @@ interface FileContent { filePath: string; content: string; ast?: AstNode; symbol
 Yargs
   .scriptName('flor')
   .usage('Exemplo de uso: $0 [opção] [arquivo .flor]')
-  .example('$0 oi_mundo.flor', '')
+  .example('$0', 'Compila todos os arquivo flor do diretório')
+  .example('$0 oi_mundo.flor', 'Compilar arquivo flor')
+  .example('$0 --pdr-compilar', 'Compila a biblioteca padrão de flor para ser usada posteriormente')
+  .example('$0 --pdr oi_mundo.flor', 'Compilar arquivo flor analisando o código junto com a biblioteca padrão')
+  .example('$0 --pdr --exec oi_mundo.flor', 'Compila e Executa o arquivo flor analisando o código junto com a biblioteca padrão')
   .version(false)
   .help('m')
   .alias('m', 'manual')
@@ -33,7 +37,8 @@ Yargs
   .options({
     saida: {
       describe: 'Saida do compilador',
-      choices: ['js', 'ast', 'tab-sim']
+      choices: ['js', 'ast', 'tab-sim'],
+      default: 'js'
     },
     exec: {
       type: 'boolean',
@@ -41,11 +46,18 @@ Yargs
     },
     pdr: {
       type: 'boolean',
-      describe: 'Insere a biblioteca padrão de Flor no processo de compilação'
+      describe: 'Insere a biblioteca padrão de Flor no processo de análise'
+    },
+    'pdr-compilar': {
+      type: 'boolean',
+      describe: 'Compila a biblioteca padrão de Flor'
     }
   })
 
-const files = Yargs.argv._.length !== 0 ? Yargs.argv._ : glob.sync('**/*.flor')
+let files: string[] = Yargs.argv._
+if (files.length === 0 && Yargs.argv['pdr-compilar'] !== true) {
+  files = glob.sync('**/*.flor')
+}
 const filesContent = files
   .map((path): FileContent => {
     try {
@@ -76,7 +88,7 @@ const outputFormat = Yargs.argv.saida || 'js'
 //   }
 // }
 
-if (Yargs.argv.pdr) {
+if (Yargs.argv['pdr-compilar']) {
   try {
     const pathJoin = require('path').join
     const homeDir = require('os').homedir()
