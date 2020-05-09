@@ -3,13 +3,14 @@
  */
 export const StandardLibJSImpl = `// Standard LIB Definitions
 /** **************************************************************************** */
+const _ = global
 
 /**
  * Texto: String
  */
 
 // Statics
-Texto = {
+_.Texto = {
   do_unicode: String.fromCharCode
 }
 
@@ -45,7 +46,7 @@ String.prototype.tamanho = function () {
  */
 
 // Statics
-Numero = {
+_.Numero = {
   EPSILON: Number.EPSILON,
   VALOR_MAX: Number.MAX_VALUE,
   VALOR_MIN: Number.MIN_VALUE,
@@ -83,7 +84,7 @@ Boolean.prototype.toString = function () {
  */
 
 // Statics
-Lista = {
+_.Lista = {
   e_lista: Array.isArray
 }
 
@@ -113,8 +114,8 @@ Array.prototype.adicionar_no_inicio = Array.prototype.unshift
 
 
 // Prototype Overrides
-__old_array_to_string__ = Array.prototype.toString
-Array.prototype.toString = function () {
+const __old_array_to_string__ = Array.prototype.toString
+_.Array.prototype.toString = function () {
   return` + "`[${this.__old_array_to_string__()}]` " + `
 }
 
@@ -182,7 +183,7 @@ Math.tangente = Math.tan
 Math.tangente_hiperbolica = Math.tanh
 Math.truncar = Math.trunc
 
-Matematica = Math
+_.Matematica = Math
 
 /** **************************************************************************** */
 
@@ -190,15 +191,15 @@ Matematica = Math
  * Global
  */
 
-txt = (arg) => arg.toString()
-bool = (arg) => new Boolean(arg)
-list = (arg) => Array.from(arg)
-dic = (arg) => JSON.parse(arg)
-num = (arg) => new Number(arg)
-int = parseInt
-real = parseFloat
+_.txt = (arg) => arg.toString()
+_.bool = (arg) => new Boolean(arg)
+_.list = (arg) => Array.from(arg)
+_.dic = (arg) => JSON.parse(arg)
+_.num = (arg) => new Number(arg)
+_.int = parseInt
+_.real = parseFloat
 
-escrever = function (message) {
+_.escrever = function (message) {
   let log = ''
   if (message === null) {
     log = 'nulo'
