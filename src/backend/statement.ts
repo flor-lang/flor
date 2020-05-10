@@ -16,7 +16,7 @@ const functionCall = {
     if (parent.name === 'class-instantiation') {
       evaluateFunctionCallAsClassInstantiation(node)
     }
-    if (parent.name === 'statement') {
+    if (['statement', 'subscriptable'].includes(parent.name)) {
       evaluateFunctionCallUse(node)
     }
   }

@@ -6,14 +6,14 @@ test('generate class declaration', (): void => {
 
   tryGenerateClassDeclaration([
     ['definir classe Pessoa fim',
-    'class Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nPessoa.__propertiesDeclarations__.bind(this)()\n}}\nPessoa.__propertiesDeclarations__.bind(null)()'],
+    'class Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nPessoa.__propertiesDeclarations__.bind(this)()\n}}\nPessoa.__propertiesDeclarations__.bind(null)()\n'],
     [
       `
       definir classe PessoaFisica
         heranca: Pessoa
         interfaces: Nomeavel Localizavel
       fim`  
-    , 'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()'
+    , 'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()\n'
     ],
     [
       `
@@ -30,7 +30,7 @@ test('generate class declaration', (): void => {
       `,
       'class Carro{\nstatic __propertiesDeclarations__() {if (this) {this.modelo = \"Esportivo\"}\n' + 
       'if (this) {this.marca = null}\nif (this) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = 2020}\n}constructor(marca=null)' + 
-      '{\nCarro.__propertiesDeclarations__.bind(this)()\n__marca = marca;}}\nCarro.__propertiesDeclarations__.bind(null)()'
+      '{\nCarro.__propertiesDeclarations__.bind(this)()\n__marca = marca;}}\nCarro.__propertiesDeclarations__.bind(null)()\n'
     ],
     [
       `
@@ -42,7 +42,7 @@ test('generate class declaration', (): void => {
       fim
       `,
       'class Luz{\nstatic __propertiesDeclarations__() {}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}' +
-      'ligar(){\n__ligado = true;}desligar(){\n__ligado = false;} static esta_ligado(){ return __ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()'
+      'ligar(){\n__ligado = true;}desligar(){\n__ligado = false;} static esta_ligado(){ return __ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n'
     ]
   ])
 })
