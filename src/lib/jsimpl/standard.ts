@@ -114,7 +114,7 @@ Array.prototype.adicionar_no_inicio = Array.prototype.unshift
 
 
 // Prototype Overrides
-const __old_array_to_string__ = Array.prototype.toString
+Array.prototype.__old_array_to_string__ = Array.prototype.toString
 _.Array.prototype.toString = function () {
   return` + "`[${this.__old_array_to_string__()}]` " + `
 }
@@ -141,8 +141,27 @@ Array.prototype.tamanho = function () {
 Object.prototype.possui = Object.prototype.hasOwnProperty
 
 // Prototype overrides
+__object_stringify_depth__ = 0
 Object.prototype.toString = function () {
-  return this
+  let str = ''
+
+  if (this.constructor.name !== 'Object') {
+    __object_stringify_depth__ += 1
+    const closeIdent = Array(__object_stringify_depth__ - 1).fill('    ').join('')
+    const ident = closeIdent + '    '
+    const entries = Object.entries(this)
+    const lastIndex = entries.length - 1
+    const body = entries.reduce((prev, curr, index) =>
+      prev + ident + curr[0].toString() + ' => ' + (curr[1] ? curr[1].toString() : 'null') + 
+      (index !== lastIndex ? '\\n' : '')
+    , '')
+    str = this.constructor.name + ' :: {\\n' + body + '\\n' + closeIdent + '}'
+  } else {
+    str = JSON.stringify(this, null, 2)
+  }
+
+  __object_stringify_depth__ = 0
+  return str
 }
 
 /** **************************************************************************** */
