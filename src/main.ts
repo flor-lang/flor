@@ -4,7 +4,7 @@ import { visitor } from './backend/visitor'
 import { traverser, AstNode } from './backend/traverse'
 import Env from './enviroment/env'
 import SymbolTable from './enviroment/symbol-table'
-import { FlorErrorMessage } from './utils/errors'
+import { FlorCompilationErrorMessage } from './utils/errors'
 import { StandardLib } from './lib/standard.flib'
 import comments from './utils/comments'
 
@@ -72,12 +72,10 @@ export const compile = (code: string, toLoadStandardLib = false): string => {
  */
 export const tryCompile = (code: string, toLoadStandardLib = false): { success: boolean; result: string } => {
   try {
-    traverseAstFrom(code, toLoadStandardLib)
-    const result = Env.get().codeOutput
-    Env.get().clean()
+    const result = compile(code, toLoadStandardLib)
     return { success: true, result }
   } catch (error) {
-    const result = FlorErrorMessage(error)
+    const result = FlorCompilationErrorMessage(error)
     Env.get().clean()
     return { success: false, result }
   }

@@ -1,4 +1,7 @@
-export const FlorErrorMessage = (error: Error): string => {
+// TODO: Handle Parsimmon and Semantics Errors
+export const FlorCompilationErrorMessage = (error: Error): string => error.message
+
+export const FlorRuntimeErrorMessage = (error: Error): string => {
   let florErrorMessage = error.message
 
   if (error instanceof TypeError) {
