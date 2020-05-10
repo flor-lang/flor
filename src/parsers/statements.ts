@@ -149,8 +149,17 @@ export const ReturnStatement: ReturnStatementParser = P
 type LabeledArgsParser = P.Parser<P.Node<'labeled-args', {}>>
 const LabeledArgs: LabeledArgsParser = P
   .seqObj(
-    P.lazy((): IdentifierParser => Identifier).named('label'),
-    P.optWhitespace, Colon, P.optWhitespace,
+    P.alt(
+      P.seqObj(
+        P.lazy((): IdentifierParser => Identifier).named('label'),
+        P.optWhitespace, Colon, P.optWhitespace
+      )
+        .node('label')
+        .map(nodePropertiesMapper(['label']))
+        .map((node: { value: unknown }): unknown => node.value),
+      P.optWhitespace.node('identifier')
+    )
+      .named('label'),
     P.lazy((): ExpressionParser => Expression).named('value')
   )
   .node('labeled-arg')
