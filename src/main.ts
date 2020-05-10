@@ -19,18 +19,18 @@ export { SymbolTable, AstNode }
  */
 export const parseCode = (code: string): AstNode => Program.tryParse(code)
 
-const loadStandardLib = (): void => {
+const loadStandardLib = (callbackfn: (identifier: string, node: AstNode) => void): void => {
   for (const key in StandardLib) {
     // eslint-disable-next-line no-prototype-builtins
     if (StandardLib.hasOwnProperty(key)) {
-      Env.get().symbolTable.put(key, StandardLib[key])
+      callbackfn(key, StandardLib[key])
     }
   }
 }
 
 const traverseAstFrom = (code: string, toLoadStandardLib = false): void => {
   if (toLoadStandardLib) {
-    loadStandardLib()
+    loadStandardLib((identifier, node): void => Env.get().symbolTable.put(identifier, node))
   }
   const executableCode = comments.remove(code)
   traverser(parseCode(executableCode), visitor)
@@ -45,6 +45,7 @@ const traverseAstFrom = (code: string, toLoadStandardLib = false): void => {
 export const getSymbolTable = (code: string, toLoadStandardLib = false): SymbolTable => {
   traverseAstFrom(code, toLoadStandardLib)
   const table = Env.get().symbolTable
+  loadStandardLib((identifier): AstNode => table.rm(identifier))
   Env.get().clean()
   return table
 }
