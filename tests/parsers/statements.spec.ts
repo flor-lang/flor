@@ -235,6 +235,9 @@ test('parse function call', (): void => {
   cantParseFunctionCall([
     'ordenar (',
     'ordenar )',
+    'ordenar (f: , x: 10))',
+    'ordenar (f: , 10))',
+    'ordenar (0, n: 10))'
   ])
 })
 
