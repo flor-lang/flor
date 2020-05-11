@@ -141,7 +141,7 @@ Array.prototype.tamanho = function () {
 Object.prototype.possui = Object.prototype.hasOwnProperty
 
 // Prototype overrides
-__object_stringify_depth__ = 0
+let __object_stringify_depth__ = 0
 Object.prototype.toString = function () {
   let str = ''
 
@@ -153,9 +153,9 @@ Object.prototype.toString = function () {
     const lastIndex = entries.length - 1
     const body = entries.reduce((prev, curr, index) =>
       prev + ident + curr[0].toString() + ' => ' + (curr[1] ? curr[1].toString() : 'null') + 
-      (index !== lastIndex ? '\\n' : '')
+      (index !== lastIndex ? '\n' : '')
     , '')
-    str = this.constructor.name + ' :: {\\n' + body + '\\n' + closeIdent + '}'
+    str = this.constructor.name + ' :: {\n' + body + '\n' + closeIdent + '}'
   } else {
     str = JSON.stringify(this, null, 2)
   }
@@ -211,16 +211,18 @@ _.Matematica = Math
  */
 
 _.txt = (arg) => arg.toString()
-_.bool = (arg) => new Boolean(arg)
+_.bool = (arg) => new Boolean(arg).valueOf()
 _.list = (arg) => Array.from(arg)
 _.dic = (arg) => JSON.parse(arg)
-_.num = (arg) => new Number(arg)
+_.num = (arg) => new Number(arg).valueOf()
 _.int = parseInt
 _.real = parseFloat
 
 _.escrever = function (message) {
   let log = ''
-  if (message === null) {
+  if (typeof message === 'undefined') {
+    log = '\nErro na escrita:\n  Atributo não definido'
+  } else if (message === null) {
     log = 'nulo'
   } else if (message === Number.POSITIVE_INFINITY) {
     log = 'Infinito'

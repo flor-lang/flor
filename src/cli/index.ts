@@ -8,6 +8,7 @@ import { js as beautify } from 'js-beautify'
 
 import {
   StandardLibJSImpl,
+  FlorRuntimeErrorMessage,
   parseCode,
   AstNode,
   SymbolTable,
@@ -94,8 +95,10 @@ if (Yargs.argv['pdr-compilar']) {
     const homeDir = require('os').homedir()
     const libDir = pathJoin(homeDir, '.flor', 'lib')
     const libPath = pathJoin(libDir, 'pdr.js')
+    const ErrorHandler = `_.FlorRuntimeErrorMessage = ${FlorRuntimeErrorMessage.toString()}`
+    const StdLib = StandardLibJSImpl.toString().replace('function () {', '').slice(0, -1)
     fs.mkdirSync(libDir, { recursive: true })
-    fs.writeFileSync(libPath, StandardLibJSImpl)
+    fs.writeFileSync(libPath, beautify(`${StdLib}\n${ErrorHandler}\n`))
   } catch (error) {
     console.log(error)
   }
@@ -106,9 +109,9 @@ const executeOutput = (filePath: string): void => {
   createInterface({ input: jsExec.stdout }).on('line', console.log)
   createInterface({ input: jsExec.stderr }).on('line', console.error)
   jsExec.on('error', (error: Error): void => console.error(error.message))
-  jsExec.on('close', (code: number): void => console.info(
-    `\n******************** Execução finalizada com ${code === 0 ? 'sucesso' : 'erros'} ********************\n`)
-  )
+  // jsExec.on('close', (code: number): void => console.info(
+  //   `\n******************** Execução finalizada com ${code === 0 ? 'sucesso' : 'erros'} ********************\n`)
+  // )
 }
 
 if (outputFormat === 'js') {
@@ -118,7 +121,16 @@ if (outputFormat === 'js') {
     if (success) {
       // eslint-disable-next-line no-template-curly-in-string
       const libPath = Yargs.argv.pdr ? "require(`${require('os').homedir()}/.flor/lib/pdr`);" : ''
-      const code = `${libPath}\n${result}`
+      const code = `try{${libPath}\n${result}}catch(e){
+        if (typeof FlorRuntimeErrorMessage === 'undefined') {
+          console.error(
+            'Módulo padrão não encontrado. Por favor, compile a biblioteca padrão!' + 
+            ' Execute o comando:\\n  flor --pdr-compilar'
+          )
+        } else {
+          console.error(FlorRuntimeErrorMessage(e))
+        }
+      }`
       const fileOutput = beautify(code)
       fs.writeFileSync(outputFilePath, fileOutput)
       if (Yargs.argv.exec) {
