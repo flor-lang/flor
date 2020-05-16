@@ -21,5 +21,13 @@ export const FlorRuntimeErrorMessage = (error: Error): string => {
     }
   }
 
+  if (error instanceof ReferenceError) {
+    if (error.message.endsWith('is not defined')) {
+      __florErrorMessage__ = error.message.replace(
+        'is not defined', 'não foi definida'
+      )
+    }
+  }
+
   return `\nErro na execução:\n  ${__florErrorMessage__}`
 }
