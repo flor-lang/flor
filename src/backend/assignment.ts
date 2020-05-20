@@ -2,7 +2,7 @@ import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier } from '../utils/aux-functions'
 import { evaluateLocUse } from './semantics/definitions'
-import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen } from './generator/assignment'
+import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen, locCodeGen } from './generator/assignment'
 import { evaluateIdentifierAsClassMember } from './semantics/oo'
 
 const assignment = {
@@ -25,6 +25,7 @@ const loc = {
     if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0) {
       evaluateLocUse(node)
     }
+    locCodeGen.enter(node, parent)
   }
 }
 

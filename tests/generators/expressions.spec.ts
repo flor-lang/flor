@@ -38,7 +38,7 @@ test('generate expression function declaration', (): void => {
 
   tryGenerateExpressions([
     ['funcao(numero) numero = 0 fim', 'function(numero=null){\nnumero = 0;}'],
-    ['funcao () numero = 0 fim', 'function(){\nnumero = 0;}'],
+    ['funcao () numero = 0 fim', 'function(){\nlet numero = 0;}'],
     ['funcao (x, y, z) x = y + z fim', 'function(x=null,y=null,z=null){\nx = y+z;}'],
     [
       `funcao (lista)
@@ -46,7 +46,7 @@ test('generate expression function declaration', (): void => {
         lista[0] = lista[1]
         lista[1] = aux
       fim`,
-      `function(lista=null){\naux = lista[0];lista[0] = lista[1];lista[1] = aux;}`
+      `function(lista=null){\nlet aux = lista[0];lista[0] = lista[1];lista[1] = aux;}`
     ],
     ['(numero) := numero * 0', '(numero=null) => numero*0'],
     ['() := Pessoa', '() => Pessoa'],

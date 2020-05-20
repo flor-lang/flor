@@ -18,6 +18,11 @@ test('generate while statement', (): void => {
   const tryGenerateStatement = generatorTester(Statement)
 
   tryGenerateStatement([
+    ['soma = 0', 'let soma = 0;'],
+    ['i = 10', 'let i = 10;'],
+    ['idade = 10', 'let idade = 10;'],
+    ['exibir_mensagem_censura = ""', 'let exibir_mensagem_censura = "";'],
+    ['treta = verdadeiro', 'let treta = true;'],
     ['enquanto i > 0 faca i = i - 1 fim', 'while(i>0){\ni = i-1;}'],
     ['enquanto i <= 10 faca soma = soma + i fim', 'while(i<=10){\nsoma = soma+i;}'],
     ['enquanto idade < 18 faca exibir_mensagem_censura = verdadeiro fim',
@@ -55,6 +60,7 @@ test('generate foreach statement', (): void => {
   const tryGenerateStatement = generatorTester(Statement)
 
   tryGenerateStatement([
+    ['total = 0', 'let total = 0;'],
     ['para cada elemento de colecao faca soma=soma+elemento fim',
      'for(const elemento of colecao){\nsoma = soma+elemento;}'],
     [
@@ -72,6 +78,9 @@ test('generate if then else statement', (): void => {
   const tryGenerateStatement = generatorTester(Statement)
 
   tryGenerateStatement([
+    ['peso = 70.6', 'let peso = 70.6;'],
+    ['x = 0', 'let x = 0;'],
+    ['y = 0', 'let y = 0;'],
     ['se peso < 0 entao peso = 0 fim', 'if(peso<0){\npeso = 0;}'],
     ['se peso < 0 entao peso = 0 senao peso = 1 fim', 'if(peso<0){\npeso = 0;}else{\npeso = 1;}'],
     ['se x igual a 0 entao y = 0 senaose x igual a 1 entao y = 1 senao y = 10 fim',

@@ -30,19 +30,20 @@ test('generate class declaration', (): void => {
       `,
       'class Carro{\nstatic __propertiesDeclarations__() {if (this) {this.modelo = \"Esportivo\"}\n' + 
       'if (this) {this.marca = null}\nif (this) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = 2020}\n}constructor(marca=null)' + 
-      '{\nCarro.__propertiesDeclarations__.bind(this)()\n__marca = marca;}}\nCarro.__propertiesDeclarations__.bind(null)()\n'
+      '{\nCarro.__propertiesDeclarations__.bind(this)()\nlet __marca = marca;}}\nCarro.__propertiesDeclarations__.bind(null)()\n'
     ],
     [
       `
       definir classe Luz
+        propriedades: ligado = verdadeiro
         metodos:
-          ligar = funcao () __ligado = verdadeiro fim
-          desligar = funcao () __ligado = falso fim
-          estatico esta_ligado = () := __ligado igual a verdadeiro
+          ligar = funcao () #ligado = verdadeiro fim
+          desligar = funcao () #ligado = falso fim
+          estatico esta_ligado = () := #ligado igual a verdadeiro
       fim
       `,
-      'class Luz{\nstatic __propertiesDeclarations__() {}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}' +
-      'ligar(){\n__ligado = true;}desligar(){\n__ligado = false;} static esta_ligado(){ return __ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n'
+      'class Luz{\nstatic __propertiesDeclarations__() {if (this) {this.ligado = true}\n}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}' +
+      'ligar(){\nthis.ligado = true;}desligar(){\nthis.ligado = false;} static esta_ligado(){ return this.ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n'
     ]
   ])
 })

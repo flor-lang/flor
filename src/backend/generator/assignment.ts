@@ -1,5 +1,6 @@
 import Env from '../../enviroment/env'
 import { AstNode } from '../traverse'
+import { indexOfChildInParent, identifierValueOfLocNode } from '../../utils/aux-functions'
 
 export const assignmentCodeGen = {
   between (): void {
@@ -7,6 +8,18 @@ export const assignmentCodeGen = {
   },
   exit (): void {
     Env.get().codeOutput += ';'
+  }
+}
+
+export const locCodeGen = {
+  enter (node: AstNode, parent: AstNode): void {
+    if (parent.name === 'assignment' && indexOfChildInParent(node, parent) === 0) {
+      const identifier = identifierValueOfLocNode(node)
+      const identifierNode = Env.get().symbolTable.get(identifier)
+      if (identifierNode === null && identifier.startsWith('#') === false) {
+        Env.get().codeOutput += 'let '
+      }
+    }
   }
 }
 
