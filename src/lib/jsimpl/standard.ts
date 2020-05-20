@@ -152,7 +152,7 @@ Object.prototype.toString = function () {
     const entries = Object.entries(this)
     const lastIndex = entries.length - 1
     const body = entries.reduce((prev, curr, index) =>
-      prev + ident + curr[0].toString() + ' => ' + (curr[1] ? curr[1].toString() : 'null') + 
+      prev + ident + curr[0].toString() + ' => ' + (curr[1] ? curr[1].toString() : 'nulo') + 
       (index !== lastIndex ? '\n' : '')
     , '')
     str = this.constructor.name + ' :: {\n' + body + '\n' + closeIdent + '}'
