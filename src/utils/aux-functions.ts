@@ -18,7 +18,7 @@ export const locNodeHasEmptyParams = (locNode: AstNode): boolean => isEmptyNode(
 export const locSubscriptableIsIdentifier = (locNode: AstNode): boolean => ((locNode.value as AstNode[])[0].value as AstNode).name === 'identifier'
 export const identifierValueOfLocNode = (locNode: AstNode): string => ((locNode.value as AstNode[])[0].value as AstNode).value as string
 export const findIdentifierAtArgsNode = (argsNode: AstNode): [string, AstNode][] => (argsNode.value as AstNode[]).map((node: AstNode): [string, AstNode] => [node.value as string, node])
-export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, AstNode][] => {
+export const findClassMemberIndentifiers = (classMetaNode: AstNode, depth = 0): [string, AstNode][] => {
   const members: [string, AstNode][] = []
   const metaNode = classMetaNode.value as AstNode[]
   const inheritanceNode = metaNode[0]
@@ -28,7 +28,7 @@ export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, As
     const parentName = (inheritanceNode.value as AstNode).value as string
     const parentNode = Env.get().symbolTable.get(parentName)
     const metaNode = (parentNode.value as AstNode[])[1]
-    members.push(...findClassMemberIndentifiers(metaNode).filter(([id]): boolean => id !== 'super'))
+    members.push(...findClassMemberIndentifiers(metaNode, depth + 1).filter(([id]): boolean => id !== 'super'))
   }
 
   const propertiesNode = metaNode[2]
@@ -36,7 +36,10 @@ export const findClassMemberIndentifiers = (classMetaNode: AstNode): [string, As
   const membersPush = (memberNode: AstNode): void => {
     (memberNode.value as { value: { value: string }[] }[]).forEach((memberNode): void => {
       if (memberNode.value[0].value !== 'estatico') {
-        members.push([memberNode.value[1].value, (memberNode as unknown) as AstNode])
+        const identifier = memberNode.value[1].value
+        if (depth === 0 || identifier.startsWith('_') === false) {
+          members.push([identifier, (memberNode as unknown) as AstNode])
+        }
       }
     })
   }
