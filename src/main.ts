@@ -7,6 +7,7 @@ import SymbolTable from './enviroment/symbol-table'
 import { FlorCompilationErrorMessage, FlorRuntimeErrorMessage } from './utils/errors'
 import { StandardLib } from './lib/standard.flib'
 import comments from './utils/comments'
+import { logAst } from './utils/logger'
 
 export { logAst, logSymbolTable } from './utils/logger'
 export { StandardLibJSImpl } from './lib/jsimpl/standard'
@@ -18,6 +19,8 @@ export { SymbolTable, AstNode, FlorRuntimeErrorMessage }
  * @returns Object AstNode
  */
 export const parseCode = (code: string): AstNode => Program.tryParse(code)
+
+logAst(parseCode('foo._away[0].bar = 0'), true)
 
 const loadStandardLib = (callbackfn: (identifier: string, node: AstNode) => void): void => {
   for (const key in StandardLib) {
@@ -35,6 +38,8 @@ const traverseAstFrom = (code: string, toLoadStandardLib = false): void => {
   const executableCode = comments.remove(code)
   traverser(parseCode(executableCode), visitor)
 }
+
+traverseAstFrom('foo._away[0] = 0', false)
 
 /**
  * Traverse ast from flor input code and return your symbol table

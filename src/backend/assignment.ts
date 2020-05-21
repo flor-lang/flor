@@ -1,7 +1,7 @@
 import { AstNode } from './traverse'
 import Env from '../enviroment/env'
 import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier, locNodeHasEmptyParams } from '../utils/aux-functions'
-import { evaluateLocUse } from './semantics/definitions'
+import { evaluateLocUse, evaluatePrivatePropertyAccessAtLocNode } from './semantics/definitions'
 import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen, locCodeGen } from './generator/assignment'
 import { evaluateIdentifierAsClassMember } from './semantics/oo'
 
@@ -13,9 +13,7 @@ const assignment = {
     // TODO: After than expression visitor evaluate type of expression,
     // associate type to identifier at symbol table
     const locLhsNode = (node.value as AstNode[])[0] as AstNode
-    if (locNodeHasEmptyParams(locLhsNode) === false) {
-      evaluateLocUse(locLhsNode)
-    }
+    // evaluatePrivatePropertyAccessAtLocNode(locLhsNode)
     if (locSubscriptableIsIdentifier(locLhsNode)) {
       Env.get().symbolTable.put(identifierValueOfLocNode(locLhsNode), locLhsNode)
     }
@@ -25,8 +23,9 @@ const assignment = {
 
 const loc = {
   enter (node: AstNode, parent: AstNode): void {
-    if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0) {
+    if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0 || locNodeHasEmptyParams(node) === false) {
       evaluateLocUse(node)
+      evaluatePrivatePropertyAccessAtLocNode(node)
     }
     locCodeGen.enter(node, parent)
   }

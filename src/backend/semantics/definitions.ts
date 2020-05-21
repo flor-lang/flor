@@ -1,5 +1,5 @@
 import { AstNode } from '../../backend/traverse'
-import { locSubscriptableIsIdentifier, identifierValueOfLocNode } from '../../utils/aux-functions'
+import { locSubscriptableIsIdentifier, identifierValueOfLocNode, locNodeHasEmptyParams } from '../../utils/aux-functions'
 import Env from '../../enviroment/env'
 import Analyser from './analyser'
 
@@ -12,6 +12,19 @@ const globalDeclaration = (node: AstNode): void => {
   }
   if (Env.get().symbolTable.depth > 1) {
     Analyser.throwError(`Uma ${elemento} só pode ser definida globalmente.`, node)
+  }
+}
+
+const privatePropertyAccess = (node: AstNode): void => {
+  if (locNodeHasEmptyParams(node) === false) {
+    const params = (node.value as AstNode[])[1]
+    const existsPrivateAccess = (params.value as AstNode[])
+      .filter((p): boolean => p.name === 'objectable')
+      .map((o): string => (o.value as AstNode).value as string)
+      .some((id): boolean => id.startsWith('_'))
+    if (existsPrivateAccess) {
+      Analyser.throwError(`Variáveis privadas (iniciadas com '_') não podem ser do escopo de suas respectivas classes.`, node)
+    }
   }
 }
 
@@ -32,5 +45,6 @@ const functionCallUse = (node: AstNode): void => {
 }
 
 export const evaluateGlobalDeclaration = Analyser.create(globalDeclaration)
+export const evaluatePrivatePropertyAccessAtLocNode = Analyser.create(privatePropertyAccess)
 export const evaluateLocUse = Analyser.create(locUse)
 export const evaluateFunctionCallUse = Analyser.create(functionCallUse)

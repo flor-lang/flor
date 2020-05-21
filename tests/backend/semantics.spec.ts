@@ -140,7 +140,7 @@ test('test class instantiation', () => {
 
 })
 
-test('teste super call at subclasses', () => {
+test('test super call at subclasses', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true,
     /(.*Em construtores de subclasses, 'super\(\.\.\.\)' deve ser chamado no início da função)|(.*Função 'super' não foi definida)/)
@@ -193,7 +193,7 @@ test('teste super call at subclasses', () => {
 
 })
 
-test('teste parent class definition', () => {
+test('test parent class definition', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true, /.*Classe '.+' não foi definida/)
 
@@ -357,4 +357,34 @@ test('test interfaces implementations', () => {
       propriedades: foo
     fim`,
   ])
+})
+
+test('test private properties access', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true, /.*Variáveis privadas \(iniciadas com '_'\) não podem ser do escopo de suas respectivas classes/)
+
+  mustBeAllowed([
+    '_foo = 0',
+    'foo = [0] foo[0] = 1',
+    `definir classe Foo
+      propriedades: _sou_privado
+      metodos: bar = () := #_sou_privado + 1
+    fim`
+  ])
+
+  mustThrows([
+    `foo = nulo
+    foo._away = 0`,
+    `foo = nulo
+    bar = foo._away`,
+    'foo = [nulo] foo[0]._prop = 1',
+    'foo = [nulo] foo[0] = foo[0]._prop',
+    `definir classe Bar
+      propriedades: _privado_do_pai
+    fim
+    definir classe Foo heranca: Bar
+      metodos: bar = () := super._privado_do_pai + 1
+    fim`
+  ])
+
 })
