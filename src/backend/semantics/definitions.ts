@@ -20,8 +20,14 @@ const privatePropertyAccess = (node: AstNode): void => {
     const params = (node.value as AstNode[])[1]
     const existsPrivateAccess = (params.value as AstNode[])
       .filter((p): boolean => p.name === 'objectable')
-      .map((o): string => (o.value as AstNode).value as string)
-      .some((id): boolean => id.startsWith('_'))
+      .map((o): {} => (o.value as AstNode).value)
+      .some((id): boolean => {
+        let identifier: string = id as string
+        if (Array.isArray(id)) {
+          identifier = (id as AstNode[])[0].value as string
+        }
+        return identifier.startsWith('_')
+      })
     if (existsPrivateAccess) {
       Analyser.throwError(`Variáveis privadas (iniciadas com '_') não podem ser do escopo de suas respectivas classes.`, node)
     }

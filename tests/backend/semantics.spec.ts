@@ -378,6 +378,8 @@ test('test private properties access', () => {
     foo._away = 0`,
     `foo = nulo
     bar = foo._away`,
+    `foo = nulo
+    bar = foo._away()`,
     'foo = [nulo] foo[0]._prop = 1',
     'foo = [nulo] foo[0] = foo[0]._prop',
     `definir classe Bar
