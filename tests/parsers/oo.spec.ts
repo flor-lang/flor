@@ -37,7 +37,10 @@ test('parse interface declaration', (): void => {
       nome
       executando()
     fim
-    `
+    `,
+    `definir interface Tilte
+      foo _bar
+    fim`
   ])
 })
 

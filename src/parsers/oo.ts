@@ -28,6 +28,10 @@ export const InterfaceDeclaration: InterfaceDeclarationParser = P
     (result: { properties: never[] }): boolean => result.properties.length > 1,
     'Definir interface exige um identificador e no mínimo uma variável'
   )
+  .assert(
+    (result: { properties: never[] }): boolean => result.properties.every((node: { value: string }): boolean => node.value.startsWith('_') === false),
+    'Membros declarados de uma interface não devem ser privados (iniciados com \'_\')'
+  )
   .map((ast: { properties: never[] }): {}[] => [
     ast.properties[0],
     { name: 'members', value: ast.properties.splice(1) }
