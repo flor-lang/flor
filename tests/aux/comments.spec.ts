@@ -17,7 +17,7 @@ test('remove multi line comment', (): void => {
   // Multi line comment in more than one line
   expect(
     comments.remove('a = 1\n/*\nteste\n*/')
-  ).toBe('a = 1\n')
+  ).toBe('a = 1\n\n\n')
 })
 
 test('not remove comment inside string', (): void => {
