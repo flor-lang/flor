@@ -13,6 +13,7 @@ test('test identifier', () => {
     ['teste = super.ola()', 'teste = super.ola()\n;'],
     ['teste = super()', 'teste = super()\n;'],
     ['#variavel = "teste"', 'this.variavel = "teste";'],
+    ['while = "teste"', 'let while_ = "teste";'],
   ])
 });
 

@@ -1,6 +1,7 @@
 import Env from '../../enviroment/env'
 import { AstNode } from '../traverse'
 import { indexOfChildInParent, identifierValueOfLocNode } from '../../utils/aux-functions'
+import JSReservedWords from '../../utils/js-reserved-words'
 
 export const assignmentCodeGen = {
   between (): void {
@@ -26,7 +27,11 @@ export const locCodeGen = {
 export const identifierCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     if (['labeled-arg', 'interfaces'].includes(parent.name) === false) {
-      Env.get().codeOutput += (node.value as string).replace('#', 'this.')
+      let identifier = node.value as string
+      if (JSReservedWords.includes(identifier)) {
+        identifier = `${identifier}_`
+      }
+      Env.get().codeOutput += identifier.replace('#', 'this.')
     }
   }
 }
