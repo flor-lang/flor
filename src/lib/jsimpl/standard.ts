@@ -151,10 +151,15 @@ Object.prototype.toString = function () {
     const ident = closeIdent + '    '
     const entries = Object.entries(this)
     const lastIndex = entries.length - 1
-    const body = entries.reduce((prev, curr, index) =>
-      prev + ident + curr[0].toString() + ' => ' + (curr[1] ? curr[1].toString() : 'nulo') + 
-      (index !== lastIndex ? '\n' : '')
-    , '')
+    const body = entries.reduce((prev, curr, index) => {
+      let prop = curr[0].toString()
+      if (prop.endsWith('_')) {
+          prop = prop.substring(0, prop.length - 1)
+      }
+      return prev + ident + prop + ' => '
+        + (curr[1] ? curr[1].toString() : 'nulo')
+        + (index !== lastIndex ? '\n' : '')
+    }, '')
     str = this.constructor.name + ' :: {\n' + body + '\n' + closeIdent + '}'
   } else {
     str = JSON.stringify(this, null, 2)
