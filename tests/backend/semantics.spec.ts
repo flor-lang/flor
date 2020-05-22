@@ -362,7 +362,7 @@ test('test interfaces implementations', () => {
 test('test private properties access', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true,
-    /(.*Variáveis privadas \(iniciadas com '_'\) não podem ser do escopo de suas respectivas classes|.*não foi definida)/)
+    /(.*Variáveis privadas \(iniciadas com '_'\) não podem ser acessadas fora de suas respectivas classes|.*não foi definida)/)
 
   mustBeAllowed([
     '_foo = 0',

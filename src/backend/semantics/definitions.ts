@@ -29,7 +29,7 @@ const privatePropertyAccess = (node: AstNode): void => {
         return identifier.startsWith('_')
       })
     if (existsPrivateAccess) {
-      Analyser.throwError(`Variáveis privadas (iniciadas com '_') não podem ser do escopo de suas respectivas classes.`, node)
+      Analyser.throwError(`Variáveis privadas (iniciadas com '_') não podem ser acessadas fora de suas respectivas classes.`, node)
     }
   }
 }
