@@ -28,10 +28,14 @@ export const identifierCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     if (['labeled-arg', 'interfaces'].includes(parent.name) === false) {
       let identifier = node.value as string
+      if (identifier.startsWith('#')) {
+        Env.get().codeOutput += 'this.'
+        identifier = identifier.substr(1)
+      }
       if (JSReservedWords.includes(identifier)) {
         identifier = `${identifier}_`
       }
-      Env.get().codeOutput += identifier.replace('#', 'this.')
+      Env.get().codeOutput += identifier
     }
   }
 }
