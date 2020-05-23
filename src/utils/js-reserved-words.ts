@@ -7,7 +7,7 @@ const JSReservedWords = [
   'export', 'extends', 'false', 'final',
   'finally', 'float', 'for', 'function',
   'goto', 'if', 'implements', 'import',
-  'in', 'instanceof', 'int', 'interface',
+  'in', 'instanceof',
   'let', 'long', 'native', 'new',
   'null', 'package', 'private', 'protected',
   'public', 'return', 'short', 'static',
