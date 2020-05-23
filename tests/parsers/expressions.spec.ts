@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction } from '../../src/parsers/expressions'
+import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction, ConditionalExpression } from '../../src/parsers/expressions'
 import { canParse, cantParse } from '../utils'
 
 
@@ -118,3 +118,21 @@ test('can parse inline function', (): void => {
   ])
 })
 
+test('parse conditional expression', (): void => {
+  const canParseConditionalExpression = canParse(ConditionalExpression)
+  const cantParseConditionalExpression = cantParse(ConditionalExpression)
+
+  canParseConditionalExpression([
+    '0 se 5 > 4 senao -1',
+    '"nani" se confuso igual a verdadeiro',
+    '(x) := x+x se soma senao funcao (x) retornar x*x fim',
+    '"maior que 5" se foo > 5'
+  ])
+  cantParseConditionalExpression([
+    'se 5 > 4 ? 0 : -1',
+    '"nani" se confuso senao',
+    'falso se confuso expr',
+    '0 senao confuso',
+    'se confuso 0 senao -1'
+  ])
+})

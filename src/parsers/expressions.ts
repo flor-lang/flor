@@ -15,7 +15,9 @@ import {
   UnaryOperator,
   Function,
   End,
-  ColonEqual
+  ColonEqual,
+  If,
+  Else
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
@@ -33,6 +35,7 @@ export type BoolParser = P.Parser<P.Node<'bool', {}>>
 export type BoolBtwParenthesesParser = P.Parser<P.Node<'wrapped', {}>>
 export type BlockFunctionParser = P.Parser<P.Node<'block-function', {}>>
 export type InlineFunctionParser = P.Parser<P.Node<'inline-function', {}>>
+export type ConditionalExpressionParser = P.Parser<P.Node<'conditional-expression', {}>>
 export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 
 /**
@@ -244,6 +247,27 @@ export const InlineFunction: InlineFunctionParser = P
   )
   .node('inline-function')
   .map(nodePropertiesMapper(['args', 'expression']))
+
+/**
+ * Parse conditional expressions
+ *
+ * conditional-expression -> expression se expression | expression se expression senao expression
+ */
+export const ConditionalExpression: ConditionalExpressionParser = P
+  .seqObj(
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): ExpressionParser => Expression).named('then'),
+    If,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): ExpressionParser => Expression).named('condition'),
+    P.alt(
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      P.seqMap(Else, P.lazy((): ExpressionParser => Expression), (_, expr): unknown => expr),
+      P.optWhitespace
+    ).named('else')
+  )
+  .node('conditional-expression')
+  .map(nodePropertiesMapper(['condition', 'then', 'else']))
 
 /**
  * Parse expressions
