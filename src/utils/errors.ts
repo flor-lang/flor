@@ -11,13 +11,20 @@ export const FlorRuntimeErrorMessage = (error: Error): string => {
       )
     }
 
-    if (error.message.startsWith('Cannot read property') &&
-        error.message.endsWith('of undefined')) {
+    if (error.message.startsWith('Cannot read property')) {
       __florErrorMessage__ = error.message.replace(
         'Cannot read property', 'Váriavel'
-      ).replace(
-        'of undefined', 'não pode ser lida de um objeto não existente'
       )
+      if (error.message.endsWith('of undefined')) {
+        __florErrorMessage__ = __florErrorMessage__.replace(
+          'of undefined', 'não pode ser lida de um objeto não existente'
+        )
+      }
+      if (error.message.endsWith('of null')) {
+        __florErrorMessage__ = __florErrorMessage__.replace(
+          'of null', 'não pode ser lida de um objeto nulo'
+        )
+      }
     }
   }
 
