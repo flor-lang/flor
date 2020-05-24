@@ -1,8 +1,11 @@
 import SymbolTable from './symbol-table'
+import { Polyfill } from './polyfill'
 
 type EnvContext = 'test' | 'dev' | 'prod'
 export default class Env {
   private static instance: Env
+
+  private polyfills: Polyfill[]
 
   private tableStack: SymbolTable[]
 
@@ -12,7 +15,7 @@ export default class Env {
 
   public codeOutput: string
 
-  public stackMap: { [key: string]: string[] }
+  public stackMap: { [key: string]: (string | number)[] }
 
   private constructor () {
     this.clean()
@@ -38,12 +41,21 @@ export default class Env {
     this._symbolTable = this.tableStack.pop() || null
   }
 
+  public injectPolyfill (polyfill: Polyfill): void {
+    if (this.polyfills.includes(polyfill) === false) {
+      this.polyfills.push(polyfill)
+      this.codeOutput = `\n${polyfill}\n${this.codeOutput}`
+    }
+  }
+
   public clean (context: EnvContext = 'dev'): void {
+    this.polyfills = []
     this.tableStack = []
     this.context = context
     this.codeOutput = ''
     this._symbolTable = new SymbolTable(null)
     this.stackMap = {
+      lhs: [],
       propDeclarations: [],
       superFirst: [],
       classScope: [],

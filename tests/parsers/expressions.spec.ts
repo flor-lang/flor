@@ -123,10 +123,10 @@ test('parse conditional expression', (): void => {
   const cantParseConditionalExpression = cantParse(ConditionalExpression)
 
   canParseConditionalExpression([
-    '0 se 5 > 4 senao -1',
-    '"nani" se confuso igual a verdadeiro',
-    '(x) := x+x se soma senao funcao (x) retornar x*x fim',
-    '"maior que 5" se foo > 5'
+    'se 5 > 4 entao 0 senao -1',
+    'se confuso igual a verdadeiro entao "nani"',
+    'se soma entao (x) := x+x senao funcao (x) retornar x*x fim',
+    'se foo > 5 entao "maior que 5"'
   ])
   cantParseConditionalExpression([
     'se 5 > 4 ? 0 : -1',

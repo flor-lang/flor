@@ -46,7 +46,7 @@ export const propertyCodeGen = {
       const classStack = Env.get().stackMap['classScope']
       const className = classStack[classStack.length - 1]
       Env.get().codeOutput += `if ('${nodeValue[1].value}' in ${className} === false) {`
-      owner = className
+      owner = className as string
     } else {
       Env.get().codeOutput += 'if (this) {'
     }

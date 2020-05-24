@@ -17,7 +17,8 @@ import {
   End,
   ColonEqual,
   If,
-  Else
+  Else,
+  Then
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
@@ -250,16 +251,17 @@ export const InlineFunction: InlineFunctionParser = P
 
 /**
  * Parse conditional expressions
- *
+ * foo = se 5 > 0 entao 2
  * conditional-expression -> expression se expression | expression se expression senao expression
  */
 export const ConditionalExpression: ConditionalExpressionParser = P
   .seqObj(
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    P.lazy((): ExpressionParser => Expression).named('then'),
     If,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     P.lazy((): ExpressionParser => Expression).named('condition'),
+    Then,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    P.lazy((): ExpressionParser => Expression).named('then'),
     P.alt(
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       P.seqMap(Else, P.lazy((): ExpressionParser => Expression), (_, expr): unknown => expr),
@@ -279,6 +281,7 @@ export const Expression: ExpressionParser = P
     P.lazy((): ClassInstantiationParser => ClassInstantiation),
     InlineFunction,
     BlockFunction,
+    ConditionalExpression,
     Bool
   )
   .node('expression')

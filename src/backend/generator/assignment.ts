@@ -19,6 +19,7 @@ export const locCodeGen = {
       const identifierNode = Env.get().symbolTable.get(identifier)
       if (identifierNode === null && identifier.startsWith('#') === false) {
         Env.get().codeOutput += 'let '
+        Env.get().stackMap['lhs'][0] = Env.get().stackMap['lhs'][0] as number + 4
       }
     }
   }

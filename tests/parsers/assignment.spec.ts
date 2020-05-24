@@ -18,6 +18,7 @@ test('parse assignment operation', (): void => {
   const cantParseAssignment = cantParse(Assignment)
 
   canParseAssignment([
+    'foo = se 5 > 3 entao 1 senao 2',
     'resultado = duplicar(x: 5) - 10',
     'duplicar = (valor) := valor * 2',
     'x = 20',

@@ -17,17 +17,26 @@ const assignment = {
     if (locSubscriptableIsIdentifier(locLhsNode)) {
       Env.get().symbolTable.put(identifierValueOfLocNode(locLhsNode), locLhsNode)
     }
+    Env.get().stackMap['lhs'] = []
     assignmentCodeGen.exit()
   }
 }
 
 const loc = {
   enter (node: AstNode, parent: AstNode): void {
+    if (parent.name === 'assignment' && indexOfChildInParent(node, parent) === 0) {
+      Env.get().stackMap['lhs'].push(Env.get().codeOutput.length)
+    }
     if (parent.name !== 'assignment' || indexOfChildInParent(node, parent) !== 0 || locNodeHasEmptyParams(node) === false) {
       evaluateLocUse(node)
       evaluatePrivatePropertyAccessAtLocNode(node)
     }
     locCodeGen.enter(node, parent)
+  },
+  exit (node: AstNode, parent: AstNode): void {
+    if (parent.name === 'assignment' && indexOfChildInParent(node, parent) === 0) {
+      Env.get().stackMap['lhs'].push(Env.get().codeOutput.length)
+    }
   }
 }
 

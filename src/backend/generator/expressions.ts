@@ -58,3 +58,24 @@ export const inlineFunctionCodeGen = {
     }
   }
 }
+
+export const conditionalExpressionCodeGen = {
+  enter (): void {
+    let variable = 'null'
+    if (Env.get().stackMap['lhs'].length === 2) {
+      const start = Env.get().stackMap['lhs'][0] as number
+      const end = Env.get().stackMap['lhs'][1] as number
+      const identifier = Env.get().codeOutput.substring(start, end)
+      if (Env.get().symbolTable.get(identifier)) {
+        variable = identifier
+      }
+    }
+    Env.get().codeOutput += `__cdt_expr__(${variable},`
+  },
+  between (): void {
+    Env.get().codeOutput += ','
+  },
+  exit (): void {
+    Env.get().codeOutput += ')'
+  }
+}

@@ -1,7 +1,15 @@
-import { wrappedCodeGen, unaryCodeGen, blockFunctionCodeGen, argsCodeGen, inlineFunctionCodeGen } from './generator/expressions'
 import { AstNode } from 'backend/traverse'
 import Env from '../enviroment/env'
 import { findIdentifierAtArgsNode } from '../utils/aux-functions'
+import {
+  wrappedCodeGen,
+  unaryCodeGen,
+  blockFunctionCodeGen,
+  argsCodeGen,
+  inlineFunctionCodeGen,
+  conditionalExpressionCodeGen
+} from './generator/expressions'
+import { Polyfill } from '../enviroment/polyfill'
 
 const expression = {
   enter (node: AstNode, parent: AstNode): void {
@@ -65,11 +73,25 @@ export const inlineFunction = {
   }
 }
 
+export const conditionalExpression = {
+  enter (): void {
+    conditionalExpressionCodeGen.enter()
+  },
+  between (): void {
+    conditionalExpressionCodeGen.between()
+  },
+  exit (): void {
+    conditionalExpressionCodeGen.exit()
+    Env.get().injectPolyfill(Polyfill.CTD_EXPR)
+  }
+}
+
 export default {
   expression,
   wrapped,
   unary,
   blockFunction,
   args,
-  inlineFunction
+  inlineFunction,
+  conditionalExpression
 }
