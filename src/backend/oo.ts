@@ -82,8 +82,8 @@ const property = {
   between (node: AstNode, parent: AstNode, index: number): void {
     propertyCodeGen.between(node, parent, index)
   },
-  exit (): void {
-    propertyCodeGen.exit()
+  exit (node: AstNode): void {
+    propertyCodeGen.exit(node)
   }
 }
 
