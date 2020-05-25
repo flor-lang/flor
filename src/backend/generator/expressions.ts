@@ -2,6 +2,19 @@ import Env from '../../enviroment/env'
 import { AstNode } from 'backend/traverse'
 import { isEmptyNode } from '../../utils/aux-functions'
 
+export const expressionCodeGen = {
+  enter (node: AstNode, parent: AstNode): void {
+    if (parent && parent.name === 'assignment') {
+      Env.get().codeOutput += '('
+    }
+  },
+  exit (node: AstNode, parent: AstNode): void {
+    if (parent && parent.name === 'assignment') {
+      Env.get().codeOutput += ') || null'
+    }
+  }
+}
+
 export const wrappedCodeGen = {
   enter (): void {
     Env.get().codeOutput += '('

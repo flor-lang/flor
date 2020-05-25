@@ -6,6 +6,8 @@ import { traverser } from '../src/backend/traverse'
 import { visitor } from '../src/backend/visitor'
 import Env from '../src/enviroment/env'
 
+export const assignRhs = (code: string): string => `(${code}) || null;`
+
 const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false, index: number = undefined) => (a: string[]) => {
   a.map((s, i) => {
     const result = p.parse(s)

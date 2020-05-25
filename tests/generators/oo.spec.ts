@@ -1,5 +1,5 @@
 import { ClassDeclaration, ClassInstantiation } from '../../src/parsers/oo'
-import { generatorTester } from '../utils'
+import { generatorTester, assignRhs } from '../utils'
 
 test('generate class declaration', (): void => {
   const tryGenerateClassDeclaration = generatorTester(ClassDeclaration)
@@ -30,7 +30,7 @@ test('generate class declaration', (): void => {
       `,
       'class Carro{\nstatic __propertiesDeclarations__() {if (this) {this.modelo = \"Esportivo\"}\n' + 
       'if (this) {this.marca = null}\nif (this) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = 2020}\n}constructor(marca=null)' + 
-      '{\nCarro.__propertiesDeclarations__.bind(this)()\nlet __marca = marca;}}\nCarro.__propertiesDeclarations__.bind(null)()\n'
+      `{\nCarro.__propertiesDeclarations__.bind(this)()\nlet __marca = ${assignRhs('marca')}}}\nCarro.__propertiesDeclarations__.bind(null)()\n`
     ],
     [
       `
@@ -43,7 +43,7 @@ test('generate class declaration', (): void => {
       fim
       `,
       'class Luz{\nstatic __propertiesDeclarations__() {if (this) {this.ligado = true}\n}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}' +
-      'ligar(){\nthis.ligado = true;}desligar(){\nthis.ligado = false;} static esta_ligado(){ return this.ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n'
+      `ligar(){\nthis.ligado = ${assignRhs('true')}}desligar(){\nthis.ligado = ${assignRhs('false')}} static esta_ligado(){ return this.ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n`
     ]
   ])
 })

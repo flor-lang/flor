@@ -2,6 +2,7 @@ import { AstNode } from 'backend/traverse'
 import Env from '../enviroment/env'
 import { findIdentifierAtArgsNode } from '../utils/aux-functions'
 import {
+  expressionCodeGen,
   wrappedCodeGen,
   unaryCodeGen,
   blockFunctionCodeGen,
@@ -20,11 +21,13 @@ const expression = {
         Env.get().symbolTable.put(id, node)
       })
     }
+    expressionCodeGen.enter(node, parent)
   },
   exit (node: AstNode, parent: AstNode): void {
     if (parent && parent.name === 'inline-function') {
       Env.get().popSymbolTable()
     }
+    expressionCodeGen.exit(node, parent)
   }
 }
 
