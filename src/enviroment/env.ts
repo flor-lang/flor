@@ -1,5 +1,5 @@
 import SymbolTable from './symbol-table'
-import { Polyfill } from './polyfill'
+import { Polyfill, PolyfillDependenciesMap } from './polyfill'
 
 type EnvContext = 'test' | 'dev' | 'prod'
 export default class Env {
@@ -43,9 +43,16 @@ export default class Env {
 
   public injectPolyfill (polyfill: Polyfill): void {
     if (this.polyfills.includes(polyfill) === false) {
+      this.injectPolyfillDependencies(polyfill)
       this.polyfills.push(polyfill)
       this.codeOutput = `\n${polyfill}\n${this.codeOutput}`
     }
+  }
+
+  private injectPolyfillDependencies (polyfill: Polyfill): void {
+    PolyfillDependenciesMap
+      .find(([polyfillKey]): boolean => polyfillKey === polyfill)[1]
+      .forEach((dependency: Polyfill): void => this.injectPolyfill(dependency))
   }
 
   public clean (context: EnvContext = 'dev'): void {
