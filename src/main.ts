@@ -29,6 +29,7 @@ const loadStandardLib = (callbackfn: (identifier: string, node: AstNode) => void
 }
 
 const traverseAstFrom = (code: string, toLoadStandardLib = false): void => {
+  Env.get().clean('prod')
   if (toLoadStandardLib) {
     loadStandardLib((identifier, node): void => Env.get().symbolTable.put(identifier, node))
   }
@@ -46,7 +47,7 @@ export const getSymbolTable = (code: string, toLoadStandardLib = false): SymbolT
   traverseAstFrom(code, toLoadStandardLib)
   const table = Env.get().symbolTable
   loadStandardLib((identifier): AstNode => table.rm(identifier))
-  Env.get().clean()
+  Env.get().clean('prod')
   return table
 }
 
@@ -58,8 +59,8 @@ export const getSymbolTable = (code: string, toLoadStandardLib = false): SymbolT
  */
 export const compile = (code: string, toLoadStandardLib = false): string => {
   traverseAstFrom(code, toLoadStandardLib)
-  const output = Env.get().codeOutput
-  Env.get().clean()
+  const output = Env.get().getCodeOutputPolyfilled()
+  Env.get().clean('prod')
   return output
 }
 
@@ -76,7 +77,7 @@ export const tryCompile = (code: string, toLoadStandardLib = false): { success: 
     return { success: true, result }
   } catch (error) {
     const result = FlorCompilationErrorMessage(error)
-    Env.get().clean()
+    Env.get().clean('prod')
     return { success: false, result }
   }
 }

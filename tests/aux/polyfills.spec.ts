@@ -23,7 +23,7 @@ test('test expression wrapper polyfill', (): void => {
       ['msg ="druida louco"', 'let msg = __expr__("druida louco");'],
     ], 
     'const __nullish_coalesce__=(l,_=null)=>null==l?_:l;\n' + 
-    'const expr=_=>__nullish_coalesce__(_);\n'
+    'const __expr__=_=>__nullish_coalesce__(_);\n'
   )
 })
 
@@ -36,7 +36,7 @@ test('test expression and condional expression polyfills', (): void => {
       ['msg = se 0 > 0 entao "hey"', 'msg = __expr__(__cdt_expr__(msg,0>0,"hey",));'],
     ],
     'const __nullish_coalesce__=(l,_=null)=>null==l?_:l;\n' + 
-    'const expr=_=>__nullish_coalesce__(_);\n' +
+    'const __expr__=_=>__nullish_coalesce__(_);\n' +
     'const __cdt_expr__=(_,c,l,n)=>n?c?l:n:c?l:_||null;\n'
   )
 })

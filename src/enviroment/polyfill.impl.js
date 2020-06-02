@@ -39,4 +39,4 @@ const __nullish_coalesce__ = (expression, rhs = null) => {
  * 
  * @param {*} expression Common flor expression
  */
-const expr = (expression) => __nullish_coalesce__(expression)
+const __expr__ = (expression) => __nullish_coalesce__(expression)
