@@ -41,14 +41,23 @@ export default class Env {
     this._symbolTable = this.tableStack.pop() || null
   }
 
+  public getCodeOutputPolyfilled (): string {
+    let output = this.codeOutput
+    this.polyfills.forEach((polyfill: Polyfill): void => {
+      output = `${polyfill}\n${output}`
+    })
+    return output
+  }
+
   public injectPolyfill (polyfill: Polyfill): void {
     if (this.polyfills.includes(polyfill) === false) {
-      this.injectPolyfillDependencies(polyfill)
       this.polyfills.push(polyfill)
-      this.codeOutput = `\n${polyfill}\n${this.codeOutput}`
+      this.injectPolyfillDependencies(polyfill)
     }
   }
 
+  // FIXME: Provisional Method
+  // TODO: Injection by Tree Dependency
   private injectPolyfillDependencies (polyfill: Polyfill): void {
     PolyfillDependenciesMap
       .find(([polyfillKey]): boolean => polyfillKey === polyfill)[1]
@@ -56,17 +65,19 @@ export default class Env {
   }
 
   public clean (context: EnvContext = 'dev'): void {
-    this.polyfills = []
-    this.tableStack = []
     this.context = context
     this.codeOutput = ''
-    this._symbolTable = new SymbolTable(null)
-    this.stackMap = {
-      lhs: [],
-      propDeclarations: [],
-      superFirst: [],
-      classScope: [],
-      staticScope: []
+    this.polyfills = []
+    if (context !== 'test') {
+      this.tableStack = []
+      this._symbolTable = new SymbolTable(null)
+      this.stackMap = {
+        lhs: [],
+        propDeclarations: [],
+        superFirst: [],
+        classScope: [],
+        staticScope: []
+      }
     }
   }
 }

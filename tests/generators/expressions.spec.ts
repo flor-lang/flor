@@ -61,10 +61,9 @@ test('generate expression function declaration', (): void => {
 
 test('generate coditional expression declaration', (): void => {
   const tryGenerateExpressions = generatorTester(Expression)
-  const polyfilled = (code: string): string => `\nconst __cdt_expr__=(_,c,l,n)=>n?c?l:n:c?l:_||null;\n${code}`
   
   tryGenerateExpressions([
-    ['se verdadeiro entao 1 senao 0', polyfilled('__cdt_expr__(null,true,1,0)')],
+    ['se verdadeiro entao 1 senao 0', '__cdt_expr__(null,true,1,0)'],
     ['se nulo entao 1 senao 0', '__cdt_expr__(null,null,1,0)'],
     ['se 5 > 0 entao 1', '__cdt_expr__(null,5>0,1,)'],
     ['se 0 > 0 entao "hey"', '__cdt_expr__(null,0>0,"hey",)'],

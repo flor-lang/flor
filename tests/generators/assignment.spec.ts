@@ -19,7 +19,6 @@ test('test identifier', () => {
 
 test('test assignment', () => {
   const tryGenerateAssignment = generatorTester(Assignment)
-  const polyfilled = (code: string): string => `\nconst __cdt_expr__=(_,c,l,n)=>n?c?l:n:c?l:_||null;\n${code}`
 
   tryGenerateAssignment([
     ['somar = nulo', `let somar = ${assignRhs('null')}`],
@@ -28,7 +27,7 @@ test('test assignment', () => {
     ['somar = (x) := x + y', `somar = ${assignRhs('(x=null) => x+y')}`],
     ['somar = funcao(x, y) soma = x + y fim', `somar = ${assignRhs(`function(x=null,y=null){\nlet soma = ${assignRhs('x+y')}}`)}`],
     ['somar = funcao(x, y) retornar x + y fim', `somar = ${assignRhs('function(x=null,y=null){\nreturn x+y}')}`],
-    ['somar = se 5 > 0 entao (x) := x + y', polyfilled(`somar = ${assignRhs('__cdt_expr__(somar,5>0,(x=null) => x+y,)')}`)],
+    ['somar = se 5 > 0 entao (x) := x + y', `somar = ${assignRhs('__cdt_expr__(somar,5>0,(x=null) => x+y,)')}`],
     ['teste = se verdadeiro entao 1 senao -1', `teste = ${assignRhs('__cdt_expr__(teste,true,1,(-1))')}`],
   ])
 });

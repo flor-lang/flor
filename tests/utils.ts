@@ -6,7 +6,7 @@ import { traverser } from '../src/backend/traverse'
 import { visitor } from '../src/backend/visitor'
 import Env from '../src/enviroment/env'
 
-export const assignRhs = (code: string): string => `(${code}) || null;`
+export const assignRhs = (code: string): string => `__expr__(${code});`
 
 const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false, index: number = undefined) => (a: string[]) => {
   a.map((s, i) => {
@@ -26,20 +26,23 @@ const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false,
 export const canParse = parseStrings(true)
 export const cantParse = parseStrings(false)
 
-export const generatorTester = (p: Parser<any>, log: boolean = false, logIndex: number = undefined) => (inputs: [string, string][]) => {
+export const generatorTester = (p: Parser<any>, log: boolean = false, logIndex: number = undefined) => (inputs: [string, string][], polyfill = '') => {
   inputs.forEach((i, index) => {
-    Env.get().context = 'test'
-    Env.get().codeOutput = ''
+    Env.get().clean('test')
+
     const ast = p.tryParse(i[0])
     traverser(ast, visitor)
-    const resultCode = Env.get().codeOutput
+
+    const resultCode = polyfill
+      ? Env.get().getCodeOutputPolyfilled()
+      : Env.get().codeOutput
 
     if (log && index === logIndex) {
       const resultAst = p.parse(i[0])
       logAst(resultAst, true)
     }
 
-    expect(resultCode).toBe(i[1])
+    expect(resultCode).toBe(`${polyfill}${i[1]}`)
   })
 }
 

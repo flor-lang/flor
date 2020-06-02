@@ -6,5 +6,6 @@ export enum Polyfill {
 
 export const PolyfillDependenciesMap: [Polyfill, Polyfill[]][] = [
   [Polyfill.CTD_EXPR, []],
+  [Polyfill.NULL_CLSC, []],
   [Polyfill.EXPR, [Polyfill.NULL_CLSC]]
 ]

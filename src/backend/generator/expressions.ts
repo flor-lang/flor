@@ -1,16 +1,18 @@
 import Env from '../../enviroment/env'
 import { AstNode } from 'backend/traverse'
 import { isEmptyNode } from '../../utils/aux-functions'
+import { Polyfill } from '../../enviroment/polyfill'
 
 export const expressionCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent && parent.name === 'assignment') {
-      Env.get().codeOutput += '('
+      Env.get().codeOutput += '__expr__('
     }
   },
   exit (node: AstNode, parent: AstNode): void {
     if (parent && parent.name === 'assignment') {
-      Env.get().codeOutput += ') || null'
+      Env.get().codeOutput += ')'
+      Env.get().injectPolyfill(Polyfill.EXPR)
     }
   }
 }

@@ -59,14 +59,14 @@ export const propertyCodeGen = {
       if (isEmptyNode(assignmentNode)) {
         Env.get().codeOutput += 'null'
       } else {
-        Env.get().codeOutput += '('
+        Env.get().codeOutput += '__expr__('
       }
     }
   },
   exit (node: AstNode): void {
     const assignmentNode = (node.value as AstNode[])[2]
     if (isEmptyNode(assignmentNode) === false) {
-      Env.get().codeOutput += ') || null'
+      Env.get().codeOutput += ')'
     }
     Env.get().codeOutput += '}\n'
   }
