@@ -9,7 +9,7 @@ import { StandardLib } from './lib/standard.flib'
 import comments from './utils/comments'
 
 export { logAst, logSymbolTable } from './utils/logger'
-export { StandardLibJSImpl } from './lib/jsimpl/standard'
+export { StandardLibJSImpl } from './lib/impl/standard'
 export { SymbolTable, AstNode, FlorRuntimeErrorMessage }
 
 /**
