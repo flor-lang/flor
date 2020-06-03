@@ -1,12 +1,12 @@
 import { Visitor } from './traverse'
 
-import assignment from './assignment'
-import literals from './literals'
-import operators from './operators'
-import program from './program'
-import expressions from './expressions'
-import statement from './statement'
-import oo from './oo'
+import assignment from './visitors/assignment'
+import literals from './visitors/literals'
+import operators from './visitors/operators'
+import program from './visitors/program'
+import expressions from './visitors/expressions'
+import statement from './visitors/statement'
+import oo from './visitors/oo'
 
 export const visitor: Visitor = {
   ...program,

@@ -6,10 +6,10 @@ import {
   forEachCodeGen,
   ifThenElseCodeGen,
   elifCodeGen
-} from './generator/statement'
-import { AstNode } from './traverse'
-import { evaluateFunctionCallUse } from './semantics/definitions'
-import { evaluateFunctionCallAsClassInstantiation } from './semantics/oo'
+} from '../generators/statement'
+import { AstNode } from '../traverse'
+import { evaluateFunctionCallUse } from '../semantics/definitions'
+import { evaluateFunctionCallAsClassInstantiation } from '../semantics/oo'
 
 const functionCall = {
   enter (node: AstNode, parent: AstNode): void {

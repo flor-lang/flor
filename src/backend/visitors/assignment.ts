@@ -1,9 +1,9 @@
-import { AstNode } from './traverse'
-import Env from '../enviroment/env'
-import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier, locNodeHasEmptyParams } from '../utils/aux-functions'
-import { evaluateLocUse, evaluatePrivatePropertyAccessAtLocNode } from './semantics/definitions'
-import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen, locCodeGen } from './generator/assignment'
-import { evaluateIdentifierAsClassMember } from './semantics/oo'
+import { AstNode } from '../traverse'
+import Env from '../../enviroment/env'
+import { indexOfChildInParent, identifierValueOfLocNode, locSubscriptableIsIdentifier, locNodeHasEmptyParams } from '../../utils/aux-functions'
+import { evaluateLocUse, evaluatePrivatePropertyAccessAtLocNode } from '../semantics/definitions'
+import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeGen, locCodeGen } from '../generators/assignment'
+import { evaluateIdentifierAsClassMember } from '../semantics/oo'
 
 const assignment = {
   between (): void {

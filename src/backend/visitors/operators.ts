@@ -1,5 +1,5 @@
-import { AstNode } from './traverse'
-import { operatorCodeGen } from './generator/operators'
+import { AstNode } from '../traverse'
+import { operatorCodeGen } from '../generators/operators'
 
 const operator = {
   enter (node: AstNode): void {

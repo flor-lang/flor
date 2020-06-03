@@ -6,17 +6,17 @@ import {
   constructorCodeGen,
   methodCodeGen,
   classInstantiationCodeGen
-} from './generator/oo'
+} from '../generators/oo'
 import {
   evaluateSuperCallAtConstructorSubclass,
   evaluateInheritanceParent,
   evaluateInterfaceUse,
   evaluateInterfaceImplementations
-} from './semantics/oo'
-import { AstNode } from './traverse'
-import Env from '../enviroment/env'
-import { findClassMemberIndentifiers, isEmptyNode } from '../utils/aux-functions'
-import { evaluateGlobalDeclaration } from './semantics/definitions'
+} from '../semantics/oo'
+import { AstNode } from '../traverse'
+import Env from '../../enviroment/env'
+import { findClassMemberIndentifiers, isEmptyNode } from '../../utils/aux-functions'
+import { evaluateGlobalDeclaration } from '../semantics/definitions'
 
 const interfaceDeclaration = {
   enter (node: AstNode): void {

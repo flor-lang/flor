@@ -1,6 +1,6 @@
 import { AstNode } from 'backend/traverse'
-import Env from '../enviroment/env'
-import { findIdentifierAtArgsNode } from '../utils/aux-functions'
+import Env from '../../enviroment/env'
+import { findIdentifierAtArgsNode } from '../../utils/aux-functions'
 import {
   expressionCodeGen,
   wrappedCodeGen,
@@ -9,8 +9,8 @@ import {
   argsCodeGen,
   inlineFunctionCodeGen,
   conditionalExpressionCodeGen
-} from './generator/expressions'
-import { Polyfill } from '../enviroment/polyfill'
+} from '../generators/expressions'
+import { Polyfill } from '../../enviroment/polyfill'
 
 const expression = {
   enter (node: AstNode, parent: AstNode): void {

@@ -1,5 +1,5 @@
-import { AstNode } from './traverse'
-import { numberCodeGen, stringCodeGen, booleanCodeGen, nullCodeGen, arrayCodeGen, keyValueCodeGen, dictionaryCodeGen } from './generator/literals'
+import { AstNode } from '../traverse'
+import { numberCodeGen, stringCodeGen, booleanCodeGen, nullCodeGen, arrayCodeGen, keyValueCodeGen, dictionaryCodeGen } from '../generators/literals'
 
 const number = {
   enter (node: AstNode): void {
