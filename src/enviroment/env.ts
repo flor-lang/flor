@@ -2,6 +2,7 @@ import SymbolTable from './symbol-table'
 import { Polyfill, PolyfillDependenciesMap } from './polyfill'
 
 type EnvContext = 'test' | 'dev' | 'prod'
+
 export default class Env {
   private static instance: Env
 
@@ -72,11 +73,11 @@ export default class Env {
       this.tableStack = []
       this._symbolTable = new SymbolTable(null)
       this.stackMap = {
-        lhs: [],
-        propDeclarations: [],
-        superFirst: [],
-        classScope: [],
-        staticScope: [],
+        LHS: [],
+        PROP_DECLARATIONS: [],
+        SUPER_FIRST: [],
+        CLASS_SCOPE: [],
+        STATIC_SCOPE: [],
         FUNCTION_NAME: []
       }
     }

@@ -8,7 +8,7 @@ export const classDeclarationCodeGen = {
   },
   exit (): void {
     Env.get().codeOutput += '}\n'
-    const classStack = Env.get().stackMap['classScope']
+    const classStack = Env.get().stackMap['CLASS_SCOPE']
     const className = classStack[classStack.length - 1]
     Env.get().codeOutput += `${className}.__propertiesDeclarations__.bind(null)()\n`
   }
@@ -31,9 +31,9 @@ export const propertiesCodeGen = {
   },
   exit (): void {
     Env.get().codeOutput += '}'
-    const classStack = Env.get().stackMap['classScope']
+    const classStack = Env.get().stackMap['CLASS_SCOPE']
     const className = classStack[classStack.length - 1]
-    Env.get().stackMap['propDeclarations'].push(`${className}.__propertiesDeclarations__.bind(this)()\n`)
+    Env.get().stackMap['PROP_DECLARATIONS'].push(`${className}.__propertiesDeclarations__.bind(this)()\n`)
   }
 }
 
@@ -43,7 +43,7 @@ export const propertyCodeGen = {
     const modifierValue = nodeValue[0].value
     let owner = 'this'
     if (modifierValue === 'estatico') {
-      const classStack = Env.get().stackMap['classScope']
+      const classStack = Env.get().stackMap['CLASS_SCOPE']
       const className = classStack[classStack.length - 1]
       Env.get().codeOutput += `if ('${nodeValue[1].value}' in ${className} === false) {`
       owner = className as string
@@ -76,11 +76,11 @@ export const constructorCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     const inheritanceNode = (parent.value as AstNode[])[0]
     if (isEmptyNode(node)) {
-      const propDeclarations = Env.get().stackMap['propDeclarations'].pop()
+      const propDeclarations = Env.get().stackMap['PROP_DECLARATIONS'].pop()
       Env.get().codeOutput += `constructor(){\n${
         isEmptyNode(inheritanceNode) ? '' : 'super();\n'}${propDeclarations}}`
     } else if (isEmptyNode(inheritanceNode) === false) {
-      Env.get().stackMap['superFirst'].push('super')
+      Env.get().stackMap['SUPER_FIRST'].push('super')
     }
   }
 }

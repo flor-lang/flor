@@ -5,9 +5,9 @@ import Analyser from './analyser'
 const identifierAsClassMember = (node: AstNode): void => {
   const identifierValue = node.value as string
   if (identifierValue.startsWith('#') || identifierValue === 'super') {
-    if (Env.get().stackMap['classScope'].length === 0) {
+    if (Env.get().stackMap['CLASS_SCOPE'].length === 0) {
       Analyser.throwError(`Operadores [#, super] não podem ser usados fora da definição de uma classe.`, node)
-    } else if (Env.get().stackMap['staticScope'].length > 0) {
+    } else if (Env.get().stackMap['STATIC_SCOPE'].length > 0) {
       Analyser.throwError(`Membros [#, super] não podem ser usados dentro de um método estático.`, node)
     }
   }
@@ -73,7 +73,7 @@ const interfaceImplementations = (node: AstNode): void => {
       const memberNode = Env.get().symbolTable.get(`#${memberIdentifier}`)
 
       if (memberNode === null) {
-        const classStack = Env.get().stackMap['classScope']
+        const classStack = Env.get().stackMap['CLASS_SCOPE']
         const className = classStack[classStack.length - 1]
         Analyser.throwError(
           `A classe '${className}' não está em conforme com a interface '${identifier}',\n` +

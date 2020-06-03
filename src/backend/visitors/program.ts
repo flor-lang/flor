@@ -18,9 +18,9 @@ const block = {
     }
   },
   between (node: AstNode, parent: AstNode, index: number): void {
-    if (index === 0 && Env.get().stackMap['superFirst'].length > 0) {
+    if (index === 0 && Env.get().stackMap['SUPER_FIRST'].length > 0) {
       blockCodeGen.between()
-      Env.get().stackMap['superFirst'].pop()
+      Env.get().stackMap['SUPER_FIRST'].pop()
     }
   },
   exit (node: AstNode, parent: AstNode): void {

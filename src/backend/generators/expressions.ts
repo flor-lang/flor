@@ -77,9 +77,9 @@ export const inlineFunctionCodeGen = {
 export const conditionalExpressionCodeGen = {
   enter (): void {
     let variable = 'null'
-    if (Env.get().stackMap['lhs'].length === 2) {
-      const start = Env.get().stackMap['lhs'][0] as number
-      const end = Env.get().stackMap['lhs'][1] as number
+    if (Env.get().stackMap['LHS'].length === 2) {
+      const start = Env.get().stackMap['LHS'][0] as number
+      const end = Env.get().stackMap['LHS'][1] as number
       const identifier = Env.get().codeOutput.substring(start, end)
       if (Env.get().symbolTable.get(identifier)) {
         variable = identifier

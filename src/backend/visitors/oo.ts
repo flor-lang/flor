@@ -31,14 +31,14 @@ const classDeclaration = {
     evaluateGlobalDeclaration(node)
     const identifier = (node.value as AstNode[])[0].value as string
     Env.get().symbolTable.put(identifier, node)
-    Env.get().stackMap['classScope'].push(identifier)
+    Env.get().stackMap['CLASS_SCOPE'].push(identifier)
     classDeclarationCodeGen.enter()
   },
   exit (): void {
     /* Pop Class scope created at contructor::enter */
     Env.get().popSymbolTable()
     classDeclarationCodeGen.exit()
-    Env.get().stackMap['classScope'].pop()
+    Env.get().stackMap['CLASS_SCOPE'].pop()
   }
 }
 
@@ -117,7 +117,7 @@ const method = {
     const modifierValue = nodeValue[0].value
     const methodName = nodeValue[1].value as string
     if (modifierValue === 'estatico') {
-      Env.get().stackMap['staticScope'].push(methodName)
+      Env.get().stackMap['STATIC_SCOPE'].push(methodName)
     }
     methodCodeGen.enter(node)
   },
@@ -125,7 +125,7 @@ const method = {
     const nodeValue = node.value as AstNode[]
     const modifierValue = nodeValue[0].value
     if (modifierValue === 'estatico') {
-      Env.get().stackMap['staticScope'].pop()
+      Env.get().stackMap['STATIC_SCOPE'].pop()
     }
   }
 }
