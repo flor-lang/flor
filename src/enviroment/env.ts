@@ -76,7 +76,8 @@ export default class Env {
         propDeclarations: [],
         superFirst: [],
         classScope: [],
-        staticScope: []
+        staticScope: [],
+        FUNCTION_NAME: []
       }
     }
   }

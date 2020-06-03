@@ -6,14 +6,22 @@ import { assignmentCodeGen, identifierCodeGen, objectableCodeGen, indexableCodeG
 import { evaluateIdentifierAsClassMember } from '../semantics/oo'
 
 const assignment = {
-  between (): void {
+  between (node: AstNode): void {
+    const locLhsNode = (node.value as AstNode[])[0] as AstNode
+    if (locSubscriptableIsIdentifier(locLhsNode)) {
+      const rhsNode = (node.value as AstNode[])[1] as AstNode
+      const functionName = identifierValueOfLocNode(locLhsNode)
+      if ((rhsNode.value as AstNode).name === 'block-function') {
+        Env.get().stackMap['FUNCTION_NAME'].push(functionName)
+      }
+    }
     assignmentCodeGen.between()
   },
+
   exit (node: AstNode): void {
     // TODO: After than expression visitor evaluate type of expression,
     // associate type to identifier at symbol table
     const locLhsNode = (node.value as AstNode[])[0] as AstNode
-    // evaluatePrivatePropertyAccessAtLocNode(locLhsNode)
     if (locSubscriptableIsIdentifier(locLhsNode)) {
       Env.get().symbolTable.put(identifierValueOfLocNode(locLhsNode), locLhsNode)
     }

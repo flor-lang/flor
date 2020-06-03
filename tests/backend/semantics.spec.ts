@@ -391,3 +391,23 @@ test('test private properties access', () => {
   ])
 
 })
+
+
+test('test private properties access', () => {
+  semanticTester(false)([
+    `fibonacci = funcao (posicao)
+        se posicao < 2 entao
+            retornar posicao
+        senao
+            retornar fibonacci(posicao - 1) + fibonacci(posicao - 2)
+        fim
+    fim`,
+    `recursao1 = funcao (n)
+      foo = funcao ()
+        retornar foo() + recursao1(0)
+      fim
+      foo()
+      retornar recursao1(n-1)
+    fim`
+  ])
+})

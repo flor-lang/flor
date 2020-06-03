@@ -11,6 +11,10 @@ const block = {
     }
     if (parent.name === 'block-function') {
       const argsNode = (parent.value as AstNode[])[0]
+      const functionName = Env.get().stackMap['FUNCTION_NAME'].pop()
+      if (functionName) {
+        Env.get().symbolTable.put(functionName as string, parent)
+      }
       findIdentifierAtArgsNode(argsNode).forEach(([id, node]): void => {
         Env.get().symbolTable.put(id, node)
       })
