@@ -1,0 +1,31 @@
+/**
+Sequencia de Fibonacci
+*/
+
+// Algoritmo recursivo (chama ele mesmo) que retorna o numero de 
+// uma determinada posicao da sequencia de fibonacci
+fibonacci = funcao (posicao)
+    se posicao < 2 entao
+        retornar posicao
+    senao
+        retornar fibonacci(posicao - 1) + fibonacci(posicao - 2)
+    fim
+fim
+
+// Algoritmo que retornar um texto com a sequencia de fibonacci com n elementos
+obter_sequencia_de_fibo = funcao (numero_de_elementos)
+    i = 1
+    sequencia = ""
+    enquanto i < numero_de_elementos + 1 faca
+        sequencia = sequencia + fibonacci(i) + " "
+        i = i + 1
+    fim
+    retornar sequencia
+fim
+
+numero_de_elementos = 10
+escrever(
+    "Sequencia de fibonacci com " +
+    numero_de_elementos + " elementos:\n  " +
+    obter_sequencia_de_fibo(numero_de_elementos)
+)
