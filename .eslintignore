@@ -1,5 +1,5 @@
 dist/
+tests/
 doc/examples
 src/lib/impl
-src/enviroment/polyfill.impl.js
-tests/
+src/enviroment/impl
