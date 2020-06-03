@@ -1,6 +1,6 @@
 import { AstNode } from '../traverse'
 import Env from '../../enviroment/env'
-import { findIdentifierAtArgsNode } from '../../utils/aux-functions'
+import { insertFunctionArgumentsInSymbolTable } from '../../utils/aux-functions'
 import { blockCodeGen } from '../../backend/generators/program'
 
 const block = {
@@ -10,14 +10,7 @@ const block = {
       blockCodeGen.enter()
     }
     if (parent.name === 'block-function') {
-      const argsNode = (parent.value as AstNode[])[0]
-      const functionName = Env.get().stackMap['FUNCTION_NAME'].pop()
-      if (functionName) {
-        Env.get().symbolTable.put(functionName as string, parent)
-      }
-      findIdentifierAtArgsNode(argsNode).forEach(([id, node]): void => {
-        Env.get().symbolTable.put(id, node)
-      })
+      insertFunctionArgumentsInSymbolTable(parent)
     }
     if (parent.name === 'for-each') {
       const iteratorIdentifierNode = (parent.value as AstNode[])[0]

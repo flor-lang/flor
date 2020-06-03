@@ -10,8 +10,9 @@ const assignment = {
     const locLhsNode = (node.value as AstNode[])[0] as AstNode
     if (locSubscriptableIsIdentifier(locLhsNode)) {
       const rhsNode = (node.value as AstNode[])[1] as AstNode
+      const expressionNodeName = (rhsNode.value as AstNode).name
       const functionName = identifierValueOfLocNode(locLhsNode)
-      if ((rhsNode.value as AstNode).name === 'block-function') {
+      if (['block-function', 'inline-function'].includes(expressionNodeName)) {
         Env.get().stackMap['FUNCTION_NAME'].push(functionName)
       }
     }

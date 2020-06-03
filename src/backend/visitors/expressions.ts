@@ -1,6 +1,6 @@
 import { AstNode } from 'backend/traverse'
 import Env from '../../enviroment/env'
-import { findIdentifierAtArgsNode } from '../../utils/aux-functions'
+import { insertFunctionArgumentsInSymbolTable } from '../../utils/aux-functions'
 import {
   expressionCodeGen,
   wrappedCodeGen,
@@ -16,10 +16,7 @@ const expression = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent && parent.name === 'inline-function') {
       Env.get().pushSymbolTable()
-      const argsNode = (parent.value as AstNode[])[0]
-      findIdentifierAtArgsNode(argsNode).forEach(([id, node]): void => {
-        Env.get().symbolTable.put(id, node)
-      })
+      insertFunctionArgumentsInSymbolTable(parent)
     }
     expressionCodeGen.enter(node, parent)
   },

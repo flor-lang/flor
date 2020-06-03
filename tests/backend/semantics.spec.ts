@@ -408,6 +408,7 @@ test('test private properties access', () => {
       fim
       foo()
       retornar recursao1(n-1)
-    fim`
+    fim`,
+    'fibo = (n) := se n < 2 entao n senao fibo(n - 1) + fibo(n - 2)'
   ])
 })

@@ -18,6 +18,29 @@ export const locNodeHasEmptyParams = (locNode: AstNode): boolean => isEmptyNode(
 export const locSubscriptableIsIdentifier = (locNode: AstNode): boolean => ((locNode.value as AstNode[])[0].value as AstNode).name === 'identifier'
 export const identifierValueOfLocNode = (locNode: AstNode): string => ((locNode.value as AstNode[])[0].value as AstNode).value as string
 export const findIdentifierAtArgsNode = (argsNode: AstNode): [string, AstNode][] => (argsNode.value as AstNode[]).map((node: AstNode): [string, AstNode] => [node.value as string, node])
+
+/**
+ * Insert name and arguments of a function in your block symbol table
+ *
+ * @param functionNode Node of a function: block-function or inline-function
+ */
+export const insertFunctionArgumentsInSymbolTable = (functionNode: AstNode): void => {
+  const argsNode = (functionNode.value as AstNode[])[0]
+  const functionName = Env.get().stackMap['FUNCTION_NAME'].pop()
+  if (functionName) {
+    Env.get().symbolTable.put(functionName as string, functionNode)
+  }
+  findIdentifierAtArgsNode(argsNode).forEach(([id, node]): void => {
+    Env.get().symbolTable.put(id, node)
+  })
+}
+
+/**
+ * Find members of class nodes and return in tuples as [identifier, memberNode]
+ * @param classMetaNode Meta Node of class node
+ * @param depth Depth of members to handle cases of inheritances
+ * @returns Tuple [identifier, node] of class members
+ */
 export const findClassMemberIndentifiers = (classMetaNode: AstNode, depth = 0): [string, AstNode][] => {
   const members: [string, AstNode][] = []
   const metaNode = classMetaNode.value as AstNode[]
