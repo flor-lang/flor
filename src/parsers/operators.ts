@@ -26,6 +26,7 @@ export const MinusOperator = P.string('-')
 export const AsteriskOperator = P.string('*')
 export const SlashOperator = P.string('/')
 export const PercentOperator = P.string('%')
+export const ExponentialOperator = P.string('^')
 
 export const Equal = P.string('=')
 export const Greater = P.string('>')

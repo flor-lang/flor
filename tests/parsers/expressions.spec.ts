@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction, ConditionalExpression } from '../../src/parsers/expressions'
+import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction, ConditionalExpression, Exponential } from '../../src/parsers/expressions'
 import { canParse, cantParse } from '../utils'
 
 
@@ -16,6 +16,14 @@ test('parse unary', (): void => {
 
   canParseUnary(['5', '-5', '+5', '-(-5)', '-foo', '-foo[bar]', '!(5 > 4)', '!verdadeiro'])
   cantParseUnary(['- 5', '-+5', '*5', '', 'foo!'])
+})
+
+test('parse exponential', (): void => {
+  const canParseExponential = canParse(Exponential)
+  const cantParseExponential = cantParse(Exponential)
+
+  canParseExponential(['2^3', '2^-4', '-4^-1', '(-1)^(-3)', 'base^expoente', '2^(5 * 2)'])
+  cantParseExponential(['5^', '^2', '^', '2^5 * 2', '2^10 + 4'])
 })
 
 test('parse term', (): void => {
