@@ -29,7 +29,13 @@ test('generate basic expression code', (): void => {
     ['5 != 2', '5!=2'],
     ['5 diferente de 2', '5!=2'],
     ['verdadeiro ou falso', 'true||false'],
-    ['verdadeiro e falso', 'true&&false']
+    ['verdadeiro e falso', 'true&&false'],
+    ['2^3', '(Math.pow(2,3))'],
+    ['2^-4', '(Math.pow(2,(-4)))'],
+    ['-4^-1', '(Math.pow((-4),(-1)))'],
+    ['(-1)^(-3)', '(Math.pow(((-1)),((-3))))'],
+    ['base^expoente', '(Math.pow(base,expoente))'],
+    ['2^(5 * 2)', '(Math.pow(2,(5*2)))']
   ])
 })
 

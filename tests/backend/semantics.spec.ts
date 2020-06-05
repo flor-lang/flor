@@ -16,7 +16,10 @@ test('test variable definition and your use', () => {
     'em_linha = (x) := 2*x',
     `hey_listen = funcao (parametro)
       retornar "Hey " + parametro + " listen!"
-    fim`
+    fim`,
+    `expoente = 2
+    exp = 5^expoente
+    `
   ])
 
   mustThrows([
@@ -34,7 +37,8 @@ test('test variable definition and your use', () => {
     `definir classe Teste
         propriedades: valor = 0
     fim
-    teste = #valor`
+    teste = #valor`,
+    'exp = 5^expoente'
   ])
 })
 

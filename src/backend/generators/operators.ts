@@ -3,6 +3,10 @@ import { AstNode } from '../traverse'
 
 export const operatorCodeGen = {
   enter (node: AstNode): void {
-    Env.get().codeOutput += node.value
+    if (node.value !== '^') {
+      Env.get().codeOutput += node.value
+    } else {
+      Env.get().codeOutput += ','
+    }
   }
 }
