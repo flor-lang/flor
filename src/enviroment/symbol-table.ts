@@ -35,4 +35,21 @@ export default class SymbolTable {
     })
     return node
   }
+
+  public rm (identifier: string): AstNode {
+    let node: AstNode = null
+    this.searchIdentifier(identifier, (symbolTable): void => {
+      node = symbolTable.table[identifier]
+      delete symbolTable.table[identifier]
+    })
+    return node
+  }
+
+  public get depth (): number {
+    let depth = 0
+    this.iterateSymbolTable((): void => {
+      depth += 1
+    })
+    return depth
+  }
 }

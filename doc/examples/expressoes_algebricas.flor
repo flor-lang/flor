@@ -1,0 +1,20 @@
+/**
+Expressões algebricas
+*/
+
+// Funcao auxiliar para potencias
+el = Matematica.elevar
+escrever("Expressões Algébricas")
+
+// Determine o valor da expressão: 2xˆ4 + 4x - 5, com x = 3
+f = (x) := 2 * el(base: x, potencia: 4) + 4*x - 5
+escrever("  Valor da expressao 1: " + f(x: 3))
+
+// Dada a expressao x^-1 - x^(1/2), determine o valor quando x = 4
+f = (x) := el(x,-1) - el(x, 1/2)
+escrever("  Valor da expressao 2: " + f(x: 4))
+
+// Dadas as funções f(x) = x^2 + 1 e g(x) = 3x - 4, determine f[g(x)], com x = 3
+f = (x) := el(x, 2) + 1
+g = (x) := 3*x - 4
+escrever("  Valor da expressao 3: " + f(g(x: 3)))

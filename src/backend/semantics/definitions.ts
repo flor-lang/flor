@@ -1,27 +1,56 @@
 import { AstNode } from '../../backend/traverse'
-import { locSubscriptableIsIdentifier, identifierValueOfLocNode } from '../../utils/aux-functions'
+import { locSubscriptableIsIdentifier, identifierValueOfLocNode, locNodeHasEmptyParams } from '../../utils/aux-functions'
 import Env from '../../enviroment/env'
 import Analyser from './analyser'
+
+const globalDeclaration = (node: AstNode): void => {
+  let elemento = 'variável'
+  if (node.name === 'class-declaration') {
+    elemento = 'classe'
+  } else if (node.name === 'interface-declaration') {
+    elemento = 'interface'
+  }
+  if (Env.get().symbolTable.depth > 1) {
+    Analyser.throwError(`Uma ${elemento} só pode ser definida globalmente.`, node)
+  }
+}
+
+const privatePropertyAccess = (node: AstNode): void => {
+  if (locNodeHasEmptyParams(node) === false) {
+    const params = (node.value as AstNode[])[1]
+    const existsPrivateAccess = (params.value as AstNode[])
+      .filter((p): boolean => p.name === 'objectable')
+      .map((o): {} => (o.value as AstNode).value)
+      .some((id): boolean => {
+        let identifier: string = id as string
+        if (Array.isArray(id)) {
+          identifier = (id as AstNode[])[0].value as string
+        }
+        return identifier.startsWith('_')
+      })
+    if (existsPrivateAccess) {
+      Analyser.throwError(`Variáveis privadas (iniciadas com '_') não podem ser acessadas fora de suas respectivas classes.`, node)
+    }
+  }
+}
 
 const locUse = (node: AstNode): void => {
   if (locSubscriptableIsIdentifier(node)) {
     const identifier = identifierValueOfLocNode(node)
     if (Env.get().symbolTable.get(identifier) === null) {
-      Analyser.throwError(`Váriavel '${identifier}' não foi definida`, node)
+      Analyser.throwError(`Váriavel '${identifier}' não foi definida.`, node)
     }
   }
 }
 
-const classInstantiation = (node: AstNode): void => {
+const functionCallUse = (node: AstNode): void => {
   const identifier = (node.value as AstNode[])[0].value as string
-  const classNode = Env.get().symbolTable.get(identifier)
-  if (classNode === null) {
-    Analyser.throwError(`Classe '${identifier}' não foi definida`, node)
-  }
-  if (classNode.name !== 'class-declaration') {
-    Analyser.throwError(`As cláusulas [novo, nova] só podem ser usadas para instanciar classes`, node)
+  if (Env.get().symbolTable.get(identifier) === null) {
+    Analyser.throwError(`Função '${identifier}' não foi definida.`, node)
   }
 }
 
+export const evaluateGlobalDeclaration = Analyser.create(globalDeclaration)
+export const evaluatePrivatePropertyAccessAtLocNode = Analyser.create(privatePropertyAccess)
 export const evaluateLocUse = Analyser.create(locUse)
-export const evaluateFunctionCallAsClassInstantiation = Analyser.create(classInstantiation)
+export const evaluateFunctionCallUse = Analyser.create(functionCallUse)

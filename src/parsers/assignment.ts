@@ -89,6 +89,7 @@ export const Loc: LocParser = P
     P.optWhitespace,
     Locline.named('locline')
   )
+  .optWspc()
   .node('loc')
   .map(mapLocNode)
   .map(nodePropertiesMapper(['subscriptable', 'params']))
@@ -100,7 +101,7 @@ export const Loc: LocParser = P
 */
 export const Assignment: AssignmentParser = P
   .seqObj(
-    Loc.optWspc().named('lhs'),
+    Loc.named('lhs'),
     Equal, P.optWhitespace,
     P.lazy((): ExpressionParser => Expression).named('rhs')
   )

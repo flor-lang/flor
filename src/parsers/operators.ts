@@ -85,5 +85,6 @@ export const Methods = P.string('metodos')
 export const Private = P.string('privado').wspc()
 export const Public = P.string('publico').wspc()
 export const Static = P.string('estatico').wspc()
-export const ClassFieldModifier = P.alt(Private, Public, Static, P.optWhitespace)
+// FIXME: After type check
+export const ClassFieldModifier = P.alt(/* Private, Public, */ Static, P.optWhitespace)
 export const New = P.alt(P.string('novo'), P.string('nova')).wspc()

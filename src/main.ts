@@ -1,32 +1,83 @@
 // Playground code
 import { Program } from './parsers/program'
 import { visitor } from './backend/visitor'
-import { traverser } from './backend/traverse'
-// import Env from './enviroment/env'
-// import { logAst } from './utils/logger'
+import { traverser, AstNode } from './backend/traverse'
+import Env from './enviroment/env'
+import SymbolTable from './enviroment/symbol-table'
+import { FlorCompilationErrorMessage, FlorRuntimeErrorMessage } from './utils/errors'
+import { StandardLib } from './lib/standard.flib'
+import comments from './utils/comments'
 
-const ast = Program.tryParse(`
-int = parseInt
-trolando = "Troll do Troll"
-definir classe Pessoa
-    propriedades: nome idade
-    construtor: funcao (nome, idade)
-        #nome = nome
-        #idade = idade
-    fim
-    metodos:
-        descricao = () := "Nome: " + #nome + ""
-fim
+export { logAst, logSymbolTable } from './utils/logger'
+export { StandardLibJSImpl } from './lib/impl/standard'
+export { SymbolTable, AstNode, FlorRuntimeErrorMessage }
 
-josiel = nova Pessoa(nome: "Josiel", idade: 14)
-escrever(l: josiel)
-`)
+/**
+ * Parse input code generating abstract syntax tree
+ * @param code Input flor code
+ * @returns Object AstNode
+ */
+export const parseCode = (code: string): AstNode => Program.tryParse(code)
 
-try {
-  traverser(ast, visitor)
-  // logAst(ast, true)
-  // console.log(Env.get().symbolTable)
-  // console.log(Env.get().codeOutput)
-} catch (e) {
-  console.error((e as Error).message)
+const loadStandardLib = (callbackfn: (identifier: string, node: AstNode) => void): void => {
+  for (const key in StandardLib) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (StandardLib.hasOwnProperty(key)) {
+      callbackfn(key, StandardLib[key])
+    }
+  }
+}
+
+const traverseAstFrom = (code: string, toLoadStandardLib = false): void => {
+  Env.get().clean('prod')
+  if (toLoadStandardLib) {
+    loadStandardLib((identifier, node): void => Env.get().symbolTable.put(identifier, node))
+  }
+  const executableCode = comments.remove(code)
+  traverser(parseCode(executableCode), visitor)
+}
+
+/**
+ * Traverse ast from flor input code and return your symbol table
+ * @param code Input flor code
+ * @param toLoadStandardLib Indicates whether to include the standard library in analysis process
+ * @returns Object SymbolTable
+ */
+export const getSymbolTable = (code: string, toLoadStandardLib = false): SymbolTable => {
+  traverseAstFrom(code, toLoadStandardLib)
+  const table = Env.get().symbolTable
+  loadStandardLib((identifier): AstNode => table.rm(identifier))
+  Env.get().clean('prod')
+  return table
+}
+
+/**
+ * Traverse ast from flor input code and return your JS output code
+ * @param code Input flor code
+ * @param toLoadStandardLib Indicates whether to include the standard library in analysis process
+ * @returns JS generated code
+ */
+export const compile = (code: string, toLoadStandardLib = false): string => {
+  traverseAstFrom(code, toLoadStandardLib)
+  const output = Env.get().getCodeOutputPolyfilled()
+  Env.get().clean('prod')
+  return output
+}
+
+/**
+ * Try traverse ast from flor input code and return your JS output code.
+ * If an error is found, an erro message is returned
+ * @param code Input flor code
+ * @param toLoadStandardLib Indicates whether to include the standard library in analysis process
+ * @returns Object { success: boolean; result: string }
+ */
+export const tryCompile = (code: string, toLoadStandardLib = false): { success: boolean; result: string } => {
+  try {
+    const result = compile(code, toLoadStandardLib)
+    return { success: true, result }
+  } catch (error) {
+    const result = FlorCompilationErrorMessage(error)
+    Env.get().clean('prod')
+    return { success: false, result }
+  }
 }

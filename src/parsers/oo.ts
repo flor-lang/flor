@@ -28,10 +28,14 @@ export const InterfaceDeclaration: InterfaceDeclarationParser = P
     (result: { properties: never[] }): boolean => result.properties.length > 1,
     'Definir interface exige um identificador e no mínimo uma variável'
   )
-  .map((ast: { properties: never[] }): { identifier: {}; properties: never[] } => ({
-    identifier: ast.properties[0],
-    properties: ast.properties.splice(1)
-  }))
+  .assert(
+    (result: { properties: never[] }): boolean => result.properties.every((node: { value: string }): boolean => node.value.startsWith('_') === false),
+    'Membros declarados de uma interface não devem ser privados (iniciados com \'_\')'
+  )
+  .map((ast: { properties: never[] }): {}[] => [
+    ast.properties[0],
+    { name: 'members', value: ast.properties.splice(1) }
+  ])
   .node('interface-declaration')
 
 type MetaInheritanceParser = P.Parser<P.Node<'inheritance', {}>>
@@ -76,13 +80,17 @@ const PropertyDeclaration: PropertyDeclarationParser = P
     P.alt(
       P.seqObj(
         P.optWhitespace, Equal, P.optWhitespace,
-        P.lazy((): BoolParser => Bool).named('bool')
-      ).node('assignment').map(nodePropertiesMapper(['bool'])),
+        P.alt(
+          P.lazy((): BoolParser => Bool),
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          P.lazy((): ClassInstantiationParser => ClassInstantiation)
+        ).named('prop-rhs')
+      ).node('initialize').map(nodePropertiesMapper(['prop-rhs'])),
       P.optWhitespace
-    ).named('assignment')
+    ).named('initialize')
   )
   .node('property')
-  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'assignment']))
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'initialize']))
 
 type MetaPropertiesParser = P.Parser<P.Node<'properties', {}>>
 const MetaProperties: MetaPropertiesParser = P
@@ -104,11 +112,11 @@ const MethodDeclaration: MethodDeclarationParser = P
       P.alt(
         P.lazy((): InlineFunctionParser => InlineFunction),
         P.lazy((): BlockFunctionParser => BlockFunction)
-      ).named('function')
-    ).node('function').map(nodePropertiesMapper(['function'])).named('function')
+      ).named('initialize')
+    ).node('initialize').map(nodePropertiesMapper(['initialize'])).named('initialize')
   )
   .node('method')
-  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'function']))
+  .map(nodePropertiesMapper(['field-modifier', 'identifier', 'initialize']))
 
 const MetaMethods: ObjectParser = P
   .seqObj(

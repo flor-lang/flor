@@ -1,3 +1,5 @@
 dist/
-doc/examples
 tests/
+doc/examples
+src/lib/impl
+src/enviroment/impl

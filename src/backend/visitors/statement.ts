@@ -6,14 +6,18 @@ import {
   forEachCodeGen,
   ifThenElseCodeGen,
   elifCodeGen
-} from './generator/statement'
-import { AstNode } from './traverse'
-import { evaluateFunctionCallAsClassInstantiation } from './semantics/definitions'
+} from '../generators/statement'
+import { AstNode } from '../traverse'
+import { evaluateFunctionCallUse } from '../semantics/definitions'
+import { evaluateFunctionCallAsClassInstantiation } from '../semantics/oo'
 
 const functionCall = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent.name === 'class-instantiation') {
       evaluateFunctionCallAsClassInstantiation(node)
+    }
+    if (['statement', 'subscriptable'].includes(parent.name)) {
+      evaluateFunctionCallUse(node)
     }
   }
 }

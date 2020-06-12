@@ -37,7 +37,10 @@ test('parse interface declaration', (): void => {
       nome
       executando()
     fim
-    `
+    `,
+    `definir interface Tilte
+      foo _bar
+    fim`
   ])
 })
 
@@ -55,7 +58,7 @@ test('parse class declaration', (): void => {
     `
     definir classe Carro
       propriedades:
-        privado modelo
+        modelo
         marca
         construtora
         estatico ano = 2020
@@ -70,7 +73,13 @@ test('parse class declaration', (): void => {
       metodos:
         ligar = funcao () __ligado = verdadeiro fim
         desligar = funcao () __ligado = falso fim
-        privado esta_ligado = () := __ligado igual a verdadeiro
+        esta_ligado = () := __ligado igual a verdadeiro
+    fim
+    `,
+    `
+    definir classe Teste
+      propriedades:
+        instancia = novo Teste()
     fim
     `
   ])

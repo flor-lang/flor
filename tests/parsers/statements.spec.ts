@@ -226,11 +226,18 @@ test('parse function call', (): void => {
     'ordenar ()',
     'duplicar (x: 2)',
     'somar(x: 0, y: 0)',
-    'subtrair(x:x,y:y)'
+    'subtrair(x:x,y:y)',
+    'inserir(x)',
+    'inserir(0)',
+    'inserir(0, na_posicao: 0)',
+    'inserir(f: (x) := x, 0)'
   ])
   cantParseFunctionCall([
-    'inserir(x)',
-    'inserir(0)'
+    'ordenar (',
+    'ordenar )',
+    'ordenar (f: , x: 10))',
+    'ordenar (f: , 10))',
+    'ordenar (0, n: 10))'
   ])
 })
 

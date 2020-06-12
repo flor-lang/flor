@@ -1,24 +1,25 @@
 import { ClassDeclaration, ClassInstantiation } from '../../src/parsers/oo'
-import { generatorTester } from '../utils'
+import { generatorTester, assignRhs } from '../utils'
 
 test('generate class declaration', (): void => {
   const tryGenerateClassDeclaration = generatorTester(ClassDeclaration)
 
   tryGenerateClassDeclaration([
-    ['definir classe Pessoa fim', 'class Pessoa{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}}'],
+    ['definir classe Pessoa fim',
+    'class Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nPessoa.__propertiesDeclarations__.bind(this)()\n}}\nPessoa.__propertiesDeclarations__.bind(null)()\n'],
     [
       `
       definir classe PessoaFisica
         heranca: Pessoa
         interfaces: Nomeavel Localizavel
       fim`  
-    , 'class PessoaFisica extends Pessoa{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}}'
+    , 'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()\n'
     ],
     [
       `
       definir classe Carro
         propriedades:
-          privado modelo = "Esportivo"
+          modelo = "Esportivo"
           marca
           construtora
           estatico ano = 2020
@@ -27,21 +28,22 @@ test('generate class declaration', (): void => {
         fim
       fim
       `,
-      'class Carro{\n__propertiesDeclarations__() {this.modelo = \"Esportivo\";' + 
-      'this.marca = null;this.construtora = null;this.ano = 2020;}constructor(marca)' + 
-      '{\nthis.__propertiesDeclarations__()\n__marca = marca;}}'
+      `class Carro{\nstatic __propertiesDeclarations__() {if (this) {this.modelo = ${assignRhs('"Esportivo"').slice(0, -1)}}\n` + 
+      `if (this) {this.marca = null}\nif (this) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = ${assignRhs('2020').slice(0, -1)}}\n}constructor(marca=null)` + 
+      `{\nCarro.__propertiesDeclarations__.bind(this)()\nlet __marca = ${assignRhs('marca')}}}\nCarro.__propertiesDeclarations__.bind(null)()\n`
     ],
     [
       `
       definir classe Luz
+        propriedades: ligado = verdadeiro
         metodos:
-          ligar = funcao () __ligado = verdadeiro fim
-          desligar = funcao () __ligado = falso fim
-          privado esta_ligado = () := __ligado igual a verdadeiro
+          ligar = funcao () #ligado = verdadeiro fim
+          desligar = funcao () #ligado = falso fim
+          estatico esta_ligado = () := #ligado igual a verdadeiro
       fim
       `,
-      'class Luz{\n__propertiesDeclarations__() {}constructor(){\nthis.__propertiesDeclarations__()\n}' +
-      'ligar(){\n__ligado = true;}desligar(){\n__ligado = false;}esta_ligado(){ return __ligado==true}}'
+      `class Luz{\nstatic __propertiesDeclarations__() {if (this) {this.ligado = ${assignRhs('true').slice(0, -1)}}\n}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}` +
+      `ligar(){\nthis.ligado = ${assignRhs('true')}}desligar(){\nthis.ligado = ${assignRhs('false')}} static esta_ligado(){ return this.ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n`
     ]
   ])
 })

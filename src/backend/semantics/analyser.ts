@@ -7,7 +7,7 @@ const Analyser = {
   create (analyserfn: AnalyserFunction): AnalyserFunction {
     return (node: AstNode): void => {
       if (Env.get().context !== 'test') {
-        // analyserfn(node)
+        analyserfn(node)
       }
     }
   },

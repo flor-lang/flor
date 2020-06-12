@@ -1,22 +1,30 @@
-import { wrappedCodeGen, unaryCodeGen, blockFunctionCodeGen, argsCodeGen, inlineFunctionCodeGen } from './generator/expressions'
 import { AstNode } from 'backend/traverse'
-import Env from '../enviroment/env'
-import { findIdentifierAtArgsNode } from '../utils/aux-functions'
+import Env from '../../enviroment/env'
+import { insertFunctionArgumentsInSymbolTable } from '../../utils/aux-functions'
+import {
+  expressionCodeGen,
+  wrappedCodeGen,
+  unaryCodeGen,
+  blockFunctionCodeGen,
+  argsCodeGen,
+  inlineFunctionCodeGen,
+  conditionalExpressionCodeGen
+} from '../generators/expressions'
+import { Polyfill } from '../../enviroment/polyfill'
 
 const expression = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent && parent.name === 'inline-function') {
       Env.get().pushSymbolTable()
-      const argsNode = (parent.value as AstNode[])[0]
-      findIdentifierAtArgsNode(argsNode).forEach(([id, node]): void => {
-        Env.get().symbolTable.put(id, node)
-      })
+      insertFunctionArgumentsInSymbolTable(parent)
     }
+    expressionCodeGen.enter(node, parent)
   },
   exit (node: AstNode, parent: AstNode): void {
     if (parent && parent.name === 'inline-function') {
       Env.get().popSymbolTable()
     }
+    expressionCodeGen.exit(node, parent)
   }
 }
 
@@ -51,8 +59,8 @@ const args = {
   between (): void {
     argsCodeGen.between()
   },
-  exit (): void {
-    argsCodeGen.exit()
+  exit (node: AstNode): void {
+    argsCodeGen.exit(node)
   }
 }
 
@@ -65,11 +73,25 @@ export const inlineFunction = {
   }
 }
 
+export const conditionalExpression = {
+  enter (): void {
+    conditionalExpressionCodeGen.enter()
+  },
+  between (): void {
+    conditionalExpressionCodeGen.between()
+  },
+  exit (): void {
+    conditionalExpressionCodeGen.exit()
+    Env.get().injectPolyfill(Polyfill.CTD_EXPR)
+  }
+}
+
 export default {
   expression,
   wrapped,
   unary,
   blockFunction,
   args,
-  inlineFunction
+  inlineFunction,
+  conditionalExpression
 }

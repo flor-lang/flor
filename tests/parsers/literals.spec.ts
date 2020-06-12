@@ -45,7 +45,7 @@ test('parse dicitionary', (): void => {
     '{}',
     '{"chave": "valor"}',
     '{ "chave": identificador }',
-    '{ 0: "zero", 1: "um" }',
+    // '{ 0: "zero", 1: "um" }',
     '{ "teste": falso }',
     '{ "amostras": [0, 1, 2] }',
     '{ "f": (x) := x*2, "c": f(x: 5) }',

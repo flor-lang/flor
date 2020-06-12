@@ -11,13 +11,14 @@ const remove = (file: string): string => {
   const output: string[] = []
 
   const getCurrentChar = (): string => original[position]
-  const getPreviusChar = (): string => original[position - 1]
+  const getPreviousChar = (): string => original[position - 1]
   const getNextChar = (): string => original[position + 1]
+  const addNewLine = (): void => { output.push(NEW_LINE) }
   const add = (): void => { output.push(getCurrentChar()) }
   const next = (): void => { position++ }
   const atEnd = (): boolean => position >= original.length
   const isEscaping = (): boolean => {
-    if (getPreviusChar() === BACK_SLASH) {
+    if (getPreviousChar() === BACK_SLASH) {
       let offset = 1
       let escaped = true
       while ((position - offset) > 0) {
@@ -59,6 +60,9 @@ const remove = (file: string): string => {
       next()
       while (!atEnd()) {
         next()
+        if (getCurrentChar() === NEW_LINE) {
+          addNewLine()
+        }
         if (getCurrentChar() === STAR && getNextChar() === SLASH) {
           next()
           next()
