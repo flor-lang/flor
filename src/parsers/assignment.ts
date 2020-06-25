@@ -5,6 +5,7 @@ import { Equal, LeftBracket, RightBracket, Dot } from './operators'
 import { ObjectParser, Expression, ExpressionParser, BoolParser, Bool } from './expressions'
 import { FunctionCall, FunctionCallParser } from './statements'
 import { mapLocNode, nodePropertiesMapper } from '../utils/node-map'
+import { FlorReservedWords } from '../utils/reserved-words'
 
 export type IdentifierParser = P.Parser<P.Node<'identifier', string>>
 export type SubscriptableParser = P.Parser<P.Node<'subscriptable', {}>>
@@ -13,19 +14,6 @@ export type IndexableParser = P.Parser<P.Node<'indexable', {}>>
 export type LocParser = P.Parser<P.Node<'loc', {}>>
 export type AssignmentParser = P.Parser<P.Node<'assignment', {}>>
 
-export const reservedList: string[] = [
-  'verdadeiro', 'falso', 'nulo',
-  'e', 'ou',
-  'se', 'senao', 'entao', 'senaose',
-  'enquanto', 'faca',
-  'a', 'de', 'ate', 'com',
-  'igual', 'diferente', 'para', 'cada', 'passo',
-  'funcao', 'retornar', 'fim',
-  'definir', 'interface', 'classe', 'novo', 'nova',
-  'construtor', 'propriedades', 'metodos',
-  'privado', 'publico', 'estatico'
-]
-
 /**
  * Identifier parser
  *
@@ -33,7 +21,7 @@ export const reservedList: string[] = [
 */
 export const Identifier: IdentifierParser = P
   .regexp(/#?[_]*([a-zA-Z_][a-zA-Z0-9]+|[a-zA-Z])+/)
-  .assert((s: string): boolean => !reservedList.includes(s), `Erro de sintaxe: Identificador reservado`)
+  .assert((s: string): boolean => !FlorReservedWords.includes(s), `Erro de sintaxe: Identificador reservado`)
   .node('identifier')
 
 /**
