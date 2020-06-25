@@ -1,5 +1,5 @@
 import { canParse, cantParse } from '../utils'
-import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement, ReturnStatement, FunctionCall } from '../../src/parsers/statements'
+import { Statement, IfThenElseStatement, WhileStatement, DoWhileStatement, ForEachStatement, ForToStatement, ReturnStatement, FunctionCall, IterationBreakerStatement } from '../../src/parsers/statements'
 
 test('if then else statement', (): void => {
   const canParseIfThenElseStatement = canParse(IfThenElseStatement)
@@ -241,10 +241,10 @@ test('parse function call', (): void => {
   ])
 })
 
-test('parse statement', (): void => {
-  const canParseStatement = canParse(Statement)
-  const cantParseStatement = cantParse(Statement)
+test('parse iteration breaker', (): void => {
+  const canParseIterationBreakerStatement = canParse(IterationBreakerStatement)
+  const cantParseIterationBreakerStatement = cantParse(IterationBreakerStatement)
 
-  canParseStatement([])
-  cantParseStatement([])
+  canParseIterationBreakerStatement(['continuar', 'interromper'])
+  cantParseIterationBreakerStatement(['continue', 'break'])
 })
