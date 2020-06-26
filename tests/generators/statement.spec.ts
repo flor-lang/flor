@@ -91,3 +91,14 @@ test('generate if then else statement', (): void => {
     ]
   ])
 })
+
+test('generate iteration breakers', (): void => {
+  const tryGenerateStatement = generatorTester(Statement)
+
+  tryGenerateStatement([
+    [`enquanto verdadeiro faca interromper fim`, 'while(true){\nbreak;}'],
+    [`faca continuar enquanto verdadeiro fim`, 'do{\ncontinue;}while(true)'],
+    [`para cada elemento de frota faca interromper continuar fim`, 
+    `for(const elemento of frota){\nbreak;continue;}`]
+  ])
+})

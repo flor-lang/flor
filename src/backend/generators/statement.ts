@@ -8,6 +8,17 @@ export const returnCodeGen = {
   }
 }
 
+export const iterationBreakerCodeGen = {
+  enter (node: AstNode): void {
+    if (node.value === 'continuar') {
+      Env.get().codeOutput += 'continue;'
+    }
+    if (node.value === 'interromper') {
+      Env.get().codeOutput += 'break;'
+    }
+  }
+}
+
 export const labeledArgsCodeGen = {
   enter (): void {
     Env.get().codeOutput += '('

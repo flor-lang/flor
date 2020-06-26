@@ -5,6 +5,7 @@ import { blockCodeGen } from '../../backend/generators/program'
 
 const block = {
   enter (node: AstNode, parent: AstNode): void {
+    Env.get().stackMap['CURRENT_BLOCK_PARENT'].push(parent.name)
     if (parent.name !== 'program') {
       Env.get().pushSymbolTable()
       blockCodeGen.enter()
@@ -28,6 +29,7 @@ const block = {
       Env.get().popSymbolTable()
       blockCodeGen.exit()
     }
+    Env.get().stackMap['CURRENT_BLOCK_PARENT'].pop()
   }
 }
 

@@ -397,7 +397,7 @@ test('test private properties access', () => {
 })
 
 
-test('test private properties access', () => {
+test('test recursion, name and args symbols inside block scope', () => {
   semanticTester(false)([
     `fibonacci = funcao (posicao)
         se posicao < 2 entao
@@ -415,4 +415,57 @@ test('test private properties access', () => {
     fim`,
     'fibo = (n) := se n < 2 entao n senao fibo(n - 1) + fibo(n - 2)'
   ])
+})
+
+test('test private properties access', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true,
+    /(.*Os alteradores \[continuar, interromper\] só podem ser utilizados dentro de laços\.)/)
+
+  mustBeAllowed([
+    `enquanto verdadeiro faca
+      interromper
+      continuar
+    fim`,
+    `faca
+      interromper
+      continuar
+    enquanto verdadeiro
+    fim`,
+    `frota = [0,1,2]
+    para cada elemento de frota faca
+      interromper
+      continuar
+    fim`,
+    `frota = [0,1,2]
+    enquanto verdadeiro faca
+      foo = funcao ()
+        para cada i de frota faca
+          continuar
+        fim
+      fim
+    fim`
+  ])
+
+  mustThrows([
+    `foo = funcao ()
+      continuar
+    fim`,
+    `enquanto verdadeiro faca
+      foo = funcao ()
+        continuar
+      fim
+    fim`,
+    `definir classe Foo
+      construtor: funcao ()
+        continuar
+      fim
+    fim`,
+    `enquanto verdadeiro faca
+      se verdadeiro entao
+        continuar
+      fim
+    fim`
+  ])
+
 })
