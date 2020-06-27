@@ -150,7 +150,7 @@ export const ReturnStatement: ReturnStatementParser = P
 /**
  * Parse breakers of loops and switches
  *
- * iteration-breaker -> continuar | interromper
+ * iteration-breaker -> pular_iteracao | interromper_laco
  */
 export const IterationBreakerStatement: IterationBreakerStatementParser = P
   .alt(

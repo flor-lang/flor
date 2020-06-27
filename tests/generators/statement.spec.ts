@@ -83,10 +83,10 @@ test('generate if then else statement', (): void => {
     ['y = 0', `let y = ${assignRhs('0')}`],
     ['se peso < 0 entao peso = 0 fim', `if(peso<0){\npeso = ${assignRhs('0')}}`],
     ['se peso < 0 entao peso = 0 senao peso = 1 fim', `if(peso<0){\npeso = ${assignRhs('0')}}else{\npeso = ${assignRhs('1')}}`],
-    ['se x igual a 0 entao y = 0 senaose x igual a 1 entao y = 1 senao y = 10 fim',
+    ['se x igual a 0 entao y = 0 senao_se x igual a 1 entao y = 1 senao y = 10 fim',
      `if(x==0){\ny = ${assignRhs('0')}}else if(x==1){\ny = ${assignRhs('1')}}else{\ny = ${assignRhs('10')}}`
     ],
-    ['se x igual a 0 entao y = 0 senaose x igual a 1 entao y = 1 fim',
+    ['se x igual a 0 entao y = 0 senao_se x igual a 1 entao y = 1 fim',
      `if(x==0){\ny = ${assignRhs('0')}}else if(x==1){\ny = ${assignRhs('1')}}`
     ]
   ])
@@ -96,9 +96,9 @@ test('generate iteration breakers', (): void => {
   const tryGenerateStatement = generatorTester(Statement)
 
   tryGenerateStatement([
-    [`enquanto verdadeiro faca interromper fim`, 'while(true){\nbreak;}'],
-    [`faca continuar enquanto verdadeiro fim`, 'do{\ncontinue;}while(true)'],
-    [`para cada elemento de frota faca interromper continuar fim`, 
+    [`enquanto verdadeiro faca interromper_laco fim`, 'while(true){\nbreak;}'],
+    [`faca pular_iteracao enquanto verdadeiro fim`, 'do{\ncontinue;}while(true)'],
+    [`para cada elemento de frota faca interromper_laco pular_iteracao fim`, 
     `for(const elemento of frota){\nbreak;continue;}`]
   ])
 })

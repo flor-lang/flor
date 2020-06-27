@@ -54,7 +54,7 @@ const iterationBreakerUse = (node: AstNode): void => {
   const last = Env.get().stackMap['ITERATION_BREAKER_BLOCK'].length - 1
   const breakerBlock = Env.get().stackMap['ITERATION_BREAKER_BLOCK'][last] as string
   if (breakerBlock !== 'LOOP') {
-    Analyser.throwError(`Os alteradores [continuar, interromper] só podem ser utilizados dentro de laços.`, node)
+    Analyser.throwError(`Os alteradores [pular_iteracao, interromper_laco] só podem ser utilizados dentro de laços.`, node)
   }
 }
 

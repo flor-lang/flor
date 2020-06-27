@@ -10,10 +10,10 @@ export const returnCodeGen = {
 
 export const iterationBreakerCodeGen = {
   enter (node: AstNode): void {
-    if (node.value === 'continuar') {
+    if (node.value === 'pular_iteracao') {
       Env.get().codeOutput += 'continue;'
     }
-    if (node.value === 'interromper') {
+    if (node.value === 'interromper_laco') {
       Env.get().codeOutput += 'break;'
     }
   }

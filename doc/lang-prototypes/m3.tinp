@@ -15,7 +15,7 @@ caso soma_pares
     soma_pares = 0
   esta contido em [100, 200 ou 300] faca
     soma_pares = 10
-    interromper
+    interromper_laco
   do tipo 'texto' faca
     continue
   senao faca

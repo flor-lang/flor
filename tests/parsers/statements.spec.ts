@@ -35,9 +35,9 @@ test('if then else statement', (): void => {
     `
     se divida_atual igual a 0 entao
       mensagem = "Não há dividas"
-    senaose divida_atual < 0 entao
+    senao_se divida_atual < 0 entao
       mensagem = "Cliente possui saldo"
-    senaose possui_pendencia entao
+    senao_se possui_pendencia entao
       mensagem = "Cliente possui pendencia"
     senao
       mensagem = "Cliente necessita prestar contas"
@@ -46,9 +46,9 @@ test('if then else statement', (): void => {
     `
     se divida_atual igual a 0 entao
       mensagem = "Não há dividas"
-    senaose divida_atual < 0 entao
+    senao_se divida_atual < 0 entao
       mensagem = "Cliente possui saldo"
-    senaose possui_pendencia entao
+    senao_se possui_pendencia entao
       mensagem = "Cliente possui pendencia"
     fim
     `
@@ -67,7 +67,7 @@ test('if then else statement', (): void => {
     'se verdadeiro entao a = 5senao a = afim',
     'se igual a entao a=0 fim',
     'senao se teste entao faca_algo() fim',
-    // `se teste entao teste() senaose !teste entao fim`,
+    // `se teste entao teste() senao_se !teste entao fim`,
     'se teste entao teste() senao se eita() fim',
   ])
 })
@@ -245,6 +245,6 @@ test('parse iteration breaker', (): void => {
   const canParseIterationBreakerStatement = canParse(IterationBreakerStatement)
   const cantParseIterationBreakerStatement = cantParse(IterationBreakerStatement)
 
-  canParseIterationBreakerStatement(['continuar', 'interromper'])
+  canParseIterationBreakerStatement(['pular_iteracao', 'interromper_laco'])
   cantParseIterationBreakerStatement(['continue', 'break'])
 })

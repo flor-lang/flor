@@ -420,57 +420,57 @@ test('test recursion, name and args symbols inside block scope', () => {
 test('test breaks and continues use', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true,
-    /(.*Os alteradores \[continuar, interromper\] só podem ser utilizados dentro de laços\.)/)
+    /(.*Os alteradores \[pular_iteracao, interromper_laco\] só podem ser utilizados dentro de laços\.)/)
 
   mustBeAllowed([
     `enquanto verdadeiro faca
-      interromper
-      continuar
+      interromper_laco
+      pular_iteracao
     fim`,
     `faca
-      interromper
-      continuar
+      interromper_laco
+      pular_iteracao
     enquanto verdadeiro
     fim`,
     `frota = [0,1,2]
     para cada elemento de frota faca
-      interromper
-      continuar
+      interromper_laco
+      pular_iteracao
     fim`,
     `frota = [0,1,2]
     enquanto verdadeiro faca
       foo = funcao ()
         para cada i de frota faca
-          continuar
+          pular_iteracao
         fim
       fim
     fim`,
     `enquanto verdadeiro faca
       se verdadeiro entao
-        continuar
+        pular_iteracao
       fim
     fim`,
     `enquanto verdadeiro faca
       foo = funcao ()
         retornar "froids"
       fim
-      continuar
+      pular_iteracao
     fim`
   ])
 
   mustThrows([
-    'continuar',
+    'pular_iteracao',
     `foo = funcao ()
-      continuar
+      pular_iteracao
     fim`,
     `enquanto verdadeiro faca
       foo = funcao ()
-        continuar
+        pular_iteracao
       fim
     fim`,
     `definir classe Foo
       construtor: funcao ()
-        continuar
+        pular_iteracao
       fim
     fim`
   ])

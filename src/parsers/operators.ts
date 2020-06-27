@@ -66,13 +66,13 @@ export const Do = P.string('faca').wspc()
 export const If = P.string('se').wspc()
 export const Then = P.string('entao').wspc()
 export const Else = P.string('senao').wspc()
-export const ElseIf = P.string('senaose').wspc() // P.seq(Else, If)
+export const ElseIf = P.string('senao_se').wspc() // P.seq(Else, If)
 
 export const While = P.string('enquanto').wspc()
 export const ForEach = P.seq(ForExpr, EachExpr)
 
-export const ContinueStmt = P.string('continuar').wspc()
-export const BreakStmt = P.string('interromper').wspc()
+export const ContinueStmt = P.string('pular_iteracao').wspc()
+export const BreakStmt = P.string('interromper_laco').wspc()
 
 export const Function = P.string('funcao')
 export const Return = P.string('retornar').wspc()

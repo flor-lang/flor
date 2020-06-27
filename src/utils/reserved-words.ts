@@ -20,7 +20,7 @@ export const JSReservedWords = [
 export const FlorReservedWords = [
   'verdadeiro', 'falso', 'nulo',
   'e', 'ou',
-  'se', 'senao', 'entao', 'senaose',
+  'se', 'senao', 'entao', 'senao_se',
   'enquanto', 'faca',
   'a', 'de', 'ate', 'com',
   'igual', 'diferente', 'para', 'cada', 'passo',
@@ -28,5 +28,5 @@ export const FlorReservedWords = [
   'definir', 'interface', 'classe', 'novo', 'nova',
   'construtor', 'propriedades', 'metodos',
   'privado', 'publico', 'estatico',
-  'interromper', 'continuar'
+  'interromper_laco', 'pular_iteracao'
 ]
