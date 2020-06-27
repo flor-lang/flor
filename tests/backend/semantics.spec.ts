@@ -417,7 +417,7 @@ test('test recursion, name and args symbols inside block scope', () => {
   ])
 })
 
-test('test private properties access', () => {
+test('test breaks and continues use', () => {
   const mustBeAllowed = semanticTester(false)
   const mustThrows = semanticTester(true,
     /(.*Os alteradores \[continuar, interromper\] só podem ser utilizados dentro de laços\.)/)
@@ -444,10 +444,22 @@ test('test private properties access', () => {
           continuar
         fim
       fim
+    fim`,
+    `enquanto verdadeiro faca
+      se verdadeiro entao
+        continuar
+      fim
+    fim`,
+    `enquanto verdadeiro faca
+      foo = funcao ()
+        retornar "froids"
+      fim
+      continuar
     fim`
   ])
 
   mustThrows([
+    'continuar',
     `foo = funcao ()
       continuar
     fim`,
@@ -458,11 +470,6 @@ test('test private properties access', () => {
     fim`,
     `definir classe Foo
       construtor: funcao ()
-        continuar
-      fim
-    fim`,
-    `enquanto verdadeiro faca
-      se verdadeiro entao
         continuar
       fim
     fim`

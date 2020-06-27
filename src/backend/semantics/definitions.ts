@@ -51,9 +51,9 @@ const functionCallUse = (node: AstNode): void => {
 }
 
 const iterationBreakerUse = (node: AstNode): void => {
-  const last = Env.get().stackMap['CURRENT_BLOCK_PARENT'].length - 1
-  const currentBlockParentName = Env.get().stackMap['CURRENT_BLOCK_PARENT'][last] as string
-  if (['while-stmt', 'do-while', 'for-each'].includes(currentBlockParentName) === false) {
+  const last = Env.get().stackMap['ITERATION_BREAKER_BLOCK'].length - 1
+  const breakerBlock = Env.get().stackMap['ITERATION_BREAKER_BLOCK'][last] as string
+  if (breakerBlock !== 'LOOP') {
     Analyser.throwError(`Os alteradores [continuar, interromper] só podem ser utilizados dentro de laços.`, node)
   }
 }
