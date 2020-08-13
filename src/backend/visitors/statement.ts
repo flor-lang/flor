@@ -5,10 +5,11 @@ import {
   doWhileCodeGen,
   forEachCodeGen,
   ifThenElseCodeGen,
-  elifCodeGen
+  elifCodeGen,
+  iterationBreakerCodeGen
 } from '../generators/statement'
 import { AstNode } from '../traverse'
-import { evaluateFunctionCallUse } from '../semantics/definitions'
+import { evaluateFunctionCallUse, evaluateIterationBreakerUse } from '../semantics/definitions'
 import { evaluateFunctionCallAsClassInstantiation } from '../semantics/oo'
 
 const functionCall = {
@@ -25,6 +26,13 @@ const functionCall = {
 const returnStmt = {
   enter (): void {
     returnCodeGen.enter()
+  }
+}
+
+const iterationBreakerStmt = {
+  enter (node: AstNode): void {
+    evaluateIterationBreakerUse(node)
+    iterationBreakerCodeGen.enter(node)
   }
 }
 
@@ -91,6 +99,7 @@ const elif = {
 export default {
   functionCall,
   returnStmt,
+  iterationBreakerStmt,
   labeledArgs,
   whileStmt,
   doWhile,

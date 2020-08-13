@@ -8,7 +8,8 @@ import {
   blockFunctionCodeGen,
   argsCodeGen,
   inlineFunctionCodeGen,
-  conditionalExpressionCodeGen
+  conditionalExpressionCodeGen,
+  exponentialCodeGen
 } from '../generators/expressions'
 import { Polyfill } from '../../enviroment/polyfill'
 
@@ -43,6 +44,15 @@ const unary = {
   },
   exit (): void {
     unaryCodeGen.exit()
+  }
+}
+
+const exponential = {
+  enter (): void {
+    exponentialCodeGen.enter()
+  },
+  exit (): void {
+    exponentialCodeGen.exit()
   }
 }
 
@@ -90,6 +100,7 @@ export default {
   expression,
   wrapped,
   unary,
+  exponential,
   blockFunction,
   args,
   inlineFunction,

@@ -1,4 +1,4 @@
-const JSReservedWords = [
+export const JSReservedWords = [
   'abstract', 'arguments', 'await', 'boolean',
   'break', 'byte', 'case', 'catch',
   'char', 'class', 'const', 'continue',
@@ -17,4 +17,16 @@ const JSReservedWords = [
   'volatile', 'while', 'with', 'yield'
 ]
 
-export default JSReservedWords
+export const FlorReservedWords = [
+  'verdadeiro', 'falso', 'nulo',
+  'e', 'ou',
+  'se', 'senao', 'entao', 'senao_se',
+  'enquanto', 'faca',
+  'a', 'de', 'ate', 'com',
+  'igual', 'diferente', 'para', 'cada', 'passo',
+  'funcao', 'retornar', 'fim',
+  'definir', 'interface', 'classe', 'novo', 'nova',
+  'construtor', 'propriedades', 'metodos',
+  'privado', 'publico', 'estatico',
+  'interromper_laco', 'pular_iteracao'
+]

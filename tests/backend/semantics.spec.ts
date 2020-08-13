@@ -16,7 +16,10 @@ test('test variable definition and your use', () => {
     'em_linha = (x) := 2*x',
     `hey_listen = funcao (parametro)
       retornar "Hey " + parametro + " listen!"
-    fim`
+    fim`,
+    `expoente = 2
+    exp = 5^expoente
+    `
   ])
 
   mustThrows([
@@ -34,7 +37,8 @@ test('test variable definition and your use', () => {
     `definir classe Teste
         propriedades: valor = 0
     fim
-    teste = #valor`
+    teste = #valor`,
+    'exp = 5^expoente'
   ])
 })
 
@@ -393,7 +397,7 @@ test('test private properties access', () => {
 })
 
 
-test('test private properties access', () => {
+test('test recursion, name and args symbols inside block scope', () => {
   semanticTester(false)([
     `fibonacci = funcao (posicao)
         se posicao < 2 entao
@@ -411,4 +415,64 @@ test('test private properties access', () => {
     fim`,
     'fibo = (n) := se n < 2 entao n senao fibo(n - 1) + fibo(n - 2)'
   ])
+})
+
+test('test breaks and continues use', () => {
+  const mustBeAllowed = semanticTester(false)
+  const mustThrows = semanticTester(true,
+    /(.*Os alteradores \[pular_iteracao, interromper_laco\] só podem ser utilizados dentro de laços\.)/)
+
+  mustBeAllowed([
+    `enquanto verdadeiro faca
+      interromper_laco
+      pular_iteracao
+    fim`,
+    `faca
+      interromper_laco
+      pular_iteracao
+    enquanto verdadeiro
+    fim`,
+    `frota = [0,1,2]
+    para cada elemento de frota faca
+      interromper_laco
+      pular_iteracao
+    fim`,
+    `frota = [0,1,2]
+    enquanto verdadeiro faca
+      foo = funcao ()
+        para cada i de frota faca
+          pular_iteracao
+        fim
+      fim
+    fim`,
+    `enquanto verdadeiro faca
+      se verdadeiro entao
+        pular_iteracao
+      fim
+    fim`,
+    `enquanto verdadeiro faca
+      foo = funcao ()
+        retornar "froids"
+      fim
+      pular_iteracao
+    fim`
+  ])
+
+  mustThrows([
+    'pular_iteracao',
+    `foo = funcao ()
+      pular_iteracao
+    fim`,
+    `enquanto verdadeiro faca
+      foo = funcao ()
+        pular_iteracao
+      fim
+    fim`,
+    `definir classe Foo
+      construtor: funcao ()
+        pular_iteracao
+      fim
+    fim`
+  ])
+
 })

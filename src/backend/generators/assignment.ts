@@ -1,7 +1,7 @@
 import Env from '../../enviroment/env'
 import { AstNode } from '../traverse'
 import { indexOfChildInParent, identifierValueOfLocNode } from '../../utils/aux-functions'
-import JSReservedWords from '../../utils/js-reserved-words'
+import { JSReservedWords } from '../../utils/reserved-words'
 
 export const assignmentCodeGen = {
   between (): void {

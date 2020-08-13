@@ -35,6 +35,15 @@ export const unaryCodeGen = {
   }
 }
 
+export const exponentialCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += '(Math.pow('
+  },
+  exit (): void {
+    Env.get().codeOutput += '))'
+  }
+}
+
 export const blockFunctionCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     let code = ''

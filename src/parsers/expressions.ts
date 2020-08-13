@@ -13,6 +13,7 @@ import {
   AndOperator,
   OrOperator,
   UnaryOperator,
+  ExponentialOperator,
   Function,
   End,
   ColonEqual,
@@ -27,6 +28,7 @@ import { mapArithmeticRecursiveNode, mapUnaryNode, nodePropertiesMapper } from '
 export type ObjectParser = P.Parser<{}>
 export type FactorParser = P.Parser<P.Node<'factor', {}>>
 export type UnaryParser = P.Parser<P.Node<'unary', {}>>
+export type ExponentialParser = P.Parser<P.Node<'exponential', {}>>
 export type TermParser = P.Parser<P.Node<'term', {}>>
 export type AddParser = P.Parser<P.Node<'add', {}>>
 export type InequalityParser = P.Parser<P.Node<'inequality', {}>>
@@ -67,23 +69,46 @@ export const Unary: UnaryParser = P
   .node('unary')
   .map(mapUnaryNode)
 
+const ExponentialLine: ObjectParser = P
+  .alt(
+    P.seqObj(
+      ExponentialOperator.named('operator'), P.optWhitespace,
+      Unary.named('unary'), P.optWhitespace,
+      P.lazy((): ObjectParser => ExponentialLine).named('exponentialline')
+    ),
+    P.optWhitespace
+  )
+/**
+ * Parse terms with exponential operators(* / %)
+ *
+ * exponential -> exponential ^ unary | unary
+*/
+export const Exponential: ExponentialParser = P
+  .seqObj(
+    Unary.named('unary'),
+    P.optWhitespace,
+    ExponentialLine.named('exponentialline')
+  )
+  .node('exponential')
+  .map(mapArithmeticRecursiveNode)
+
 const TermLine: ObjectParser = P
   .alt(
     P.seqObj(
       TermOperator.named('operator'), P.optWhitespace,
-      Unary.named('unary'), P.optWhitespace,
+      Exponential.named('exponential'), P.optWhitespace,
       P.lazy((): ObjectParser => TermLine).named('termline')
     ),
     P.optWhitespace
   )
 /**
- * Parse terms with factor operators(* / %)
+ * Parse terms with term operators(* / %)
  *
- * term -> term * unary | term / unary | term % unary | unary
+ * term -> term * exponential | term / exponential | term % exponential | exponential
 */
 export const Term: TermParser = P
   .seqObj(
-    Unary.named('unary'),
+    Exponential.named('exponential'),
     P.optWhitespace,
     TermLine.named('termline')
   )

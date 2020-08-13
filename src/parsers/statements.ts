@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon, ElseIf } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon, ElseIf, BreakStmt, ContinueStmt } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser, LocParser, Loc } from './assignment'
 import { Block, BlockParser } from './program'
@@ -13,6 +13,7 @@ export type DoWhileStatementParser = P.Parser<P.Node<'do-while', {}>>
 export type ForEachStatementParser = P.Parser<P.Node<'for-each', {}>>
 export type ForToStatementParser = P.Parser<P.Node<'for-to', {}>>
 export type ReturnStatementParser = P.Parser<P.Node<'return', {}>>
+export type IterationBreakerStatementParser = P.Parser<P.Node<'iteration-breaker-stmt', {}>>
 export type FunctionCallParser = P.Parser<P.Node<'function-call', {}>>
 export type StatementParser = P.Parser<P.Node<'statement', {}>>
 
@@ -131,7 +132,7 @@ export const ForToStatement: ForToStatementParser = P
   .map(nodePropertiesMapper(['identifier', 'start-iterator', 'end-iterator', 'for-to-line', 'block']))
 
 /**
- * Parser function returns
+ * Parse function returns
  *
  * return -> retornar expr
  */
@@ -145,6 +146,18 @@ export const ReturnStatement: ReturnStatementParser = P
   )
   .node('return-stmt')
   .map(nodePropertiesMapper(['expression']))
+
+/**
+ * Parse breakers of loops and switches
+ *
+ * iteration-breaker -> pular_iteracao | interromper_laco
+ */
+export const IterationBreakerStatement: IterationBreakerStatementParser = P
+  .alt(
+    ContinueStmt,
+    BreakStmt
+  )
+  .node('iteration-breaker-stmt')
 
 type LabeledArgsParser = P.Parser<P.Node<'labeled-args', {}>>
 const LabeledArgs: LabeledArgsParser = P
@@ -199,6 +212,7 @@ export const Statement: StatementParser = P
     ForEachStatement,
     // ForToStatement,
     ReturnStatement,
+    IterationBreakerStatement,
     P.lazy((): LocParser => Loc)
   )
   .node('statement')

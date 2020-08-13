@@ -78,7 +78,9 @@ export default class Env {
         SUPER_FIRST: [],
         CLASS_SCOPE: [],
         STATIC_SCOPE: [],
-        FUNCTION_NAME: []
+        FUNCTION_NAME: [],
+        CURRENT_BLOCK_PARENT: [],
+        ITERATION_BREAKER_BLOCK: []
       }
     }
   }
