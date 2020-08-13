@@ -7,9 +7,8 @@ Sequencia de Fibonacci
 fibonacci = funcao (posicao)
     se posicao < 2 entao
         retornar posicao
-    senao
-        retornar fibonacci(posicao - 1) + fibonacci(posicao - 2)
     fim
+    retornar fibonacci(posicao - 1) + fibonacci(posicao - 2)
 fim
 
 // Algoritmo que retornar um texto com a sequencia de fibonacci com n elementos
