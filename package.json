@@ -46,7 +46,7 @@
   "dependencies": {
     "glob": "^7.1.5",
     "js-beautify": "^1.11.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "parsimmon": "^1.13.0",
     "yargs": "^14.2.0"
   },
