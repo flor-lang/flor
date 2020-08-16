@@ -1,0 +1,5 @@
+dist/
+tests/
+doc/examples
+src/lib/impl
+src/enviroment/impl

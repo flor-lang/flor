@@ -1,0 +1,52 @@
+/* Até aqui */
+i = 0
+soma_pares = 0
+
+enquanto i < 10 faca
+  se i % 2 igual a 0 entao
+    soma_pares = soma_pares + i
+  fim
+  i = i + 1
+fim
+
+/* 'switch' statement */
+caso soma_pares
+  igual a 10, 20 ou 30 faca
+    soma_pares = 0
+  esta contido em [100, 200 ou 300] faca
+    soma_pares = 10
+    interromper_laco
+  do tipo 'texto' faca
+    continue
+  senao faca
+    soma_pares = -10
+fim
+
+
+/* for loops */
+colecao = [0,1,2,4,5]
+para cada elemento de colecao faca
+  soma = soma + elemento
+fim
+
+para cada i de [0...5] com passo 2 faca
+  lista[i] = i
+fim
+
+para i de 10 ate 0 com passo -1 faca
+  // do stuff
+fim
+
+/* in operator */
+se lista contem valor faca
+  // algo
+fim
+
+se valor esta contido em lista faca
+  // algo
+fim
+
+/* typeof operator */
+se tipo do valor igual a 'numero' entao
+  valor = valor + 1
+end

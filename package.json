@@ -1,19 +1,34 @@
 {
-  "name": "this-is-not-portugol",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "flor",
+  "version": "0.8.1",
+  "description": "Linguagem de Programação",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
     "test": "jest",
+    "exec": "npm run build && node dist/main.js",
+    "dev": "tsc -w",
     "build": "tsc",
-    "exec": "npm run build && node dist/main.js"
+    "build-cli": "npm run build && npm i -g"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "language",
+    "programming language",
+    "educational",
+    "linguagem de programacao",
+    "educacao"
+  ],
+  "author": "flor-lang",
+  "license": "MIT",
   "devDependencies": {
+    "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.15",
+    "@types/js-beautify": "^1.8.2",
+    "@types/lodash": "^4.14.149",
     "@types/node": "^12.6.8",
+    "@types/parsimmon": "^1.10.0",
+    "@types/treeify": "^1.0.0",
+    "@types/yargs": "^13.0.3",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "eslint": "^6.1.0",
@@ -24,7 +39,18 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.8.0",
+    "treeify": "^1.1.0",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "glob": "^7.1.5",
+    "js-beautify": "^1.11.0",
+    "lodash": "^4.17.15",
+    "parsimmon": "^1.13.0",
+    "yargs": "^14.2.0"
+  },
+  "bin": {
+    "flor": "./dist/cli/index.js"
   }
 }

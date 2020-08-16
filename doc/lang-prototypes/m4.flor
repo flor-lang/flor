@@ -1,0 +1,52 @@
+importar "console" como Console
+importar Nomeavel, Mortal de "../base/interfaces" 
+
+definir interface Nomeavel
+  nome
+fim
+
+definir classe Pessoa
+  implementa: Nomeavel
+  
+  propriedades:
+    nome
+    privado idade
+    telefones
+    estado_civil <- "solteiro"
+
+  construtor: funcao (nome, idade)
+    _.nome <- nome
+    _.idade <- idade
+    _.telefones <- []
+  fim
+    
+  metodos:
+    idade <- () := _.idade
+    
+    alterar_idade <- (idade) := _.idade = idade
+    
+    adicionar_telefone <- funcao (numero)
+      _.telefones.adiciona(numero)
+    fim
+    
+    remover_telefone <- funcao (numero)
+      _.telefones.remove(numero)
+    fim
+
+fim
+
+pessoa <- instanciar Pessoa(nome: 'Sandro', idade: 20)
+pessoa.adicionar_telefone(numero: '999999999')
+
+se pessoa.telefones.tamanho maior que 0 e pessoa.nome = 'Sandro' entao
+  Console.escreva(pessoa)
+senao se pessoa.nome = 'froids' entao
+  Console.escreva(pessoa)
+senao
+  Console.escreva("triste")
+fim
+
+definir classe PessoaJuridica
+  herda: Pessoa
+fim
+

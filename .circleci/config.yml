@@ -2,6 +2,10 @@ version: 2
 jobs:
   build:
     working_directory: ~/tinp
+    branches:
+      only:
+        - master
+        - /release-.*/
     docker:
       - image: circleci/node
     steps:

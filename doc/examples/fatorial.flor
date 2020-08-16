@@ -1,0 +1,17 @@
+/**
+Fatorial
+*/
+
+// Algoritmo para calcular o fatorial de um numero
+fatorial = funcao (numero)
+    contador = 1
+    fatorial = 1
+    enquanto contador <= numero faca
+        fatorial = fatorial * contador
+        contador = contador + 1
+    fim
+    retornar fatorial
+fim
+
+numero = 5
+escrever("Fatorial de " + numero + " é " + fatorial(do: numero))
