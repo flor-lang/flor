@@ -1,29 +1,39 @@
-<p align="center">
-  <img alt="Logo" src="https://raw.githubusercontent.com/flor-lang/flor/master/doc/logo.png" width="200px">
-</p>
 
-<p align="center">
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT Licence">
-  </a>
-</p>
+# <img src="https://raw.githubusercontent.com/flor-lang/flor/master/doc/logo.png" height="28px"/> Flor
 
-# Linguagem Flor
+[![Licença](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://badge.fury.io/js/%40flor-lang%2Fflor.svg)](https://www.npmjs.com/package/@flor-lang/flor)
 
-Flor tem como missão principal o ensino de programação, com a sintaxe pensada e construída para fácil compreensão de algoritmos e fluxos de programas, com a língua portuguesa servindo como base sintática e semântica da linguagem Flor.
+Flor tem como missão principal o ensino de programação,
+com a sintaxe pensada e construída para fácil compreensão de algoritmos e fluxos de programas,
+com a língua portuguesa servindo como base sintática e semântica da linguagem Flor.
 
+Para mais informaçoes sobre o Flor,
+visite o [site da linguagem](https://flor-lang.org/)
+ou [docs](https://docs.flor-lang.org/).
 
-## Instalando compilador
+## Instalação
 
-```bash
+Tendo Node.js instalado.
+
+```shell
+# Instalando localmente em um projeto:
 $ npm install @flor-lang/flor
 ```
 
-## Instalar CLI
+## Instalando CLI
 
-```bash
+Para buildar o CLI, tendo o Git e Node.js instalado:
+
+```shell
 $ git clone https://github.com/flor-lang/flor.git
 $ cd flor
 $ npm install && npm run build-cli
 $ flor -m
 ```
+
+## Licença
+
+O código fonte da linguagem Flor é compartilhado sob a licença MIT.
+
+Ler o arquivo [LICENSE](LICENSE) para mais informações.
