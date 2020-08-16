@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Logo" src="./doc/logo.png" width="200px">
+  <img alt="Logo" src="https://raw.githubusercontent.com/flor-lang/flor/master/doc/logo.png" width="200px">
 </p>
 
 <p align="center">
