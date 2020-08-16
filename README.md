@@ -8,16 +8,18 @@
   </a>
 </p>
 
+# Linguagem Flor
+
 Flor tem como missão principal o ensino de programação, com a sintaxe pensada e construída para fácil compreensão de algoritmos e fluxos de programas, com a língua portuguesa servindo como base sintática e semântica da linguagem Flor.
 
 
-# Instalando compilador
+## Instalando compilador
 
 ```bash
 $ npm install @flor-lang/flor
 ```
 
-# Instalar CLI
+## Instalar CLI
 
 ```bash
 $ git clone https://github.com/flor-lang/flor.git
