@@ -1,8 +1,9 @@
 {
-  "name": "this-is-not-portugol",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "flor",
+  "version": "0.8.1",
+  "description": "Linguagem de Programação",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
     "test": "jest",
     "exec": "npm run build && node dist/main.js",
@@ -10,9 +11,15 @@
     "build": "tsc",
     "build-cli": "npm run build && npm i -g"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "language",
+    "programming language",
+    "educational",
+    "linguagem de programacao",
+    "educacao"
+  ],
+  "author": "flor-lang",
+  "license": "MIT",
   "devDependencies": {
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.15",
