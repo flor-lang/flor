@@ -24,13 +24,13 @@ Yargs
   .scriptName('flor')
   .usage('Exemplo de uso: $0 [opção] [arquivo .flor]')
   .example('$0', 'Compila todos os arquivo flor do diretório')
-  .example('$0 oi_mundo.flor', 'Compilar arquivo flor')
+  .example('$0 oi_mundo.flor', 'Compilar e Executar arquivo flor')
   .example('$0 --pdr-compilar', 'Compila a biblioteca padrão de flor para ser usada posteriormente')
-  .example('$0 --pdr oi_mundo.flor', 'Compilar arquivo flor analisando o código junto com a biblioteca padrão')
-  .example('$0 --pdr --exec oi_mundo.flor', 'Compila e Executa o arquivo flor analisando o código junto com a biblioteca padrão')
-  .version(false)
+  // .example('$0 --pdr oi_mundo.flor', 'Compilar arquivo flor analisando o código junto com a biblioteca padrão')
+  // .example('$0 --pdr --exec oi_mundo.flor', 'Compila e Executa o arquivo flor analisando o código junto com a biblioteca padrão')
   .help('m')
   .alias('m', 'manual')
+  .version()
   .epilog('Autores: Mario Matheus e Rafael Coelho.')
   .locale('pt_BR')
 
@@ -41,13 +41,13 @@ Yargs
       choices: ['js', 'ast', 'tab-sim'],
       default: 'js'
     },
-    exec: {
+    'nao-exec': {
       type: 'boolean',
-      describe: 'Executa o código após compilação'
+      describe: 'Desabilita a execução do código após compilação'
     },
-    pdr: {
+    'nao-pdr': {
       type: 'boolean',
-      describe: 'Insere a biblioteca padrão de Flor no processo de análise'
+      describe: 'Desconsidera as definições da biblioteca padrão de Flor no processo de análise'
     },
     'pdr-compilar': {
       type: 'boolean',
@@ -75,6 +75,8 @@ const filesContent = files
   })
 
 const outputFormat = Yargs.argv.saida || 'js'
+const noExec = Yargs.argv['nao-exec'] || false
+const noPdr = Yargs.argv['nao-pdr'] || false
 
 /* TODO: Config file when flor exports */
 // const haveConfig = fs.existsSync('./florconfig.json')
@@ -117,10 +119,10 @@ const executeOutput = (filePath: string): void => {
 if (outputFormat === 'js') {
   filesContent.forEach(({ filePath, content }): void => {
     const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
-    const { success, result } = tryCompile(content, Yargs.argv.pdr === true)
+    const { success, result } = tryCompile(content, !noPdr)
     if (success) {
       // eslint-disable-next-line no-template-curly-in-string
-      const libPath = Yargs.argv.pdr ? "require(`${require('os').homedir()}/.flor/lib/pdr`);" : ''
+      const libPath = !noPdr ? "require(`${require('os').homedir()}/.flor/lib/pdr`);" : ''
       const code = `try{${libPath}\n${result}}catch(e){
         if (typeof FlorRuntimeErrorMessage === 'undefined') {
           console.error(
@@ -133,7 +135,7 @@ if (outputFormat === 'js') {
       }`
       const fileOutput = beautify(code)
       fs.writeFileSync(outputFilePath, fileOutput)
-      if (Yargs.argv.exec) {
+      if (!noExec) {
         executeOutput(outputFilePath)
       }
     } else {
