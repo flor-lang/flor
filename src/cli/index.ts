@@ -26,11 +26,9 @@ Yargs
   .example('$0', 'Compila todos os arquivo flor do diretório')
   .example('$0 oi_mundo.flor', 'Compilar e Executar arquivo flor')
   .example('$0 --pdr-compilar', 'Compila a biblioteca padrão de flor para ser usada posteriormente')
-  // .example('$0 --pdr oi_mundo.flor', 'Compilar arquivo flor analisando o código junto com a biblioteca padrão')
-  // .example('$0 --pdr --exec oi_mundo.flor', 'Compila e Executa o arquivo flor analisando o código junto com a biblioteca padrão')
+  .version(false)
   .help('m')
   .alias('m', 'manual')
-  .version()
   .epilog('Autores: Mario Matheus e Rafael Coelho.')
   .locale('pt_BR')
 
@@ -40,6 +38,11 @@ Yargs
       describe: 'Saida do compilador',
       choices: ['js', 'ast', 'tab-sim'],
       default: 'js'
+    },
+    versao: {
+      alias: 'v',
+      type: 'boolean',
+      describe: 'Versão instalada do pacote'
     },
     'nao-exec': {
       type: 'boolean',
@@ -55,8 +58,35 @@ Yargs
     }
   })
 
+if (Yargs.argv.versao) {
+  const pathJoin = require('path').join
+  const path = pathJoin(__dirname, '..', '..', 'package.json')
+  const packageJson = fs.readFileSync(path, 'utf-8')
+  const version = JSON.parse(packageJson).version
+  console.log(`Versão da linguagem: ${version}`)
+  process.exit()
+}
+
+if (Yargs.argv['pdr-compilar']) {
+  try {
+    const pathJoin = require('path').join
+    const homeDir = require('os').homedir()
+    const libDir = pathJoin(homeDir, '.flor', 'lib')
+    const libPath = pathJoin(libDir, 'pdr.js')
+    const ErrorHandler = `_.FlorRuntimeErrorMessage = ${FlorRuntimeErrorMessage.toString()}`
+    const StdLib = StandardLibJSImpl.toString().replace('function () {', '').slice(0, -1)
+    fs.mkdirSync(libDir, { recursive: true })
+    fs.writeFileSync(libPath, beautify(`${StdLib}\n${ErrorHandler}\n`))
+    console.log('Biblioteca padrão compilada com sucesso! :)')
+    process.exit()
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
+  }
+}
+
 let files: string[] = Yargs.argv._
-if (files.length === 0 && Yargs.argv['pdr-compilar'] !== true) {
+if (files.length === 0) {
   files = glob.sync('**/*.flor')
 }
 const filesContent = files
@@ -90,21 +120,6 @@ const noPdr = Yargs.argv['nao-pdr'] || false
 //     console.log(`Não foi possível ler arquivo de configuração`)
 //   }
 // }
-
-if (Yargs.argv['pdr-compilar']) {
-  try {
-    const pathJoin = require('path').join
-    const homeDir = require('os').homedir()
-    const libDir = pathJoin(homeDir, '.flor', 'lib')
-    const libPath = pathJoin(libDir, 'pdr.js')
-    const ErrorHandler = `_.FlorRuntimeErrorMessage = ${FlorRuntimeErrorMessage.toString()}`
-    const StdLib = StandardLibJSImpl.toString().replace('function () {', '').slice(0, -1)
-    fs.mkdirSync(libDir, { recursive: true })
-    fs.writeFileSync(libPath, beautify(`${StdLib}\n${ErrorHandler}\n`))
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 const executeOutput = (filePath: string): void => {
   const jsExec = spawn('node', [filePath])
