@@ -13,17 +13,24 @@
 Flor tem como missão principal o ensino de programação, com a sintaxe pensada e construída para fácil compreensão de algoritmos e fluxos de programas, com a língua portuguesa servindo como base sintática e semântica da linguagem Flor.
 
 
-## Instalando compilador
+## Instalando no seu computador
+
+Pré-requisito: [Node](https://nodejs.org/) instalado
+
+### Instalando compilador
 
 ```bash
-$ npm install @flor-lang/flor
+$ npm install -g @flor-lang/flor
 ```
 
-## Instalar CLI
+### Codando Flor (◕ᴗ◕✿)
 
 ```bash
-$ git clone https://github.com/flor-lang/flor.git
-$ cd flor
-$ npm install && npm run build-cli
-$ flor -m
+$ echo "escrever(\"Olá Mundo\")" >> ola.flor
+$ flor ola.flor
 ```
+
+## Playground
+
+Outra opção é utilizar nosso fabuloso (◡‿◡✿) playground online
+[clicando aqui](https://play.flor-lang.org/), onde se torna possível desenhar com flor
