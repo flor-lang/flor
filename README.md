@@ -12,25 +12,27 @@ Para mais informaçoes sobre o Flor,
 visite o [site da linguagem](https://flor-lang.org/)
 ou [docs](https://docs.flor-lang.org/).
 
-## Instalação
+## Instalando no seu computador
 
-Tendo Node.js instalado.
+Pré-requisito: [Node](https://nodejs.org/) instalado
 
-```shell
-# Instalando localmente em um projeto:
-$ npm install @flor-lang/flor
+### Instalando compilador
+
+```bash
+$ npm install -g @flor-lang/flor
 ```
 
-## Instalando CLI
+### Codando Flor (◕ᴗ◕✿)
 
-Para buildar o CLI, tendo o Git e Node.js instalado:
-
-```shell
-$ git clone https://github.com/flor-lang/flor.git
-$ cd flor
-$ npm install && npm run build-cli
-$ flor -m
+```bash
+$ echo "escrever(\"Olá Mundo\")" >> ola.flor
+$ flor ola.flor
 ```
+
+## Playground
+
+Outra opção é utilizar nosso fabuloso (◡‿◡✿) playground online
+[clicando aqui](https://play.flor-lang.org/), onde se torna possível desenhar com flor
 
 ## Licença
 
