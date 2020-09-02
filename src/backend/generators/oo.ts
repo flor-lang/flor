@@ -1,6 +1,7 @@
 import Env from '../../enviroment/env'
 import { AstNode } from 'backend/traverse'
 import { isEmptyNode } from '../../utils/aux-functions'
+import { Polyfill } from '../../enviroment/polyfill'
 
 export const classDeclarationCodeGen = {
   enter (): void {
@@ -59,6 +60,7 @@ export const propertyCodeGen = {
       if (isEmptyNode(assignmentNode)) {
         Env.get().codeOutput += 'null'
       } else {
+        Env.get().injectPolyfill(Polyfill.EXPR)
         Env.get().codeOutput += '__expr__('
       }
     }
