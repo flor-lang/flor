@@ -10,8 +10,7 @@
     "exec": "npm run build && node dist/main.js",
     "dev": "tsc -w",
     "build": "tsc",
-    "build-cli": "npm run build && npm i -g",
-    "postinstall": "flor --pdr-compilar"
+    "build-cli": "npm run build && npm i -g"
   },
   "keywords": [
     "language",

@@ -1,43 +1,45 @@
 /**
  * JS Implementation of Flor Standard Lib
  */
-export const StandardLibJSImpl = () => {// Standard LIB Definitions
+export const StandardLibJSImpl = (scope: NodeJS.Global | Window) => {// Standard LIB Definitions
 /** **************************************************************************** */
-const _ = global
+const _ = scope
 
 /**
  * Texto: String
  */
 
 // Statics
-_.Texto = {
-  do_unicode: String.fromCharCode
-}
+Object.defineProperty(_, 'Texto', {
+  value: {
+    do_unicode: String.fromCharCode
+  },
+  writable: false
+})
+
 
 // Prototype Definitions
-String.prototype.letra_na = String.prototype.charAt
-String.prototype.unicode_da_letra_na = String.prototype.charCodeAt
-String.prototype.concatenar = String.prototype.concat
-String.prototype.termina_com = String.prototype.endsWith
-String.prototype.possui = String.prototype.includes
-String.prototype.indice = String.prototype.indexOf
-String.prototype.ultimo_indice = String.prototype.lastIndexOf
-String.prototype.normalizar = String.prototype.normalize
-String.prototype.substituir = String.prototype.replace
-String.prototype.pesquisar_por = String.prototype.search
-String.prototype.obter_subtexto = String.prototype.substring
-String.prototype.dividir_texto_por = String.prototype.split
-String.prototype.inicia_com = String.prototype.startsWith
-String.prototype.minusculo = String.prototype.toLowerCase
-String.prototype.maiusculo = String.prototype.toUpperCase
-String.prototype.remover_espacos_das_laterais = String.prototype.trim
-String.prototype.remover_espacos_a_esquerda = String.prototype.trimLeft
-String.prototype.remover_espacos_a_direita = String.prototype.trimRight
-
-// Prototype Overrides
-String.prototype.tamanho = function () {
-  return this.length
-}
+Object.defineProperties(String.prototype, {
+  tamanho: { get: function () { return this.length } },
+  letra_na: { value: String.prototype.charAt },
+  unicode_da_letra_na: { value:  String.prototype.charCodeAt },
+  concatenar: { value:  String.prototype.concat },
+  termina_com: { value:  String.prototype.endsWith },
+  possui: { value:  String.prototype.includes },
+  indice: { value:  String.prototype.indexOf },
+  ultimo_indice: { value:  String.prototype.lastIndexOf },
+  normalizar: { value:  String.prototype.normalize },
+  substituir: { value:  String.prototype.replace },
+  pesquisar_por: { value:  String.prototype.search },
+  obter_subtexto: { value:  String.prototype.substring },
+  dividir_texto_por: { value:  String.prototype.split },
+  inicia_com: { value:  String.prototype.startsWith },
+  minusculo: { value:  String.prototype.toLowerCase },
+  maiusculo: { value:  String.prototype.toUpperCase },
+  remover_espacos_das_laterais: { value:  String.prototype.trim },
+  remover_espacos_a_esquerda: { value:  String.prototype.trimLeft },
+  remover_espacos_a_direita: { value:  String.prototype.trimRight },
+})
 
 /** **************************************************************************** */
 
@@ -46,26 +48,31 @@ String.prototype.tamanho = function () {
  */
 
 // Statics
-_.Numero = {
-  EPSILON: Number.EPSILON,
-  VALOR_MAX: Number.MAX_VALUE,
-  VALOR_MIN: Number.MIN_VALUE,
-  INFINITO_POSITIVO: Number.POSITIVE_INFINITY,
-  INFINITO_NEGATIVO: Number.NEGATIVE_INFINITY,
-  NaN: Number.NaN,
-  e_finito: Number.isFinite,
-  e_inteiro: Number.isInteger,
-  e_NaN: Number.isNaN
-}
+Object.defineProperty(_, 'Numero', {
+  value: {
+    EPSILON: Number.EPSILON,
+    VALOR_MAX: Number.MAX_VALUE,
+    VALOR_MIN: Number.MIN_VALUE,
+    INFINITO_POSITIVO: Number.POSITIVE_INFINITY,
+    INFINITO_NEGATIVO: Number.NEGATIVE_INFINITY,
+    NaN: Number.NaN,
+    e_finito: Number.isFinite,
+    e_inteiro: Number.isInteger,
+    e_NaN: Number.isNaN
+  },
+  writable: false
+})
 
 // Prototype Definitions
-Number.prototype.com_n_casas_decimais = Number.prototype.toFixed
-
-// Prototype Overrides
-Number.prototype.notacao_cientifica = function () {
-  const exponential = this.toExponential()
-  return exponential.replace('e', ' x 10^')
-}
+Object.defineProperties(Number.prototype, {
+  com_n_casas_decimais: { value: Number.prototype.toFixed },
+  notacao_cientifica: {
+    value() {
+      const exponential = this.toExponential()
+      return exponential.replace('e', ' x 10^')
+    }
+  }
+});
 
 /** **************************************************************************** */
 
@@ -84,51 +91,53 @@ Boolean.prototype.toString = function () {
  */
 
 // Statics
-_.Lista = {
-  e_lista: Array.isArray
-}
+Object.defineProperty(_, 'Lista', {
+  value: {
+    e_lista: Array.isArray
+  },
+  writable: false 
+})
 
 // Prototype Definitions
-Array.prototype.concatenar = Array.prototype.concat
-Array.prototype.verificar_todo_elemento = Array.prototype.every
-Array.prototype.preencher_com = Array.prototype.fill
-Array.prototype.filtrar = Array.prototype.filter
-Array.prototype.encontrar = Array.prototype.find
-Array.prototype.encontrarIndice = Array.prototype.findIndex
-Array.prototype.para_cada = Array.prototype.forEach
-Array.prototype.possui = Array.prototype.includes
-Array.prototype.indice = Array.prototype.indexOf
-Array.prototype.unir_em_texto = Array.prototype.join
-Array.prototype.ultimo_indice = Array.prototype.lastIndexOf
-Array.prototype.mapear = Array.prototype.map
-Array.prototype.remover_ultimo_elemento = Array.prototype.pop
-Array.prototype.adicionar = Array.prototype.push
-Array.prototype.reduzir = Array.prototype.reduce
-Array.prototype.inverter = Array.prototype.reverse
-Array.prototype.remover_primeiro_elemento = Array.prototype.shift
-Array.prototype.obter_sublista = Array.prototype.slice
-Array.prototype.verificar_algum_elemento = Array.prototype.some
-Array.prototype.ordenar = Array.prototype.sort
-Array.prototype.remover_elementos = Array.prototype.splice
-Array.prototype.adicionar_no_inicio = Array.prototype.unshift
+Object.defineProperties(Array.prototype, {
+  tamanho: { get: function () { return this.length } },
+  concatenar: { value:  Array.prototype.concat },
+  verificar_todo_elemento: { value:  Array.prototype.every },
+  preencher_com: { value:  Array.prototype.fill },
+  filtrar: { value:  Array.prototype.filter },
+  encontrar: { value:  Array.prototype.find },
+  encontrarIndice: { value:  Array.prototype.findIndex },
+  para_cada: { value:  Array.prototype.forEach },
+  possui: { value:  Array.prototype.includes },
+  indice: { value:  Array.prototype.indexOf },
+  unir_em_texto: { value:  Array.prototype.join },
+  ultimo_indice: { value:  Array.prototype.lastIndexOf },
+  mapear: { value:  Array.prototype.map },
+  remover_ultimo_elemento: { value:  Array.prototype.pop },
+  adicionar: { value:  Array.prototype.push },
+  reduzir: { value:  Array.prototype.reduce },
+  inverter: { value:  Array.prototype.reverse },
+  remover_primeiro_elemento: { value:  Array.prototype.shift },
+  obter_sublista: { value:  Array.prototype.slice },
+  verificar_algum_elemento: { value:  Array.prototype.some },
+  ordenar: { value:  Array.prototype.sort },
+  remover_elementos: { value:  Array.prototype.splice },
+  adicionar_no_inicio: { value:  Array.prototype.unshift },
+  __old_array_to_string__: { value: Array.prototype.toString },
+  inserir: {
+    value(elemento: any, posicao: number) {
+      return this.splice(posicao, 0, elemento)
+    }
+  },
+  remover_elemento: {
+    value(posicao: number) {
+      return this.splice(posicao, 1)
+    }
+  }
+})
 
-
-// Prototype Overrides
-Array.prototype.__old_array_to_string__ = Array.prototype.toString
-_.Array.prototype.toString = function () {
+Array.prototype.toString = function () {
   return `[${this.__old_array_to_string__()}]`
-}
-
-Array.prototype.inserir = function(elemento, posicao) {
-  return this.splice(posicao, 0, elemento)
-}
-
-Array.prototype.remover_elemento = function(posicao) {
-  return this.splice(posicao, 1)
-}
-
-Array.prototype.tamanho = function () {
-  return this.length
 }
 
 /** **************************************************************************** */
@@ -138,12 +147,18 @@ Array.prototype.tamanho = function () {
  */
 
 // Prototype Declarations
-Object.prototype.possui = Object.prototype.hasOwnProperty
+Object.defineProperties(Object.prototype, {
+  possui: { value: Object.prototype.hasOwnProperty }
+})
 
 // Prototype overrides
 let __object_stringify_depth__ = 0
 Object.prototype.toString = function () {
   let str = ''
+
+  if (this.descricao) {
+    return this.descricao()
+  }
 
   if (this.constructor.name !== 'Object') {
     __object_stringify_depth__ += 1
@@ -172,58 +187,167 @@ Object.prototype.toString = function () {
 /** **************************************************************************** */
 
 /**
+ * Conjunto: Set
+ */
+class Conjunto<T> {
+  private list: T[]
+
+  constructor(list?: T[]) {
+    this.list = []
+    if (list) {
+      list.forEach((el: T) => this.adicionar(el))
+    }
+  }
+
+  adicionar(elemento: T): void {
+    if (!this.contem(elemento)) {
+      this.list.push(elemento)
+    }
+  }
+
+  remover(elemento: T) {
+    const posicao = this.list.indexOf(elemento);
+    if (posicao > -1) {
+      this.list.splice(posicao, 1)
+    }
+  }
+
+
+  uniao(conjunto: Conjunto<T>): Conjunto<T> {
+    const novoConjunto = new Conjunto(this.valores());
+    conjunto.valores().forEach(valor => {
+      novoConjunto.adicionar(valor)
+    });
+    return novoConjunto;
+  }
+
+  intercecao(conjunto: Conjunto<T>): Conjunto<T> {
+    const valores = conjunto.valores().filter(valor => this.contem(valor));
+    return new Conjunto(valores);
+  }
+
+  diferenca(conjunto: Conjunto<T>): Conjunto<T> {
+    const valores = this.valores().filter(valor => !conjunto.contem(valor));
+    return new Conjunto(valores);
+  }
+
+  contem(elemento: T): boolean { return this.list.includes(elemento); }
+  para_cada(callbackfn: (e: T, i?: number) => void) { this.list.forEach(callbackfn); }
+  limpar() { this.list = []; }
+  valores() { return this.list; }
+  descricao() { return `Conjunto :: ${this.valores()}`; }
+
+}
+
+Object.defineProperty(_, 'Conjunto', {
+  value: Conjunto,
+  writable: false 
+})
+
+/** **************************************************************************** */
+
+/**
+ * Fila: Queue
+ */
+class Fila<T> {
+  private list: T[];
+  constructor(list?: T[]) { this.list = list || []; }
+
+  enfileirar(elemento: T): void { this.list.push(elemento); }
+  desenfileirar() { this.list.shift(); }
+  contem(elemento: T): boolean { return this.list.includes(elemento); }
+  para_cada(callbackfn: (e: T, i?: number) => void) { this.list.forEach(callbackfn) }
+  valores() { return this.list; }
+  descricao() { return `Fila :: ${this.valores()}` }
+}
+
+Object.defineProperty(_, 'Fila', {
+  value: Fila,
+  writable: false 
+})
+
+/** **************************************************************************** */
+
+/**
+ * Fila: Queue
+ */
+class Pilha<T> {
+  private list: T[];
+  constructor(list?: T[]) { this.list = list || []; }
+
+  empilhar(elemento: T): void { this.list.push(elemento); }
+  desempilhar() { this.list.pop(); }
+  contem(elemento: T): boolean { return this.list.includes(elemento); }
+  para_cada(callbackfn: (e: T, i?: number) => void) { this.list.forEach(callbackfn) }
+  valores() { return this.list; }
+  descricao() { return `Pilha :: ${this.valores()}` }
+}
+
+Object.defineProperty(_, 'Pilha', {
+  value: Pilha,
+  writable: false 
+})
+
+/** **************************************************************************** */
+
+/**
  * Matematica: Math
  */
 
 // Aliases Declarations
-Math.absoluto = Math.abs
-Math.arco_cosseno = Math.acos
-Math.arco_cosseno_hiperbolico = Math.acosh
-Math.arco_seno = Math.asin
-Math.arco_seno_hiperbolico = Math.asinh
-Math.arco_tangente = Math.atan
-Math.arco_tangente_2 = Math.atan2
-Math.arco_tangente_hiperbolico = Math.atanh
-Math.raiz_cubica = Math.cbrt
-Math.teto_de = Math.ceil
-Math.cosseno = Math.cos
-Math.cosseno_hiperbolico = Math.cosh
-Math.c_euler_el = Math.exp
-Math.e_el = Math.exp
-Math.chao = Math.floor
-Math.hipotenusa = Math.hypot
-Math.log_base_10 = Math.log10
-Math.log_base_2 = Math.log2
-Math.el = Math.pow
-Math.elevar = Math.pow
-Math.num_aleatorio = Math.random
-Math.arredondar = Math.round
-Math.sinal = Math.sign
-Math.seno = Math.sin
-Math.seno_hiperbolico = Math.sinh
-Math.raiz = Math.sqrt
-Math.raiz_quadrada = Math.sqrt
-Math.tangente = Math.tan
-Math.tangente_hiperbolica = Math.tanh
-Math.truncar = Math.trunc
+Object.defineProperties(Math, {
+  absoluto: { value:  Math.abs },
+  arco_cosseno: { value:  Math.acos },
+  arco_cosseno_hiperbolico: { value:  Math.acosh },
+  arco_seno: { value:  Math.asin },
+  arco_seno_hiperbolico: { value:  Math.asinh },
+  arco_tangente: { value:  Math.atan },
+  arco_tangente_2: { value:  Math.atan2 },
+  arco_tangente_hiperbolico: { value:  Math.atanh },
+  raiz_cubica: { value:  Math.cbrt },
+  teto_de: { value:  Math.ceil },
+  cosseno: { value:  Math.cos },
+  cosseno_hiperbolico: { value:  Math.cosh },
+  c_euler_el: { value:  Math.exp },
+  e_el: { value:  Math.exp },
+  chao: { value:  Math.floor },
+  hipotenusa: { value:  Math.hypot },
+  log_base_10: { value:  Math.log10 },
+  log_base_2: { value:  Math.log2 },
+  el: { value:  Math.pow },
+  elevar: { value:  Math.pow },
+  num_aleatorio: { value:  Math.random },
+  arredondar: { value:  Math.round },
+  sinal: { value:  Math.sign },
+  seno: { value:  Math.sin },
+  seno_hiperbolico: { value:  Math.sinh },
+  raiz: { value:  Math.sqrt },
+  raiz_quadrada: { value:  Math.sqrt },
+  tangente: { value:  Math.tan },
+  tangente_hiperbolica: { value:  Math.tanh },
+  truncar: { value:  Math.trunc },
+})
 
-_.Matematica = Math
+
+// _.Matematica = Math
+Object.defineProperty(_, 'Matematica', {
+  value: Math, writable: false
+})
 
 /** **************************************************************************** */
 
 /**
  * Global
  */
+const txt = (arg: any) => arg.toString()
+const bool = (arg: any) => new Boolean(arg).valueOf()
+const list = (arg: any) => Array.from(arg)
+const dic = (arg: any) => JSON.parse(arg)
+const num = (arg: any) => new Number(arg).valueOf()
+const int = parseInt
+const real = parseFloat
 
-_.txt = (arg) => arg.toString()
-_.bool = (arg) => new Boolean(arg).valueOf()
-_.list = (arg) => Array.from(arg)
-_.dic = (arg) => JSON.parse(arg)
-_.num = (arg) => new Number(arg).valueOf()
-_.int = parseInt
-_.real = parseFloat
-
-_.escrever = function (message) {
+const escrever = function (message: any) {
   let log = ''
   if (typeof message === 'undefined') {
     log = '\nErro na escrita:\n  Atributo não definido'
@@ -242,4 +366,55 @@ _.escrever = function (message) {
   }
   console.log(log)
 }
+
+const FlorRuntimeErrorMessage = (error: Error): string => {
+  let __florErrorMessage__ = error.message
+
+  if (error instanceof TypeError) {
+    if (error.message.endsWith('is not a function')) {
+      __florErrorMessage__ = error.message.replace(
+        'is not a function', 'não é uma função'
+      )
+    }
+
+    if (error.message.startsWith('Cannot read property')) {
+      __florErrorMessage__ = error.message.replace(
+        'Cannot read property', 'Váriavel'
+      )
+      if (error.message.endsWith('of undefined')) {
+        __florErrorMessage__ = __florErrorMessage__.replace(
+          'of undefined', 'não pode ser lida de um objeto não existente'
+        )
+      }
+      if (error.message.endsWith('of null')) {
+        __florErrorMessage__ = __florErrorMessage__.replace(
+          'of null', 'não pode ser lida de um objeto nulo'
+        )
+      }
+    }
+  }
+
+  if (error instanceof ReferenceError) {
+    if (error.message.endsWith('is not defined')) {
+      __florErrorMessage__ = error.message.replace(
+        'is not defined', 'não foi definida'
+      )
+    }
+  }
+
+  return `\nErro na execução:\n  ${__florErrorMessage__}`
+}
+
+Object.defineProperties(_, {
+  txt: { value: txt, writable: false },
+  bool: { value: bool, writable: false },
+  list: { value: list, writable: false },
+  dic: { value: dic, writable: false },
+  num: { value: num, writable: false },
+  int: { value: int, writable: false },
+  real: { value: real, writable: false },
+  escrever: { value: escrever, writable: false },
+  FlorRuntimeErrorMessage: { value: FlorRuntimeErrorMessage, writable: false },
+})
+
 }

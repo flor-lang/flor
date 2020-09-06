@@ -18,7 +18,7 @@ export const OfExpr = P.string('de').wspc()
 export const ToExpr = P.string('ate').wspc()
 export const WithExpr = P.string('com').wspc()
 export const StepExpr = P.string('passo').wspc()
-export const End = P.string('fim').wspc()
+export const End = P.string('fim').optWspc()
 
 export const NotOperator = P.string('!')
 export const PlusOperator = P.string('+')

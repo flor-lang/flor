@@ -7,8 +7,6 @@ import * as glob from 'glob'
 import { js as beautify } from 'js-beautify'
 
 import {
-  StandardLibJSImpl,
-  FlorRuntimeErrorMessage,
   parseCode,
   AstNode,
   SymbolTable,
@@ -25,7 +23,6 @@ Yargs
   .usage('Exemplo de uso: $0 [opção] [arquivo .flor]')
   .example('$0', 'Compila todos os arquivo flor do diretório')
   .example('$0 oi_mundo.flor', 'Compilar e Executar arquivo flor')
-  .example('$0 --pdr-compilar', 'Compila a biblioteca padrão de flor para ser usada posteriormente')
   .version(false)
   .help('m')
   .alias('m', 'manual')
@@ -51,10 +48,6 @@ Yargs
     'nao-pdr': {
       type: 'boolean',
       describe: 'Desconsidera as definições da biblioteca padrão de Flor no processo de análise'
-    },
-    'pdr-compilar': {
-      type: 'boolean',
-      describe: 'Compila a biblioteca padrão de Flor'
     }
   })
 
@@ -67,24 +60,6 @@ if (Yargs.argv.versao) {
   process.exit()
 }
 
-if (Yargs.argv['pdr-compilar']) {
-  try {
-    const pathJoin = require('path').join
-    const homeDir = require('os').homedir()
-    const libDir = pathJoin(homeDir, '.flor', 'lib')
-    const libPath = pathJoin(libDir, 'pdr.js')
-    const ErrorHandler = `_.FlorRuntimeErrorMessage = ${FlorRuntimeErrorMessage.toString()}`
-    const StdLib = StandardLibJSImpl.toString().replace('function () {', '').slice(0, -1)
-    fs.mkdirSync(libDir, { recursive: true })
-    fs.writeFileSync(libPath, beautify(`${StdLib}\n${ErrorHandler}\n`))
-    console.log('Biblioteca padrão compilada com sucesso! :)')
-    process.exit()
-  } catch (error) {
-    console.log(error)
-    process.exit(1)
-  }
-}
-
 let files: string[] = Yargs.argv._
 if (files.length === 0) {
   files = glob.sync('**/*.flor')
@@ -92,10 +67,11 @@ if (files.length === 0) {
 const filesContent = files
   .map((path): FileContent => {
     try {
-      const content = fs.readFileSync(path, 'utf-8')
+      const currentPath = !path.endsWith('.flor') ? path.concat('.flor') : path
+      const content = fs.readFileSync(currentPath, 'utf-8')
       const processed = String(content)
       return {
-        filePath: path,
+        filePath: currentPath,
         content: processed
       }
     } catch (e) {
@@ -121,6 +97,15 @@ const noPdr = Yargs.argv['nao-pdr'] || false
 //   }
 // }
 
+const requireLibPath = (callbackfn: (libPath: string) => void): void => {
+  const jsExec = spawn('npm', ['root', '-g'])
+  createInterface({ input: jsExec.stdout }).on('line', (path: string): void => {
+    callbackfn(`${path}/@flor-lang/flor/dist/lib/impl`)
+  })
+  createInterface({ input: jsExec.stderr }).on('line', (): void => callbackfn(''))
+  jsExec.on('error', (): void => callbackfn(''))
+}
+
 const executeOutput = (filePath: string): void => {
   const jsExec = spawn('node', [filePath])
   createInterface({ input: jsExec.stdout }).on('line', console.log)
@@ -131,35 +116,38 @@ const executeOutput = (filePath: string): void => {
   // )
 }
 
-if (outputFormat === 'js') {
-  filesContent.forEach(({ filePath, content }): void => {
-    const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
-    const { success, result } = tryCompile(content, !noPdr)
-    if (success) {
-      // eslint-disable-next-line no-template-curly-in-string
-      const libPath = !noPdr ? "require(`${require('os').homedir()}/.flor/lib/pdr`);" : ''
-      const code = `try{${libPath}\n${result}}catch(e){
+const handleFileContent = (filePath: string, content: string, libPath: string): void => {
+  const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
+  const { success, result } = tryCompile(content, !noPdr)
+  if (success) {
+    const libPathRequire = !noPdr ? `require('${libPath}/standard').StandardLibJSImpl(global);` : ''
+    const code = `try{${libPathRequire}\n${result}}catch(e){
         if (typeof FlorRuntimeErrorMessage === 'undefined') {
-          console.error(
-            'Módulo padrão não encontrado. Por favor, compile a biblioteca padrão!' + 
-            ' Execute o comando:\\n  flor --pdr-compilar'
-          )
+          console.error('Módulo de erro padrão não encontrado.')
+          console.error(e)
         } else {
           console.error(FlorRuntimeErrorMessage(e))
         }
       }`
-      const fileOutput = beautify(code)
-      fs.writeFileSync(outputFilePath, fileOutput)
-      if (!noExec) {
-        executeOutput(outputFilePath)
-      }
-    } else {
-      console.error(result)
+    const fileOutput = beautify(code)
+    fs.writeFileSync(outputFilePath, fileOutput)
+    if (!noExec) {
+      executeOutput(outputFilePath)
     }
+  } else {
+    console.error(result)
+  }
+}
+
+if (outputFormat === 'js') {
+  requireLibPath((libPath): void => {
+    filesContent.forEach(({ filePath, content }): void => {
+      handleFileContent(filePath, content, libPath)
+    })
   })
 } else if (outputFormat === 'tab-sim') {
   filesContent
-    .map((file): SymbolTable => getSymbolTable(file.content, Yargs.argv.pdr === true))
+    .map((file): SymbolTable => getSymbolTable(file.content, !noPdr))
     .forEach((table): void => logSymbolTable(table))
 } else if (outputFormat === 'ast') {
   filesContent

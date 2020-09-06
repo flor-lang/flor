@@ -4,13 +4,13 @@ import { visitor } from './backend/visitor'
 import { traverser, AstNode } from './backend/traverse'
 import Env from './enviroment/env'
 import SymbolTable from './enviroment/symbol-table'
-import { FlorCompilationErrorMessage, FlorRuntimeErrorMessage } from './utils/errors'
+import { FlorCompilationErrorMessage } from './utils/errors'
 import { StandardLib, EmptyAstNode } from './lib/standard.flib'
 import comments from './utils/comments'
 
 export { logAst, logSymbolTable } from './utils/logger'
 export { StandardLibJSImpl } from './lib/impl/standard'
-export { SymbolTable, AstNode, FlorRuntimeErrorMessage }
+export { SymbolTable, AstNode }
 
 /**
  * Parse input code generating abstract syntax tree
