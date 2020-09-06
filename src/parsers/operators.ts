@@ -20,7 +20,8 @@ export const WithExpr = P.string('com').wspc()
 export const StepExpr = P.string('passo').wspc()
 export const End = P.string('fim').optWspc()
 
-export const NotOperator = P.string('!')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const NotOperator = P.seqMap(P.string('~'), (_): string => '!')
 export const PlusOperator = P.string('+')
 export const MinusOperator = P.string('-')
 export const AsteriskOperator = P.string('*')

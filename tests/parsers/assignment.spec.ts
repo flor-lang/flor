@@ -29,7 +29,7 @@ test('parse assignment operation', (): void => {
     'arr[0] =falso',
     'x[0][0]= 0',
     'identifier = identifier',
-    'foo = !((bar * 5) >= arr[index])',
+    'foo = ~((bar * 5) >= arr[index])',
     'funcao_dois = "teste"',
     `somar = funcao(x, y)
        retornar x + y
