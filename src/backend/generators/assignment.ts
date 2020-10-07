@@ -27,7 +27,8 @@ export const locCodeGen = {
 
 export const identifierCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
-    if (['labeled-arg', 'interfaces'].includes(parent.name) === false) {
+    const excludedParents = ['labeled-arg', 'interfaces', 'interface-declaration', 'interface-members']
+    if (excludedParents.includes(parent.name) === false) {
       let identifier = node.value as string
       if (identifier.startsWith('#')) {
         Env.get().codeOutput += 'this.'
