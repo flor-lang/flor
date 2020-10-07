@@ -1,6 +1,6 @@
 {
   "name": "@flor-lang/flor",
-  "version": "0.8.312-alpha.0",
+  "version": "0.8.4",
   "description": "Linguagem de Programação",
   "homepage": "https://flor-lang.org/",
   "main": "dist/main.js",
