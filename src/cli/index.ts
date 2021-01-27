@@ -107,7 +107,13 @@ const requireLibPath = (callbackfn: (libPath: string) => void): void => {
 }
 
 const executeOutput = (filePath: string): void => {
-  const jsExec = spawn('node', [filePath])
+  const args = process.argv
+  const argIndex = args.indexOf(filePath.replace('.js', '.flor'))
+  let lastArgIndex = args.indexOf(args.find((arg, index): boolean => index > argIndex && arg.includes('.flor')))
+  if (lastArgIndex === -1) {
+    lastArgIndex = args.length
+  }
+  const jsExec = spawn('node', [filePath, ...args.slice(argIndex + 1, lastArgIndex)])
   createInterface({ input: jsExec.stdout }).on('line', console.log)
   createInterface({ input: jsExec.stderr }).on('line', console.error)
   jsExec.on('error', (error: Error): void => console.error(error.message))
@@ -120,7 +126,9 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
   const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
   const { success, result } = tryCompile(content, !noPdr)
   if (success) {
-    const libPathRequire = !noPdr ? `require('${libPath}/standard').StandardLibJSImpl(global);` : ''
+    const libPathRequire = !noPdr
+      ? `if (typeof FlorJS === 'undefined'){require('${libPath}/standard').StandardLibJSImpl(global);}`
+      : ''
     const code = `try{${libPathRequire}\n${result}}catch(e){
         if (typeof FlorRuntimeErrorMessage === 'undefined') {
           console.error('Módulo de erro padrão não encontrado.')

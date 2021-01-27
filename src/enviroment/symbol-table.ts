@@ -28,6 +28,10 @@ export default class SymbolTable {
     this.table[identifier] = node
   }
 
+  public keys (): string[] {
+    return Object.keys(this.table)
+  }
+
   public get (identifier: string): AstNode {
     let node: AstNode = null
     this.searchIdentifier(identifier, (symbolTable): void => {

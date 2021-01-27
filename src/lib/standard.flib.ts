@@ -12,6 +12,7 @@ export const StandardLib: { [key: string]: AstNode } = {
   Conjunto: EmptyAstNode,
   Math: EmptyAstNode,
   Matematica: EmptyAstNode,
+  FlorJS: EmptyAstNode,
   txt: EmptyAstNode,
   bool: EmptyAstNode,
   list: EmptyAstNode,
@@ -19,5 +20,6 @@ export const StandardLib: { [key: string]: AstNode } = {
   num: EmptyAstNode,
   int: EmptyAstNode,
   real: EmptyAstNode,
+  importar: EmptyAstNode,
   escrever: EmptyAstNode
 }

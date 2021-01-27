@@ -1,3 +1,5 @@
+import { cwd } from "process"
+
 /**
  * JS Implementation of Flor Standard Lib
  */
@@ -93,7 +95,10 @@ Boolean.prototype.toString = function () {
 // Statics
 Object.defineProperty(_, 'Lista', {
   value: {
-    e_lista: Array.isArray
+    e_lista: Array.isArray,
+    serie: (inicio: number, tamanho: number, passo = 1) => Array
+      .from(Array(tamanho).keys())
+      .map(i => passo * i + inicio)
   },
   writable: false 
 })
@@ -106,7 +111,7 @@ Object.defineProperties(Array.prototype, {
   preencher_com: { value:  Array.prototype.fill },
   filtrar: { value:  Array.prototype.filter },
   encontrar: { value:  Array.prototype.find },
-  encontrarIndice: { value:  Array.prototype.findIndex },
+  encontrar_indice: { value:  Array.prototype.findIndex },
   para_cada: { value:  Array.prototype.forEach },
   possui: { value:  Array.prototype.includes },
   indice: { value:  Array.prototype.indexOf },
@@ -190,25 +195,29 @@ Object.prototype.toString = function () {
  * Conjunto: Set
  */
 class Conjunto<T> {
-  private list: T[]
+  private _list: T[]
 
   constructor(list?: T[]) {
-    this.list = []
+    this._list = []
     if (list) {
       list.forEach((el: T) => this.adicionar(el))
     }
   }
 
+  get tamanho(): number {
+    return this._list.length;
+  }
+
   adicionar(elemento: T): void {
     if (!this.contem(elemento)) {
-      this.list.push(elemento)
+      this._list.push(elemento)
     }
   }
 
   remover(elemento: T) {
-    const posicao = this.list.indexOf(elemento);
+    const posicao = this._list.indexOf(elemento);
     if (posicao > -1) {
-      this.list.splice(posicao, 1)
+      this._list.splice(posicao, 1)
     }
   }
 
@@ -231,10 +240,10 @@ class Conjunto<T> {
     return new Conjunto(valores);
   }
 
-  contem(elemento: T): boolean { return this.list.includes(elemento); }
-  para_cada(callbackfn: (e: T, i?: number) => void) { this.list.forEach(callbackfn); }
-  limpar() { this.list = []; }
-  valores() { return this.list; }
+  contem(elemento: T): boolean { return this._list.includes(elemento); }
+  para_cada(callbackfn: (e: T, i?: number) => void) { this._list.forEach(callbackfn); }
+  limpar() { this._list = []; }
+  valores() { return this._list; }
   descricao() { return `Conjunto :: ${this.valores()}`; }
 
 }
@@ -250,14 +259,18 @@ Object.defineProperty(_, 'Conjunto', {
  * Fila: Queue
  */
 class Fila<T> {
-  private list: T[];
-  constructor(list?: T[]) { this.list = list || []; }
+  private _list: T[];
+  constructor(list?: T[]) { this._list = list || []; }
 
-  enfileirar(elemento: T): void { this.list.push(elemento); }
-  desenfileirar() { this.list.shift(); }
-  contem(elemento: T): boolean { return this.list.includes(elemento); }
-  para_cada(callbackfn: (e: T, i?: number) => void) { this.list.forEach(callbackfn) }
-  valores() { return this.list; }
+  get tamanho(): number {
+    return this._list.length;
+  }
+
+  enfileirar(elemento: T): void { this._list.push(elemento); }
+  desenfileirar() { this._list.shift(); }
+  contem(elemento: T): boolean { return this._list.includes(elemento); }
+  para_cada(callbackfn: (e: T, i?: number) => void) { this._list.forEach(callbackfn) }
+  valores() { return this._list; }
   descricao() { return `Fila :: ${this.valores()}` }
 }
 
@@ -272,14 +285,18 @@ Object.defineProperty(_, 'Fila', {
  * Fila: Queue
  */
 class Pilha<T> {
-  private list: T[];
-  constructor(list?: T[]) { this.list = list || []; }
+  private _list: T[];
+  constructor(list?: T[]) { this._list = list || []; }
 
-  empilhar(elemento: T): void { this.list.push(elemento); }
-  desempilhar() { this.list.pop(); }
-  contem(elemento: T): boolean { return this.list.includes(elemento); }
-  para_cada(callbackfn: (e: T, i?: number) => void) { this.list.forEach(callbackfn) }
-  valores() { return this.list; }
+  get tamanho(): number {
+    return this._list.length;
+  }
+
+  empilhar(elemento: T): void { this._list.push(elemento); }
+  desempilhar() { this._list.pop(); }
+  contem(elemento: T): boolean { return this._list.includes(elemento); }
+  para_cada(callbackfn: (e: T, i?: number) => void) { this._list.forEach(callbackfn) }
+  valores() { return this._list; }
   descricao() { return `Pilha :: ${this.valores()}` }
 }
 
@@ -337,6 +354,49 @@ Object.defineProperty(_, 'Matematica', {
 /** **************************************************************************** */
 
 /**
+ * FlorJS: Utilitário JS
+ */
+class FlorJS {
+
+  static argumentos() {
+    return process ? process.argv.slice(2) : [];
+  }
+
+  static variavel_externa(identificador: string, retornoPadrao: any) {
+    const variavel = (_ as any)[identificador];
+    if (variavel === undefined) {
+      return retornoPadrao !== undefined ? retornoPadrao : (function() {
+        throw new Error(`Variável '${identificador}' não foi declarada em nenhum módulo/script externo`)
+      })();
+    }
+    return variavel;
+  }
+
+  static variavel_de_ambiente(variavel: string) {
+    return process && process.env[variavel] ? process.env[variavel] : null;
+  }
+
+  static executar(fn: () => void, segundos: number = 0, argumentos: any[]) {
+    setTimeout(fn, segundos * 1000, argumentos);
+  }
+
+  static finalizar_aplicacao(mensagem: string, codigo: number) {
+    if (process) {
+      console.log(mensagem);
+      process.exit(codigo);
+    }
+  }
+
+}
+
+Object.defineProperty(_, 'FlorJS', {
+  value: FlorJS,
+  writable: false 
+})
+
+/** **************************************************************************** */
+
+/**
  * Global
  */
 const txt = (arg: any) => arg.toString()
@@ -346,6 +406,15 @@ const dic = (arg: any) => JSON.parse(arg)
 const num = (arg: any) => new Number(arg).valueOf()
 const int = parseInt
 const real = parseFloat
+
+const importar = function (path: string) {
+  try {
+    return require(cwd() + '/' + path);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
 
 const escrever = function (message: any) {
   let log = ''
@@ -413,6 +482,7 @@ Object.defineProperties(_, {
   num: { value: num, writable: false },
   int: { value: int, writable: false },
   real: { value: real, writable: false },
+  importar: { value: importar, writable: false },
   escrever: { value: escrever, writable: false },
   FlorRuntimeErrorMessage: { value: FlorRuntimeErrorMessage, writable: false },
 })

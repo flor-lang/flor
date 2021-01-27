@@ -1,5 +1,6 @@
 import SymbolTable from './symbol-table'
 import { Polyfill, PolyfillDependenciesMap } from './polyfill'
+import { StandardLib } from '../lib/standard.flib'
 
 type EnvContext = 'test' | 'dev' | 'prod'
 
@@ -47,7 +48,14 @@ export default class Env {
     this.polyfills.forEach((polyfill: Polyfill): void => {
       output = `${polyfill}\n${output}`
     })
-    return output
+
+    return `${output}\n${this.getExportsPolyfillCall()}`
+  }
+
+  private getExportsPolyfillCall (): string {
+    const std = Object.keys(StandardLib)
+    const keys = this.symbolTable.keys().filter((key): boolean => !std.includes(key))
+    return `__exports__({${keys.join(',')}});`
   }
 
   public injectPolyfill (polyfill: Polyfill): void {
@@ -69,6 +77,7 @@ export default class Env {
     this.context = context
     this.codeOutput = ''
     this.polyfills = []
+    this.injectPolyfill(Polyfill.EXPORTS)
     if (context !== 'test') {
       this.tableStack = []
       this._symbolTable = new SymbolTable(null)
