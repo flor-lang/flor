@@ -1,6 +1,6 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
-import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon, ElseIf, BreakStmt, ContinueStmt } from './operators'
+import { If, Then, Else, End, While, Do, ForEach, OfExpr, ForExpr, ToExpr, WithExpr, StepExpr, Return, Colon, ElseIf, BreakStmt, ContinueStmt, InExpr } from './operators'
 import { Expression, ObjectParser, ExpressionParser } from './expressions'
 import { Assignment, Identifier, IdentifierParser, AssignmentParser, LocParser, Loc } from './assignment'
 import { Block, BlockParser } from './program'
@@ -88,7 +88,7 @@ export const ForEachStatement: ForEachStatementParser = P
   .seqObj(
     ForEach,
     P.lazy((): IdentifierParser => Identifier).named('iterator'),
-    OfExpr,
+    P.alt(OfExpr, InExpr),
     P.lazy((): LocParser => Loc).named('collection'),
     Do,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define

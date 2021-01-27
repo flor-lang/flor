@@ -22,7 +22,7 @@ export const FlorReservedWords = [
   'e', 'ou',
   'se', 'senao', 'entao', 'senao_se',
   'enquanto', 'faca',
-  'a', 'de', 'ate', 'com',
+  'a', 'de', 'em', 'ate', 'com',
   'igual', 'diferente', 'para', 'cada', 'passo',
   'funcao', 'retornar', 'fim',
   'definir', 'interface', 'classe', 'novo', 'nova',
