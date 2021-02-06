@@ -28,5 +28,5 @@ export const FlorReservedWords = [
   'definir', 'interface', 'classe', 'novo', 'nova',
   'construtor', 'propriedades', 'metodos',
   'privado', 'publico', 'estatico',
-  'interromper_laco', 'pular_iteracao'
+  'interromper_laco', 'pular_iteracao', 'importar'
 ]

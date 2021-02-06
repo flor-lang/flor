@@ -1,7 +1,7 @@
 import * as P from 'parsimmon'
 import '../utils/parsimmon-extension'
 
-import { Literal, LiteralParser } from './literals'
+import { Literal, LiteralParser, StringLiteral, StringLiteralParser } from './literals'
 import { Loc, LocParser, Identifier, IdentifierParser } from './assignment'
 import {
   AddOperator,
@@ -19,7 +19,8 @@ import {
   ColonEqual,
   If,
   Else,
-  Then
+  Then,
+  Import
 } from './operators'
 import { BlockParser, Block } from './program'
 import { ClassInstantiationParser, ClassInstantiation } from './oo'
@@ -39,6 +40,7 @@ export type BoolBtwParenthesesParser = P.Parser<P.Node<'wrapped', {}>>
 export type BlockFunctionParser = P.Parser<P.Node<'block-function', {}>>
 export type InlineFunctionParser = P.Parser<P.Node<'inline-function', {}>>
 export type ConditionalExpressionParser = P.Parser<P.Node<'conditional-expression', {}>>
+export type ImportExpressionParser = P.Parser<P.Node<'import-expression', {}>>
 export type ExpressionParser = P.Parser<P.Node<'expression', {}>>
 
 /**
@@ -297,6 +299,19 @@ export const ConditionalExpression: ConditionalExpressionParser = P
   .map(nodePropertiesMapper(['condition', 'then', 'else']))
 
 /**
+ * Parse import expressions
+ * foo = se 5 > 0 entao 2
+ * conditional-expression -> expression se expression | expression se expression senao expression
+ */
+export const ImportExpression: ImportExpressionParser = P
+  .seqObj(
+    Import,
+    P.lazy((): StringLiteralParser => StringLiteral).named('path')
+  )
+  .node('import-expression')
+  .map(nodePropertiesMapper(['path']))
+
+/**
  * Parse expressions
  *
  * expr -> class-instantiation | inline-function | block-function | bool
@@ -307,6 +322,7 @@ export const Expression: ExpressionParser = P
     InlineFunction,
     BlockFunction,
     ConditionalExpression,
+    ImportExpression,
     Bool
   )
   .node('expression')

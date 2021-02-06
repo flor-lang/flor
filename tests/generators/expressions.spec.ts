@@ -1,4 +1,5 @@
 import { Expression } from '../../src/parsers/expressions'
+import { Import } from '../../src/parsers/operators'
 import { generatorTester, assignRhs } from '../utils'
 
 
@@ -73,5 +74,16 @@ test('generate coditional expression declaration', (): void => {
     ['se nulo entao 1 senao 0', '__cdt_expr__(null,null,1,0)'],
     ['se 5 > 0 entao 1', '__cdt_expr__(null,5>0,1,)'],
     ['se 0 > 0 entao "hey"', '__cdt_expr__(null,0>0,"hey",)'],
+  ])
+})
+
+test('generate import expression declaration', (): void => {
+  const tryGenerateExpressions = generatorTester(Expression)
+  
+  tryGenerateExpressions([
+    ['importar "arquivo"', '__import__("arquivo")'],
+    ['importar "diretorio/arquivo"', '__import__("diretorio/arquivo")'],
+    ['importar "../arquivo"', '__import__("../arquivo")'],
+    ['importar    "arquivo"', '__import__("arquivo")'],
   ])
 })

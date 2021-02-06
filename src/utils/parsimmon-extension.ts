@@ -11,7 +11,7 @@ declare module 'parsimmon' {
      * @param condition function to evaluate parse condition
      * @param errorMessage message returned with failed parse
      */
-    assert (condition: (result: T) => boolean, errorMessage: string): Parser<T>;
+    assert (condition: (result: T) => boolean, errorMessage: string): P.Parser<T>;
 
     /**
      * Identify the object in seqMap. The result ast will be stored

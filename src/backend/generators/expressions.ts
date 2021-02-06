@@ -103,3 +103,12 @@ export const conditionalExpressionCodeGen = {
     Env.get().codeOutput += ')'
   }
 }
+
+export const importExpressionCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += `__import__(`
+  },
+  exit (): void {
+    Env.get().codeOutput += ')'
+  }
+}

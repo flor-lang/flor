@@ -64,3 +64,27 @@ test('test expression wrapper polyfill in class property declaration', (): void 
     `${Polyfill.EXPORTS}\n`
   )
 })
+
+test('test import polyfill', (): void => {
+  generatorTester(Program)(
+    [
+      [
+        'arquivo = importar "arquivo"',
+        'let arquivo = __expr__(__import__("arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
+      ],
+      [
+        'arquivo = importar "diretorio/arquivo"',
+        'arquivo = __expr__(__import__("diretorio/arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
+      ],
+      [
+        'arquivo = importar "../arquivo"',
+        'arquivo = __expr__(__import__("../arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
+      ],
+    ],
+    `${Polyfill.NULL_CLSC}\n` +
+    `${Polyfill.EXPR}\n` +
+    `${Polyfill.IMPORT}\n` +
+    `${Polyfill.IS_BROWSER}\n` +
+    `${Polyfill.EXPORTS}\n`
+  )
+})

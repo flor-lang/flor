@@ -1,4 +1,4 @@
-import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction, ConditionalExpression, Exponential } from '../../src/parsers/expressions'
+import { Factor, Unary, Term, Add, Inequality, Equality, Join, Bool, BlockFunction, InlineFunction, ConditionalExpression, Exponential, ImportExpression } from '../../src/parsers/expressions'
 import { canParse, cantParse } from '../utils'
 
 
@@ -142,5 +142,23 @@ test('parse conditional expression', (): void => {
     'falso se confuso expr',
     '0 senao confuso',
     'se confuso 0 senao -1'
+  ])
+})
+
+test('parse import expression', (): void => {
+  const canParseImportExpression = canParse(ImportExpression)
+  const cantParseImportExpression = cantParse(ImportExpression)
+
+  canParseImportExpression([
+    'importar "boya"',
+    'importar "flor"',
+    'importar "diretorio/arquivo"',
+    'importar "../soba"',
+  ])
+  cantParseImportExpression([
+    'importar"boya"',
+    'importar flor',
+    'importar diretorio/arquivo',
+    'importar ',
   ])
 })

@@ -41,6 +41,14 @@ Yargs
       type: 'boolean',
       describe: 'Versão instalada do pacote'
     },
+    'criar-projeto': {
+      type: 'string',
+      describe: 'Cria um projeto Flor'
+    },
+    'executar-projeto': {
+      type: 'boolean',
+      describe: 'Executa o projeto definido pelo arquivo projeto.json'
+    },
     'nao-exec': {
       type: 'boolean',
       describe: 'Desabilita a execução do código após compilação'
@@ -61,6 +69,7 @@ if (Yargs.argv.versao) {
 }
 
 let files: string[] = Yargs.argv._
+const rootExec = files.length === 0
 if (files.length === 0) {
   files = glob.sync('**/*.flor')
 }
@@ -83,19 +92,49 @@ const filesContent = files
 const outputFormat = Yargs.argv.saida || 'js'
 const noExec = Yargs.argv['nao-exec'] || false
 const noPdr = Yargs.argv['nao-pdr'] || false
+const createProject = Yargs.argv['criar-projeto']
 
-/* TODO: Config file when flor exports */
-// const haveConfig = fs.existsSync('./florconfig.json')
-// if (haveConfig) {
-//   try {
-//     const configFile = fs.readFileSync('./florconfig.json', 'utf-8')
-//     const configs = JSON.parse(String(configFile))
+if (createProject !== null) {
+  const createNewProject = (projectName: string) => {
+    fs.mkdirSync(projectName.toLowerCase())
+    const projectFile: { [key: string]: string}  = {
+      nome: projectName,
+      arquivo_inicial: 'app.flor',
+      diretorio_da_saida: 'dist'
+    }
+    fs.writeFileSync(`${projectName.toLowerCase()}/projeto.json`, JSON.stringify(projectFile, null, 2))
+    fs.writeFileSync(`${projectName.toLowerCase()}/app.flor`, `/*\nProjeto Flor: ${projectName}\n*/\n\nescrever("Olá Mundo!")\n`)
+    console.log(`\nProjeto ${projectName} criado!`)
+    process.exit()
+  }
 
-//     if (configs.saida && !Yargs.argv.saida) outputFormat = configs.saida
-//   } catch (e) {
-//     console.log(`Não foi possível ler arquivo de configuração`)
-//   }
-// }
+
+  const projectName = createProject as string
+  if (projectName.length === 0) {
+    const inputInterface = createInterface({
+      input: process.stdin,
+      output: process.stdout
+    })
+    inputInterface.question('Nome do Projeto: ', function(name) {
+      inputInterface.close()
+      createNewProject(name)
+    })
+  } else {
+    createNewProject(projectName)
+  }
+}
+
+let project: { [key: string]: string } = {}
+const haveConfig = fs.existsSync('./projeto.json')
+if (haveConfig) {
+  try {
+    const configFile = fs.readFileSync('./projeto.json', 'utf-8')
+    const configs = JSON.parse(String(configFile))
+    project = configs
+  } catch (e) {
+    console.log(`Não foi possível ler arquivo de configuração`)
+  }
+}
 
 const requireLibPath = (callbackfn: (libPath: string) => void): void => {
   const jsExec = spawn('npm', ['root', '-g'])
@@ -108,6 +147,7 @@ const requireLibPath = (callbackfn: (libPath: string) => void): void => {
 
 const executeOutput = (filePath: string): void => {
   const args = process.argv
+  args.splice(args.indexOf('--executar-projeto'), 1)
   let argIndex = args.indexOf(filePath.replace('.js', '.flor'))
   if (argIndex === -1) {
     argIndex = 0
@@ -125,13 +165,29 @@ const executeOutput = (filePath: string): void => {
   // )
 }
 
+const handleOutputDirectory = (): string => {
+  let outputDirectory = project['diretorio_da_saida'] || ''
+  if (outputDirectory.startsWith('/')) {
+    outputDirectory = outputDirectory.replace('/', '')
+  }
+  if (outputDirectory && !fs.existsSync(outputDirectory)) {
+    fs.mkdirSync(outputDirectory)
+  }
+  return outputDirectory
+}
+
 const handleFileContent = (filePath: string, content: string, libPath: string): void => {
-  const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
+  const outputFilePath = `${filePath.substring(0, filePath.length - 4)}js`
+  const pathComponents = outputFilePath.split('/')
+  const pathComponent = pathComponents.slice(0, pathComponents.length - 1).join('/')
+  if (pathComponent && !fs.existsSync(pathComponent)) {
+    fs.mkdirSync(pathComponent)
+  }
   const { success, result } = tryCompile(content, !noPdr)
   if (success) {
     const isBrowser = `(new Function("try {return this===window;}catch(e){return false;}"))()`
     const libPathRequire = !noPdr
-      ? `if (!${isBrowser} || typeof FlorJS === 'undefined'){require('${libPath}/standard').StandardLibJSImpl(global);}`
+      ? `if (!${isBrowser} && typeof FlorJS === 'undefined'){require('${libPath}/standard').StandardLibJSImpl(global);}`
       : ''
     const code = `try{${libPathRequire}\n${result}}catch(e){
         if (typeof FlorRuntimeErrorMessage === 'undefined') {
@@ -143,7 +199,7 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
       }`
     const fileOutput = beautify(code)
     fs.writeFileSync(outputFilePath, fileOutput)
-    if (!noExec) {
+    if (!rootExec && !noExec) {
       executeOutput(outputFilePath)
     }
   } else {
@@ -153,9 +209,17 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
 
 if (outputFormat === 'js') {
   requireLibPath((libPath): void => {
+    const outputDirectory = handleOutputDirectory()
     filesContent.forEach(({ filePath, content }): void => {
-      handleFileContent(filePath, content, libPath)
+      handleFileContent(`${outputDirectory}/${filePath}`, content, libPath)
     })
+    const execProject = Yargs.argv['executar-projeto'] || false
+    const mainFile = project['arquivo_inicial']
+    if (rootExec && execProject && mainFile) {
+      const outputDirectory = project['diretorio_da_saida'] ? project['diretorio_da_saida'] + '/' : ''
+      const outputFilePath = `${outputDirectory}${mainFile.substring(0, mainFile.length - 4)}js`
+      executeOutput(outputFilePath)
+    }
   })
 } else if (outputFormat === 'tab-sim') {
   filesContent

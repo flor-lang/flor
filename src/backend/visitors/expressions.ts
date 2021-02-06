@@ -9,7 +9,8 @@ import {
   argsCodeGen,
   inlineFunctionCodeGen,
   conditionalExpressionCodeGen,
-  exponentialCodeGen
+  exponentialCodeGen,
+  importExpressionCodeGen
 } from '../generators/expressions'
 import { Polyfill } from '../../enviroment/polyfill'
 
@@ -96,6 +97,16 @@ export const conditionalExpression = {
   }
 }
 
+export const importExpression = {
+  enter (): void {
+    importExpressionCodeGen.enter()
+  },
+  exit (): void {
+    importExpressionCodeGen.exit()
+    Env.get().injectPolyfill(Polyfill.IMPORT)
+  }
+}
+
 export default {
   expression,
   wrapped,
@@ -104,5 +115,6 @@ export default {
   blockFunction,
   args,
   inlineFunction,
-  conditionalExpression
+  conditionalExpression,
+  importExpression
 }

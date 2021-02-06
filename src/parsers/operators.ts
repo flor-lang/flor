@@ -76,6 +76,7 @@ export const ForEach = P.seq(ForExpr, EachExpr)
 export const ContinueStmt = P.string('pular_iteracao').wspc()
 export const BreakStmt = P.string('interromper_laco').wspc()
 
+export const Import = P.string('importar').wspc()
 export const Function = P.string('funcao')
 export const Return = P.string('retornar').wspc()
 export const ColonEqual = P.seq(Colon, Equal)

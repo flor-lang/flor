@@ -20,6 +20,5 @@ export const StandardLib: { [key: string]: AstNode } = {
   num: EmptyAstNode,
   int: EmptyAstNode,
   real: EmptyAstNode,
-  importar: EmptyAstNode,
   escrever: EmptyAstNode
 }

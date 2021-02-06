@@ -21,6 +21,7 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/indent': ["error", 2],
+    'quote-props': ["always", 'as-needed'],
     'jest/no-disabled-tests': 'warn',
     'jest/no-focused-tests': 'error',
     'jest/no-identical-title': 'error',

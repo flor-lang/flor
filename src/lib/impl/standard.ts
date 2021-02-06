@@ -1,5 +1,3 @@
-import { cwd } from "process"
-
 /**
  * JS Implementation of Flor Standard Lib
  */
@@ -407,15 +405,6 @@ const num = (arg: any) => new Number(arg).valueOf()
 const int = parseInt
 const real = parseFloat
 
-const importar = function (path: string) {
-  try {
-    return require(cwd() + '/' + path);
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-}
-
 const escrever = function (message: any) {
   let log = ''
   if (typeof message === 'undefined') {
@@ -482,7 +471,6 @@ Object.defineProperties(_, {
   num: { value: num, writable: false },
   int: { value: int, writable: false },
   real: { value: real, writable: false },
-  importar: { value: importar, writable: false },
   escrever: { value: escrever, writable: false },
   FlorRuntimeErrorMessage: { value: FlorRuntimeErrorMessage, writable: false },
 })
