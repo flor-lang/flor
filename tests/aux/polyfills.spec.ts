@@ -1,6 +1,7 @@
 import { generatorTester, assignRhs } from "../utils"
 import { Program } from "../../src/parsers/program"
 import { Expression } from "../../src/parsers/expressions"
+import { Polyfill } from "../../src/enviroment/polyfill"
 
 test('test conditional expression polyfill', (): void => {
   generatorTester(Expression)(
@@ -10,8 +11,9 @@ test('test conditional expression polyfill', (): void => {
       ['se 5 > 0 entao 1', '__cdt_expr__(null,5>0,1,)\n__exports__({});'],
       ['se 0 > 0 entao "hey"', '__cdt_expr__(null,0>0,"hey",)\n__exports__({});'],
     ], 
-    'const __cdt_expr__=(_,c,l,n)=>n?c?l:n:c?l:_||null;\n' +
-    'const __exports__=o=>{module&&(module.exports=o)};\n'
+    `${Polyfill.CTD_EXPR}\n` +
+    `${Polyfill.IS_BROWSER}\n` +
+    `${Polyfill.EXPORTS}\n`
   )
 })
 
@@ -23,9 +25,10 @@ test('test expression wrapper polyfill', (): void => {
       ['bar = cinco igual a 4', 'let bar = __expr__(cinco==4);\n__exports__({foo,tru,bar});'],
       ['msg ="druida louco"', 'let msg = __expr__("druida louco");\n__exports__({foo,tru,bar,msg});'],
     ], 
-    'const __nullish_coalesce__=(l,_=null)=>null==l?_:l;\n' + 
-    'const __expr__=_=>__nullish_coalesce__(_);\n' +
-    'const __exports__=o=>{module&&(module.exports=o)};\n'
+    `${Polyfill.NULL_CLSC}\n` +
+    `${Polyfill.EXPR}\n` +
+    `${Polyfill.IS_BROWSER}\n` +
+    `${Polyfill.EXPORTS}\n`
   )
 })
 
@@ -37,10 +40,11 @@ test('test expression and condional expression polyfills', (): void => {
       ['bar = se 5 > 0 entao 1', 'bar = __expr__(__cdt_expr__(bar,5>0,1,));\n__exports__({foo,tru,bar,msg});'],
       ['msg = se 0 > 0 entao "hey"', 'msg = __expr__(__cdt_expr__(msg,0>0,"hey",));\n__exports__({foo,tru,bar,msg});'],
     ],
-    'const __nullish_coalesce__=(l,_=null)=>null==l?_:l;\n' + 
-    'const __expr__=_=>__nullish_coalesce__(_);\n' +
-    'const __cdt_expr__=(_,c,l,n)=>n?c?l:n:c?l:_||null;\n' +
-    'const __exports__=o=>{module&&(module.exports=o)};\n'
+    `${Polyfill.NULL_CLSC}\n` +
+    `${Polyfill.EXPR}\n` +
+    `${Polyfill.CTD_EXPR}\n` +
+    `${Polyfill.IS_BROWSER}\n` +
+    `${Polyfill.EXPORTS}\n`
   )
 })
 
@@ -54,8 +58,9 @@ test('test expression wrapper polyfill in class property declaration', (): void 
         `\n__exports__({foo,tru,bar,msg,Foo});`
       ],
     ],
-    'const __nullish_coalesce__=(l,_=null)=>null==l?_:l;\n' + 
-    'const __expr__=_=>__nullish_coalesce__(_);\n' +
-    'const __exports__=o=>{module&&(module.exports=o)};\n'
+    `${Polyfill.NULL_CLSC}\n` +
+    `${Polyfill.EXPR}\n` +
+    `${Polyfill.IS_BROWSER}\n` +
+    `${Polyfill.EXPORTS}\n`
   )
 })

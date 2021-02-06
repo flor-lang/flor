@@ -108,7 +108,10 @@ const requireLibPath = (callbackfn: (libPath: string) => void): void => {
 
 const executeOutput = (filePath: string): void => {
   const args = process.argv
-  const argIndex = args.indexOf(filePath.replace('.js', '.flor'))
+  let argIndex = args.indexOf(filePath.replace('.js', '.flor'))
+  if (argIndex === -1) {
+    argIndex = 0
+  }
   let lastArgIndex = args.indexOf(args.find((arg, index): boolean => index > argIndex && arg.includes('.flor')))
   if (lastArgIndex === -1) {
     lastArgIndex = args.length
@@ -126,8 +129,9 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
   const outputFilePath = filePath.substring(0, filePath.length - 4) + 'js'
   const { success, result } = tryCompile(content, !noPdr)
   if (success) {
+    const isBrowser = `(new Function("try {return this===window;}catch(e){return false;}"))()`
     const libPathRequire = !noPdr
-      ? `if (typeof FlorJS === 'undefined'){require('${libPath}/standard').StandardLibJSImpl(global);}`
+      ? `if (!${isBrowser} || typeof FlorJS === 'undefined'){require('${libPath}/standard').StandardLibJSImpl(global);}`
       : ''
     const code = `try{${libPathRequire}\n${result}}catch(e){
         if (typeof FlorRuntimeErrorMessage === 'undefined') {
