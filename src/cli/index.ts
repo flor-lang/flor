@@ -5,6 +5,7 @@ import { spawn } from 'child_process'
 import { createInterface } from 'readline'
 import * as glob from 'glob'
 import { js as beautify } from 'js-beautify'
+import { Configuration, Compiler } from 'webpack';
 
 import {
   parseCode,
@@ -92,12 +93,12 @@ const filesContent = files
 const outputFormat = Yargs.argv.saida || 'js'
 const noExec = Yargs.argv['nao-exec'] || false
 const noPdr = Yargs.argv['nao-pdr'] || false
-const createProject = Yargs.argv['criar-projeto']
+const createProject = Yargs.argv['criar-projeto'] || null
 
 if (createProject !== null) {
   const createNewProject = (projectName: string) => {
     fs.mkdirSync(projectName.toLowerCase())
-    const projectFile: { [key: string]: string}  = {
+    const projectFile: { [key: string]: string }  = {
       nome: projectName,
       arquivo_inicial: 'app.flor',
       diretorio_da_saida: 'dist'
@@ -108,8 +109,7 @@ if (createProject !== null) {
     process.exit()
   }
 
-
-  const projectName = createProject as string
+  const projectName = createProject as string || ''
   if (projectName.length === 0) {
     const inputInterface = createInterface({
       input: process.stdin,
@@ -187,7 +187,7 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
   if (success) {
     const isBrowser = `(new Function("try {return this===window;}catch(e){return false;}"))()`
     const libPathRequire = !noPdr
-      ? `if (!${isBrowser} && typeof FlorJS === 'undefined'){require('${libPath}/standard').StandardLibJSImpl(global);}`
+      ? `if (typeof FlorJS === 'undefined'){require('${libPath}/standard').StandardLibJSImpl(${isBrowser} ? window : global);}`
       : ''
     const code = `try{${libPathRequire}\n${result}}catch(e){
         if (typeof FlorRuntimeErrorMessage === 'undefined') {
@@ -213,12 +213,41 @@ if (outputFormat === 'js') {
     filesContent.forEach(({ filePath, content }): void => {
       handleFileContent(`${outputDirectory}/${filePath}`, content, libPath)
     })
-    const execProject = Yargs.argv['executar-projeto'] || false
     const mainFile = project['arquivo_inicial']
-    if (rootExec && execProject && mainFile) {
-      const outputDirectory = project['diretorio_da_saida'] ? project['diretorio_da_saida'] + '/' : ''
-      const outputFilePath = `${outputDirectory}${mainFile.substring(0, mainFile.length - 4)}js`
-      executeOutput(outputFilePath)
+    const packageProject = project['empacotar'] === 'verdadeiro' ? true : false;
+    if (rootExec && mainFile) {
+      const execProject = Yargs.argv['executar-projeto'] || false
+      const executeProject = () => {
+        if (execProject) {
+          const outputDirectory = project['diretorio_da_saida'] ? project['diretorio_da_saida'] + '/' : ''
+          const outputFilePath = `${outputDirectory}${mainFile.substring(0, mainFile.length - 4)}js`
+          executeOutput(outputFilePath)
+        }
+      }
+      if (packageProject) {
+        let targetEnv: 'web' | 'node' = project['destino'] as 'web' | 'node'
+        if (!['web', 'node'].includes(targetEnv)) {
+          targetEnv = 'node'  
+        }
+        const options: Configuration = {
+          entry: `${process.cwd()}/${outputDirectory}/${mainFile.replace('.flor', '.js')}`,
+          target: targetEnv,
+          devtool: 'source-map',
+          output: {
+            path: `${process.cwd()}/${outputDirectory}`,
+            filename: `${mainFile}.js`,
+          }
+        }
+        const webpack = require('webpack')
+        const compiler: Compiler = webpack(options)
+        compiler.run((err, stats) => {
+          if (!err) {
+            executeProject()
+          }
+       });
+      } else {
+        executeProject()
+      }
     }
   })
 } else if (outputFormat === 'tab-sim') {

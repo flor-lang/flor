@@ -378,6 +378,12 @@ class FlorJS {
     setTimeout(fn, segundos * 1000, argumentos);
   }
 
+  static ambiente(): string {
+    return (new Function("try {return this===window;}catch(e){return false;}"))()
+      ? 'web'
+      : 'node'
+  }
+
   static finalizar_aplicacao(mensagem: string, codigo: number) {
     if (process) {
       console.log(mensagem);
