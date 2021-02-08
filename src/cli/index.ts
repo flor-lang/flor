@@ -208,6 +208,7 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
     }
   } else {
     console.error(result)
+    process.exit(1)
   }
 }
 
