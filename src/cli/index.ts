@@ -222,6 +222,8 @@ if (outputFormat === 'js') {
           const outputDirectory = project['diretorio_da_saida'] ? project['diretorio_da_saida'] + '/' : ''
           const outputFilePath = `${outputDirectory}${mainFile.substring(0, mainFile.length - 4)}js`
           executeOutput(outputFilePath)
+        } else {
+          console.log(`*** [Sucesso] Compilação finalizada ~> /${outputDirectory}${packageProject ? `/${mainFile}.js` : ''}`)
         }
       }
       if (packageProject) {
@@ -237,6 +239,13 @@ if (outputFormat === 'js') {
             path: `${process.cwd()}/${outputDirectory}`,
             filename: `${mainFile}.js`,
           }
+        }
+        const outputFilePath = `${options.output.path}/${options.output.filename}`
+        if (fs.existsSync(outputFilePath)) {
+          fs.unlinkSync(outputFilePath)
+        }
+        if (fs.existsSync(`${outputFilePath}.map`)) {
+          fs.unlinkSync(`${outputFilePath}.map`)
         }
         const webpack = require('webpack')
         const compiler: Compiler = webpack(options)

@@ -58,7 +58,7 @@
     "parsimmon": "^1.13.0",
     "treeify": "^1.1.0",
     "tslib": "^2.0.1",
-    "webpack": "^3.12.0",
+    "webpack": "^4.46.0",
     "yargs": "^14.2.0"
   },
   "bin": {

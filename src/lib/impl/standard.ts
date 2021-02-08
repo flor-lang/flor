@@ -401,6 +401,80 @@ Object.defineProperty(_, 'FlorJS', {
 /** **************************************************************************** */
 
 /**
+ * Document
+ */
+class Componente {
+  _htmlElement: HTMLElement;
+
+  constructor(htmlElement: HTMLElement) {
+    if (!(htmlElement instanceof HTMLElement)) {
+      throw new Error(`O objeto atribuído não é um elemento HTML.`)
+    }
+    this._htmlElement = htmlElement;
+  }
+
+  get id() {
+    return this._htmlElement.id;
+  }
+
+  set id(valor) {
+    this._htmlElement.id = valor;
+  }
+
+  get texto() {
+    return this._htmlElement.textContent;
+  }
+
+  set texto(valor) {
+    this._htmlElement.textContent = valor;
+  }
+
+  get valor() {
+    const inputElement = this._htmlElement as HTMLInputElement
+    if (inputElement.value === null) {
+      return null;
+    }
+    return inputElement.value;
+  }
+
+  set valor(valor) {
+    const inputElement = this._htmlElement as HTMLInputElement
+    if (inputElement.value) {
+      inputElement.value = valor;
+    }
+  }
+  
+  set clicar(fn: () => void) {
+    this._htmlElement.onclick = fn;
+  }
+
+  set alterar(fn: () => void) {
+    this._htmlElement.onchange = fn;
+  }
+
+  descricao() {
+    return `Componente :: {\n    tag => ${this._htmlElement.tagName}\n    id => ${this.id}\n    texto => ${this.texto}\n}`
+  }
+
+}
+
+class Pagina {
+  static componente(id: string) {
+    const element = (_ as Window).document.getElementById(id)
+    return element ? new Componente(element) : null;
+  }
+}
+
+if (typeof (_ as Window).document !== 'undefined') {
+  Object.defineProperties(_, {
+    Pagina: { value: Pagina, writable: false },
+    Componente: { value: Componente, writable: false }
+  })
+}
+
+/** **************************************************************************** */
+
+/**
  * Global
  */
 const txt = (arg: any) => arg.toString()

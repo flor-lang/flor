@@ -13,6 +13,8 @@ export const StandardLib: { [key: string]: AstNode } = {
   Math: EmptyAstNode,
   Matematica: EmptyAstNode,
   FlorJS: EmptyAstNode,
+  Pagina: EmptyAstNode,
+  Componente: EmptyAstNode,
   txt: EmptyAstNode,
   bool: EmptyAstNode,
   list: EmptyAstNode,
