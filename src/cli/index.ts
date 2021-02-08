@@ -50,6 +50,10 @@ Yargs
       type: 'boolean',
       describe: 'Executa o projeto definido pelo arquivo projeto.json'
     },
+    'empacotar': {
+      type: 'boolean',
+      describe: 'Empacota projeto em um único arquivo'
+    },
     'nao-exec': {
       type: 'boolean',
       describe: 'Desabilita a execução do código após compilação'
@@ -208,13 +212,16 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
 }
 
 if (outputFormat === 'js') {
+  const compilationStartDate = new Date()
   requireLibPath((libPath): void => {
     const outputDirectory = handleOutputDirectory()
     filesContent.forEach(({ filePath, content }): void => {
       handleFileContent(`${outputDirectory}/${filePath}`, content, libPath)
     })
     const mainFile = project['arquivo_inicial']
-    const packageProject = project['empacotar'] === 'verdadeiro' ? true : false;
+    const packageProject = Yargs.argv['empacotar'] !== null
+      ? Yargs.argv['empacotar']
+      : project['empacotar'] === 'verdadeiro' ? true : false;
     if (rootExec && mainFile) {
       const execProject = Yargs.argv['executar-projeto'] || false
       const executeProject = () => {
@@ -223,13 +230,14 @@ if (outputFormat === 'js') {
           const outputFilePath = `${outputDirectory}${mainFile.substring(0, mainFile.length - 4)}js`
           executeOutput(outputFilePath)
         } else {
-          console.log(`*** [Sucesso] Compilação finalizada ~> /${outputDirectory}${packageProject ? `/${mainFile}.js` : ''}`)
+          const compilationTime = (new Date().getTime() - compilationStartDate.getTime()) / 1000
+          console.log(`*** [Sucesso::${compilationTime.toFixed(3)}s] Compilação finalizada ~> /${outputDirectory}${packageProject ? `/${mainFile}.js` : ''}`)
         }
       }
       if (packageProject) {
-        let targetEnv: 'web' | 'node' = project['destino'] as 'web' | 'node'
+        let targetEnv: 'web' | 'node' = project['destino_do_pacote'] as 'web' | 'node'
         if (!['web', 'node'].includes(targetEnv)) {
-          targetEnv = 'node'  
+          targetEnv = 'web'  
         }
         const options: Configuration = {
           entry: `${process.cwd()}/${outputDirectory}/${mainFile.replace('.flor', '.js')}`,

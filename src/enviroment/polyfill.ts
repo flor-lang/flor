@@ -4,7 +4,7 @@ export enum Polyfill {
   EXPR = 'const __expr__=_=>__nullish_coalesce__(_);',
   IS_BROWSER = 'const __isBrowser__=new Function("try {return this===window;}catch(e){return false;}");',
   EXPORTS = 'const __exports__=(obj)=>{if(__isBrowser__()){Object.assign(window,obj)}if(module){module.exports=obj}};',
-  IMPORT = 'const __import__=function(path){try{return require(__dirname+"/"+path)}catch(error){return null}};',
+  IMPORT = 'const __import__=function(path){try{return require(path.startsWith("$")?path.slice(1):__dirname+"/"+path)}catch(error){return null}};',
 }
 
 export const PolyfillDependenciesMap: [Polyfill, Polyfill[]][] = [
