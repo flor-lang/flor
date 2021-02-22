@@ -49,7 +49,7 @@ export const propertyCodeGen = {
       Env.get().codeOutput += `if ('${nodeValue[1].value}' in ${className} === false) {`
       owner = className as string
     } else {
-      Env.get().codeOutput += 'if (this) {'
+      Env.get().codeOutput += `if (this && this.${nodeValue[1].value} === undefined) {`
     }
     Env.get().codeOutput += `${owner}.`
   },
