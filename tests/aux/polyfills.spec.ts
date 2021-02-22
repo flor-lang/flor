@@ -53,7 +53,7 @@ test('test expression wrapper polyfill in class property declaration', (): void 
     [
       [
         'definir classe Foo propriedades: bar = "bar" fim',
-        `class Foo{\nstatic __propertiesDeclarations__() {if (this) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
+        `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
         `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\n` +
         `\n__exports__({foo,tru,bar,msg,Foo});`
       ],

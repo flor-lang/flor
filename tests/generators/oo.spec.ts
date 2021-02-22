@@ -28,8 +28,8 @@ test('generate class declaration', (): void => {
         fim
       fim
       `,
-      `class Carro{\nstatic __propertiesDeclarations__() {if (this) {this.modelo = ${assignRhs('"Esportivo"').slice(0, -1)}}\n` + 
-      `if (this) {this.marca = null}\nif (this) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = ${assignRhs('2020').slice(0, -1)}}\n}constructor(marca=null)` + 
+      `class Carro{\nstatic __propertiesDeclarations__() {if (this && this.modelo === undefined) {this.modelo = ${assignRhs('"Esportivo"').slice(0, -1)}}\n` + 
+      `if (this && this.marca === undefined) {this.marca = null}\nif (this && this.construtora === undefined) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = ${assignRhs('2020').slice(0, -1)}}\n}constructor(marca=null)` + 
       `{\nCarro.__propertiesDeclarations__.bind(this)()\nlet __marca = ${assignRhs('marca')}}}\nCarro.__propertiesDeclarations__.bind(null)()\n`
     ],
     [
@@ -42,7 +42,7 @@ test('generate class declaration', (): void => {
           estatico esta_ligado = () := #ligado igual a verdadeiro
       fim
       `,
-      `class Luz{\nstatic __propertiesDeclarations__() {if (this) {this.ligado = ${assignRhs('true').slice(0, -1)}}\n}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}` +
+      `class Luz{\nstatic __propertiesDeclarations__() {if (this && this.ligado === undefined) {this.ligado = ${assignRhs('true').slice(0, -1)}}\n}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}` +
       `ligar(){\nthis.ligado = ${assignRhs('true')}}desligar(){\nthis.ligado = ${assignRhs('false')}} static esta_ligado(){ return this.ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n`
     ]
   ])
