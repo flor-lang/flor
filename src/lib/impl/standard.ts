@@ -175,7 +175,7 @@ Object.prototype.toString = function () {
           prop = prop.substring(0, prop.length - 1)
       }
       return prev + ident + prop + ' => '
-        + (curr[1] ? curr[1].toString() : 'nulo')
+        + (curr[1] !== null ? curr[1].toString() : 'nulo')
         + (index !== lastIndex ? '\n' : '')
     }, '')
     str = this.constructor.name + ' :: {\n' + body + '\n' + closeIdent + '}'
