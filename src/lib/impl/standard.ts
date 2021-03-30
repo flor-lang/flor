@@ -30,6 +30,11 @@ Object.defineProperties(String.prototype, {
   ultimo_indice: { value:  String.prototype.lastIndexOf },
   normalizar: { value:  String.prototype.normalize },
   substituir: { value:  String.prototype.replace },
+  substituir_todos: {
+    value(searchValue: string, replaceValue: string) {
+      return this.split(searchValue).join(replaceValue)
+    }
+  },
   pesquisar_por: { value:  String.prototype.search },
   obter_subtexto: { value:  String.prototype.substring },
   dividir_texto_por: { value:  String.prototype.split },
