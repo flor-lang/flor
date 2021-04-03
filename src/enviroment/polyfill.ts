@@ -5,7 +5,9 @@ export enum Polyfill {
   IS_BROWSER = 'const __isBrowser__=new Function("try {return this===window;}catch(e){return false;}");',
   EXPORTS = 'const __exports__=(obj)=>{if(__isBrowser__()){Object.assign(window,obj)}if(module){module.exports=obj}};',
   IMPORT = 'const __import__=function(path){try{return require(path)}catch(error){return null}};',
-  INTERFACE_VLDT = "const __validateInterface__=(e,a,n)=>{if(!a.__props__.every(e=>n.includes(e)))throw new Error(`Existe atributos definidos pela interface '${a.nome}'`+` não implementados na classe '${e}'`)};"
+  INTERFACE_IMPL_VLDT = "const __validateInterfaceImpl__=(e,a,n)=>{if(!a.__props__.every(e=>n.includes(e)))throw new Error(`Existe atributos definidos pela interface '${a.nome}'`+` não implementados na classe '${e}'`)};",
+  INHERITANCE_VLDT = "const __validateInheritance__=(c,d)=>{if(!c||!('__propertiesDeclarations__' in c))throw new Error(`Objeto '${d}' não é uma classe para configurar uma herança`)};",
+  INTERFACE_VLDT = "const __validateInterface__=(e,a)=>{if(!e||!('__props__' in e))throw new Error(`Objeto '${a}' não é uma interface para implementar em uma classe`)};",
 }
 
 export const PolyfillDependenciesMap: [Polyfill, Polyfill[]][] = [
@@ -15,5 +17,7 @@ export const PolyfillDependenciesMap: [Polyfill, Polyfill[]][] = [
   [Polyfill.IS_BROWSER, []],
   [Polyfill.EXPORTS, [Polyfill.IS_BROWSER]],
   [Polyfill.IMPORT, []],
+  [Polyfill.INTERFACE_IMPL_VLDT, []],
+  [Polyfill.INHERITANCE_VLDT, []],
   [Polyfill.INTERFACE_VLDT, []]
 ]

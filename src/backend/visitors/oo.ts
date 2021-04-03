@@ -37,7 +37,7 @@ const classDeclaration = {
     const identifier = (node.value as AstNode[])[0].value as string
     Env.get().symbolTable.put(identifier, node)
     Env.get().stackMap['CLASS_SCOPE'].push(identifier)
-    classDeclarationCodeGen.enter()
+    classDeclarationCodeGen.enter(node)
   },
   exit (node: AstNode): void {
     /* Pop Class scope created at contructor::enter */

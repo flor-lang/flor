@@ -95,15 +95,40 @@ test('test interface validation polyfill', (): void => {
         'definir interface IFoo bar fim ' +
         'definir classe Foo interfaces: IFoo propriedades: bar = "bar" fim',
         `let IFoo = { nome: 'IFoo', __props__: ['bar'] };\n` +
+        `__validateInterface__(IFoo, 'IFoo')\n` +
         `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
         `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
-        `__validateInterface__('Foo', IFoo, Foo.__attr__)\n` +
+        `__validateInterfaceImpl__('Foo', IFoo, Foo.__attr__)\n` +
         `\n__exports__({foo,tru,bar,msg,Foo,arquivo,IFoo});`
       ],
     ],
-    `${Polyfill.INTERFACE_VLDT}\n` +
+    `${Polyfill.INTERFACE_IMPL_VLDT}\n` +
     `${Polyfill.NULL_CLSC}\n` +
     `${Polyfill.EXPR}\n` +
+    `${Polyfill.INTERFACE_VLDT}\n` +
+    `${Polyfill.IS_BROWSER}\n` +
+    `${Polyfill.EXPORTS}\n`
+  )
+})
+
+test('test inheritance validation polyfill', (): void => {
+  generatorTester(Program)(
+    [
+      [
+        'definir classe Mae propriedades: boya fim ' +
+        'definir classe Foo heranca: Mae propriedades: bar = "bar" fim',
+        `class Mae{\nstatic __propertiesDeclarations__() {if (this && this.boya === undefined) {this.boya = null}\n}` +
+        `constructor(){\nMae.__propertiesDeclarations__.bind(this)()\n}}\n` +
+        `Mae.__propertiesDeclarations__.bind(null)()\nMae.__attr__ = ['boya']\n` +
+        `__validateInheritance__(Mae, 'Mae')\n` +
+        `class Foo extends Mae{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
+        `constructor(){\nsuper();\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
+        `\n__exports__({foo,tru,bar,msg,Foo,arquivo,IFoo,Mae});`
+      ],
+    ],
+    `${Polyfill.NULL_CLSC}\n` +
+    `${Polyfill.EXPR}\n` +
+    `${Polyfill.INHERITANCE_VLDT}\n` +
     `${Polyfill.IS_BROWSER}\n` +
     `${Polyfill.EXPORTS}\n`
   )

@@ -13,8 +13,12 @@ test('generate class declaration', (): void => {
         heranca: Pessoa
         interfaces: Nomeavel Localizavel
       fim`  
-    , 'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()\n' +
-      `PessoaFisica.__attr__ = []\n__validateInterface__('PessoaFisica', Nomeavel, PessoaFisica.__attr__)\n__validateInterface__('PessoaFisica', Localizavel, PessoaFisica.__attr__)\n`
+    , 
+    `__validateInheritance__(Pessoa, 'Pessoa')\n` +
+    `__validateInterface__(Nomeavel, 'Nomeavel')\n` +
+    `__validateInterface__(Localizavel, 'Localizavel')\n` +
+    'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()\n' +
+      `PessoaFisica.__attr__ = []\n__validateInterfaceImpl__('PessoaFisica', Nomeavel, PessoaFisica.__attr__)\n__validateInterfaceImpl__('PessoaFisica', Localizavel, PessoaFisica.__attr__)\n`
     ],
     [
       `
