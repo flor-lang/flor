@@ -54,7 +54,7 @@ test('test expression wrapper polyfill in class property declaration', (): void 
       [
         'definir classe Foo propriedades: bar = "bar" fim',
         `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
-        `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\n` +
+        `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
         `\n__exports__({foo,tru,bar,msg,Foo});`
       ],
     ],
@@ -70,20 +70,40 @@ test('test import polyfill', (): void => {
     [
       [
         'arquivo = importar "arquivo"',
-        'let arquivo = __expr__(__import__("arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
+        'let arquivo = __expr__(require("./arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
       ],
       [
         'arquivo = importar "diretorio/arquivo"',
-        'arquivo = __expr__(__import__("diretorio/arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
+        'arquivo = __expr__(require("./diretorio/arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
       ],
       [
         'arquivo = importar "../arquivo"',
-        'arquivo = __expr__(__import__("../arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
+        'arquivo = __expr__(require("./../arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
       ],
     ],
     `${Polyfill.NULL_CLSC}\n` +
     `${Polyfill.EXPR}\n` +
-    `${Polyfill.IMPORT}\n` +
+    `${Polyfill.IS_BROWSER}\n` +
+    `${Polyfill.EXPORTS}\n`
+  )
+})
+
+test('test interface validation polyfill', (): void => {
+  generatorTester(Program)(
+    [
+      [
+        'definir interface IFoo bar fim ' +
+        'definir classe Foo interfaces: IFoo propriedades: bar = "bar" fim',
+        `let IFoo = { nome: 'IFoo', __props__: ['bar'] };\n` +
+        `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
+        `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
+        `__validateInterface__('Foo', IFoo, Foo.__attr__)\n` +
+        `\n__exports__({foo,tru,bar,msg,Foo,arquivo,IFoo});`
+      ],
+    ],
+    `${Polyfill.INTERFACE_VLDT}\n` +
+    `${Polyfill.NULL_CLSC}\n` +
+    `${Polyfill.EXPR}\n` +
     `${Polyfill.IS_BROWSER}\n` +
     `${Polyfill.EXPORTS}\n`
   )

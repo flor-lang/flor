@@ -1,5 +1,4 @@
 import { Expression } from '../../src/parsers/expressions'
-import { Import } from '../../src/parsers/operators'
 import { generatorTester, assignRhs } from '../utils'
 
 
@@ -81,9 +80,10 @@ test('generate import expression declaration', (): void => {
   const tryGenerateExpressions = generatorTester(Expression)
   
   tryGenerateExpressions([
-    ['importar "arquivo"', '__import__("arquivo")'],
-    ['importar "diretorio/arquivo"', '__import__("diretorio/arquivo")'],
-    ['importar "../arquivo"', '__import__("../arquivo")'],
-    ['importar    "arquivo"', '__import__("arquivo")'],
+    ['importar "arquivo"', 'require("./arquivo")'],
+    ['importar "diretorio/arquivo"', 'require("./diretorio/arquivo")'],
+    ['importar "../arquivo"', 'require("./../arquivo")'],
+    ['importar    "arquivo"', 'require("./arquivo")'],
+    ['importar "$fs"', 'require("fs")'],
   ])
 })

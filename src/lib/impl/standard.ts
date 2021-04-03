@@ -545,6 +545,12 @@ const FlorRuntimeErrorMessage = (error: Error): string => {
     }
   }
 
+  if (error.message.startsWith('Cannot find module')) {
+    __florErrorMessage__ = error.message.replace(
+      'Cannot find module', 'Módulo não encontrado'
+    )
+  }
+
   return `\nErro na execução:\n  ${__florErrorMessage__}`
 }
 

@@ -37,7 +37,7 @@ const privatePropertyAccess = (node: AstNode): void => {
 const locUse = (node: AstNode): void => {
   if (locSubscriptableIsIdentifier(node)) {
     const identifier = identifierValueOfLocNode(node)
-    if (Env.get().symbolTable.get(identifier) === null) {
+    if (Env.get().symbolTable.get(identifier) === null && !identifier.startsWith('#')) {
       Analyser.throwError(`Váriavel '${identifier}' não foi definida.`, node)
     }
   }

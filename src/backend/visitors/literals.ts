@@ -8,8 +8,8 @@ const number = {
 }
 
 const string = {
-  enter (node: AstNode): void {
-    stringCodeGen.enter(node)
+  enter (node: AstNode, parent: AstNode): void {
+    stringCodeGen.enter(node, parent)
   }
 }
 

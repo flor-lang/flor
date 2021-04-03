@@ -4,7 +4,8 @@ export enum Polyfill {
   EXPR = 'const __expr__=_=>__nullish_coalesce__(_);',
   IS_BROWSER = 'const __isBrowser__=new Function("try {return this===window;}catch(e){return false;}");',
   EXPORTS = 'const __exports__=(obj)=>{if(__isBrowser__()){Object.assign(window,obj)}if(module){module.exports=obj}};',
-  IMPORT = 'const __import__=function(path){try{return require(path.startsWith("$")?path.slice(1):__dirname+"/"+path)}catch(error){return null}};',
+  IMPORT = 'const __import__=function(path){try{return require(path)}catch(error){return null}};',
+  INTERFACE_VLDT = "const __validateInterface__=(e,a,n)=>{if(!a.__props__.every(e=>n.includes(e)))throw new Error(`Existe atributos definidos pela interface '${a.nome}'`+` não implementados na classe '${e}'`)};"
 }
 
 export const PolyfillDependenciesMap: [Polyfill, Polyfill[]][] = [
@@ -13,5 +14,6 @@ export const PolyfillDependenciesMap: [Polyfill, Polyfill[]][] = [
   [Polyfill.EXPR, [Polyfill.NULL_CLSC]],
   [Polyfill.IS_BROWSER, []],
   [Polyfill.EXPORTS, [Polyfill.IS_BROWSER]],
-  [Polyfill.IMPORT, []]
+  [Polyfill.IMPORT, []],
+  [Polyfill.INTERFACE_VLDT, []]
 ]

@@ -27,7 +27,7 @@ export const locCodeGen = {
 
 export const identifierCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
-    const excludedParents = ['labeled-arg', 'interfaces', 'interface-declaration', 'interface-members']
+    const excludedParents = ['labeled-arg', 'interfaces', 'interface-declaration']
     if (excludedParents.includes(parent.name) === false) {
       let identifier = node.value as string
       if (identifier.startsWith('#')) {
@@ -36,6 +36,9 @@ export const identifierCodeGen = {
       }
       if (JSReservedWords.includes(identifier)) {
         identifier = `${identifier}_`
+      }
+      if (parent.name === 'interface-members') {
+        identifier = `'${identifier}',`
       }
       Env.get().codeOutput += identifier
     }

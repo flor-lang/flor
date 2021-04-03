@@ -3,15 +3,49 @@ import { AstNode } from 'backend/traverse'
 import { isEmptyNode } from '../../utils/aux-functions'
 import { Polyfill } from '../../enviroment/polyfill'
 
+export const interfaceDeclarationCodeGen = {
+  enter (node: AstNode): void {
+    const identifier = (node.value as AstNode[])[0].value as string
+    if (Env.get().symbolTable.get(identifier) === null) {
+      Env.get().codeOutput += 'let '
+    }
+    Env.get().codeOutput += `${identifier} = { nome: '${identifier}', __props__: [`
+  },
+  exit(): void {
+    Env.get().codeOutput = Env.get().codeOutput.slice(0, -1) + '] };\n'
+  }
+}
+
 export const classDeclarationCodeGen = {
   enter (): void {
     Env.get().codeOutput += 'class '
   },
-  exit (): void {
+  exit (node: AstNode): void {
     Env.get().codeOutput += '}\n'
     const classStack = Env.get().stackMap['CLASS_SCOPE']
     const className = classStack[classStack.length - 1]
     Env.get().codeOutput += `${className}.__propertiesDeclarations__.bind(null)()\n`
+
+    const metaNode = (node.value as AstNode[])[1] as AstNode
+    const propsNodes = (metaNode.value as AstNode[])[2].value as AstNode[]
+    const methodsNodes = (metaNode.value as AstNode[])[4].value as AstNode[]
+    const staticFilter = (propNode: AstNode) => (propNode.value as AstNode[])[0].value !== 'estatico'
+    const identifierMap = (propNode: AstNode) => (propNode.value as AstNode[])[1].value
+
+    const attr = propsNodes.filter(staticFilter).map(identifierMap)
+      .concat(methodsNodes.filter(staticFilter).map(identifierMap))
+
+    Env.get().codeOutput += `${className}.__attr__ = [${attr.map(a => `'${a}'`)}]\n`
+    
+    const implementationsNode = (metaNode.value as AstNode[])[1]
+    if (Array.isArray(implementationsNode.value) === false) {
+      Env.get().injectPolyfill(Polyfill.INTERFACE_VLDT);
+      const interfaces = (implementationsNode.value as AstNode).value as AstNode[]
+      const interfaceNames = interfaces.map((i) => i.value as string);
+      interfaceNames.forEach(name => {
+        Env.get().codeOutput += `__validateInterface__('${className}', ${name}, ${className}.__attr__)\n`
+      })
+    }
   }
 }
 

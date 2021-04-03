@@ -6,14 +6,15 @@ test('generate class declaration', (): void => {
 
   tryGenerateClassDeclaration([
     ['definir classe Pessoa fim',
-    'class Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nPessoa.__propertiesDeclarations__.bind(this)()\n}}\nPessoa.__propertiesDeclarations__.bind(null)()\n'],
+    'class Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nPessoa.__propertiesDeclarations__.bind(this)()\n}}\nPessoa.__propertiesDeclarations__.bind(null)()\nPessoa.__attr__ = []\n'],
     [
       `
       definir classe PessoaFisica
         heranca: Pessoa
         interfaces: Nomeavel Localizavel
       fim`  
-    , 'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()\n'
+    , 'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()\n' +
+      `PessoaFisica.__attr__ = []\n__validateInterface__('PessoaFisica', Nomeavel, PessoaFisica.__attr__)\n__validateInterface__('PessoaFisica', Localizavel, PessoaFisica.__attr__)\n`
     ],
     [
       `
@@ -30,7 +31,8 @@ test('generate class declaration', (): void => {
       `,
       `class Carro{\nstatic __propertiesDeclarations__() {if (this && this.modelo === undefined) {this.modelo = ${assignRhs('"Esportivo"').slice(0, -1)}}\n` + 
       `if (this && this.marca === undefined) {this.marca = null}\nif (this && this.construtora === undefined) {this.construtora = null}\nif (\'ano\' in Carro === false) {Carro.ano = ${assignRhs('2020').slice(0, -1)}}\n}constructor(marca=null)` + 
-      `{\nCarro.__propertiesDeclarations__.bind(this)()\nlet __marca = ${assignRhs('marca')}}}\nCarro.__propertiesDeclarations__.bind(null)()\n`
+      `{\nCarro.__propertiesDeclarations__.bind(this)()\nlet __marca = ${assignRhs('marca')}}}\nCarro.__propertiesDeclarations__.bind(null)()\n` +
+      `Carro.__attr__ = ['modelo','marca','construtora']\n`
     ],
     [
       `
@@ -43,7 +45,8 @@ test('generate class declaration', (): void => {
       fim
       `,
       `class Luz{\nstatic __propertiesDeclarations__() {if (this && this.ligado === undefined) {this.ligado = ${assignRhs('true').slice(0, -1)}}\n}constructor(){\nLuz.__propertiesDeclarations__.bind(this)()\n}` +
-      `ligar(){\nthis.ligado = ${assignRhs('true')}}desligar(){\nthis.ligado = ${assignRhs('false')}} static esta_ligado(){ return this.ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n`
+      `ligar(){\nthis.ligado = ${assignRhs('true')}}desligar(){\nthis.ligado = ${assignRhs('false')}} static esta_ligado(){ return this.ligado==true}}\nLuz.__propertiesDeclarations__.bind(null)()\n` +
+      `Luz.__attr__ = ['ligado','ligar','desligar']\n`
     ]
   ])
 })
@@ -63,8 +66,7 @@ test('generate interfaces gen', (): void => {
   const tryGenerateClassInstantiation = generatorTester(InterfaceDeclaration)
 
   tryGenerateClassInstantiation([
-    ['definir interface IFoo Ibar fim', ''],
-    ['definir interface IFoo foo bar fim', ''],
+    ['definir interface IFoo foo fim', `let IFoo = { nome: 'IFoo', __props__: ['foo'] };\n`],
+    ['definir interface IFoo foo bar fim', `IFoo = { nome: 'IFoo', __props__: ['foo','bar'] };\n`],
   ])
 })
-

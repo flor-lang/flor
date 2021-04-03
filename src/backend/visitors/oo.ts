@@ -5,7 +5,8 @@ import {
   propertyCodeGen,
   constructorCodeGen,
   methodCodeGen,
-  classInstantiationCodeGen
+  classInstantiationCodeGen,
+  interfaceDeclarationCodeGen
 } from '../generators/oo'
 import {
   evaluateSuperCallAtConstructorSubclass,
@@ -22,7 +23,11 @@ const interfaceDeclaration = {
   enter (node: AstNode): void {
     evaluateGlobalDeclaration(node)
     const identifier = (node.value as AstNode[])[0].value as string
+    interfaceDeclarationCodeGen.enter(node)
     Env.get().symbolTable.put(identifier, node)
+  },
+  exit(): void {
+    interfaceDeclarationCodeGen.exit()
   }
 }
 
@@ -34,10 +39,10 @@ const classDeclaration = {
     Env.get().stackMap['CLASS_SCOPE'].push(identifier)
     classDeclarationCodeGen.enter()
   },
-  exit (): void {
+  exit (node: AstNode): void {
     /* Pop Class scope created at contructor::enter */
     Env.get().popSymbolTable()
-    classDeclarationCodeGen.exit()
+    classDeclarationCodeGen.exit(node)
     Env.get().stackMap['CLASS_SCOPE'].pop()
   }
 }
@@ -91,19 +96,23 @@ const constructor = {
   enter (node: AstNode, parent: AstNode): void {
     const metaNode = (parent.value as AstNode[])
     /* Create a new scope to Classes Properties and Methods */
+    /* Pop-ed at classDeclaration::exit */
     Env.get().pushSymbolTable()
-    findClassMemberIndentifiers(parent).forEach(([id, node]): void => {
-      Env.get().symbolTable.put(id !== 'super' ? `#${id}` : id, node)
-    })
-
-    /* Evaluate if class implements interfaces */
-    const implementationsNode = metaNode[1]
-    if (isEmptyNode(implementationsNode) === false) {
-      evaluateInterfaceImplementations(implementationsNode)
+    // findClassMemberIndentifiers(parent).forEach(([id, node]): void => {
+    //   Env.get().symbolTable.put(id !== 'super' ? `#${id}` : id, node)
+    // })
+    const inheritanceNode = metaNode[0]
+    if (isEmptyNode(inheritanceNode) === false) {
+      Env.get().symbolTable.put('super', inheritanceNode)
     }
 
+    /* Evaluate if class implements interfaces */
+    // const implementationsNode = metaNode[1]
+    // if (isEmptyNode(implementationsNode) === false) {
+    //   evaluateInterfaceImplementations(implementationsNode)
+    // }
+
     /* Evaluate 'super' call in not empty constructor */
-    const inheritanceNode = metaNode[0]
     if (isEmptyNode(node) === false && isEmptyNode(inheritanceNode) === false) {
       evaluateSuperCallAtConstructorSubclass(node)
     }

@@ -34,10 +34,6 @@ test('test variable definition and your use', () => {
     fim
     teste = teste
     `,
-    `definir classe Teste
-        propriedades: valor = 0
-    fim
-    teste = #valor`,
     'exp = 5^expoente'
   ])
 })
@@ -107,17 +103,21 @@ test('test class member identifier use', () => {
         propriedades: valor = 0
     fim
     #valor = 1`,
-    `definir classe Pai
-        propriedades: hey
+    // `definir classe Pai
+    //     propriedades: hey
+    // fim
+    // definir classe Teste
+    //     heranca: Pai
+    //     propriedades: valor = 0 duplicado
+    //     construtor: funcao ()
+    //         super()
+    //         #duplicado = #show
+    //     fim
+    // fim`,
+    `definir classe Teste
+        propriedades: valor = 0
     fim
-    definir classe Teste
-        heranca: Pai
-        propriedades: valor = 0 duplicado
-        construtor: funcao ()
-            super()
-            #duplicado = #show
-        fim
-    fim`
+    teste = #valor`
   ])
 
 })
@@ -320,48 +320,49 @@ test('test interface use', () => {
 
 })
 
-test('test interfaces implementations', () => {
-  const mustBeAllowed = semanticTester(false)
-  const mustThrows = semanticTester(true, /.+não está em conforme com a interface.+'/)
+/* FIXME: Now is check in runtime */
+// test('test interfaces implementations', () => {
+//   const mustBeAllowed = semanticTester(false)
+//   const mustThrows = semanticTester(true, /.+não está em conforme com a interface.+'/)
 
-  mustBeAllowed([
-    `
-    definir interface Autenticavel
-      usuario senha login
-    fim
-    definir classe Cliente
-      interfaces: Autenticavel
-      propriedades:
-        nome
-        data_de_nascimento
-        usuario
-        senha
-      metodos:
-        login = (senha) := #senha igual a senha
-    fim
-    `,
-    `definir interface Foo foo fim
-    definir interface Bar bar fim
-    definir classe Teste
-      interfaces: Foo Bar
-      propriedades: foo bar
-    fim`
-  ])
+//   mustBeAllowed([
+//     `
+//     definir interface Autenticavel
+//       usuario senha login
+//     fim
+//     definir classe Cliente
+//       interfaces: Autenticavel
+//       propriedades:
+//         nome
+//         data_de_nascimento
+//         usuario
+//         senha
+//       metodos:
+//         login = (senha) := #senha igual a senha
+//     fim
+//     `,
+//     `definir interface Foo foo fim
+//     definir interface Bar bar fim
+//     definir classe Teste
+//       interfaces: Foo Bar
+//       propriedades: foo bar
+//     fim`
+//   ])
 
-  mustThrows([
-    `definir interface Foo foo fim
-    definir classe Teste
-      interfaces: Foo
-      propriedades: hey
-    fim`,
-    `definir interface Foo foo fim
-    definir interface Bar bar fim
-    definir classe Teste
-      interfaces: Foo Bar
-      propriedades: foo
-    fim`,
-  ])
-})
+//   mustThrows([
+//     `definir interface Foo foo fim
+//     definir classe Teste
+//       interfaces: Foo
+//       propriedades: hey
+//     fim`,
+//     `definir interface Foo foo fim
+//     definir interface Bar bar fim
+//     definir classe Teste
+//       interfaces: Foo Bar
+//       propriedades: foo
+//     fim`,
+//   ])
+// })
 
 test('test private properties access', () => {
   const mustBeAllowed = semanticTester(false)
@@ -386,12 +387,12 @@ test('test private properties access', () => {
     bar = foo._away()`,
     'foo = [nulo] foo[0]._prop = 1',
     'foo = [nulo] foo[0] = foo[0]._prop',
-    `definir classe Bar
-      propriedades: _privado_do_pai
-    fim
-    definir classe Foo heranca: Bar
-      metodos: bar = () := #_privado_do_pai + 1
-    fim`
+    // `definir classe Bar
+    //   propriedades: _privado_do_pai
+    // fim
+    // definir classe Foo heranca: Bar
+    //   metodos: bar = () := #_privado_do_pai + 1
+    // fim`
   ])
 
 })

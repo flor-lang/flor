@@ -244,6 +244,7 @@ if (outputFormat === 'js') {
           entry: `${process.cwd()}/${outputDirectory}/${mainFile.replace('.flor', '.js')}`,
           target: targetEnv,
           devtool: 'source-map',
+          mode: 'production',
           output: {
             path: `${process.cwd()}/${outputDirectory}`,
             filename: `${mainFile}.js`,

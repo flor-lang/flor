@@ -106,7 +106,7 @@ export const conditionalExpressionCodeGen = {
 
 export const importExpressionCodeGen = {
   enter (): void {
-    Env.get().codeOutput += `__import__(`
+    Env.get().codeOutput += `require(`
   },
   exit (): void {
     Env.get().codeOutput += ')'

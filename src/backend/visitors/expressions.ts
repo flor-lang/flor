@@ -103,7 +103,6 @@ export const importExpression = {
   },
   exit (): void {
     importExpressionCodeGen.exit()
-    Env.get().injectPolyfill(Polyfill.IMPORT)
   }
 }
 

@@ -16,3 +16,5 @@ export class ClasseFlorType extends SymbolType<ClasseTypeParameter> {
     return {};
   }
 }
+
+export const ClasseFlor = new ClasseFlorType();

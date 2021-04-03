@@ -1,12 +1,15 @@
 import { AstNode } from '../backend/traverse'
+import { QualquerFlorType } from './symbol-type'
 
 export default class SymbolTable {
   private table: { [key: string]: AstNode }
+  private typesTable: { [key: string]: QualquerFlorType }
 
   protected parent: SymbolTable
 
   public constructor (parent: SymbolTable) {
     this.table = {}
+    this.typesTable = {}
     this.parent = parent
   }
 
@@ -28,6 +31,10 @@ export default class SymbolTable {
     this.table[identifier] = node
   }
 
+  public putType (identifier: string, type: QualquerFlorType): void {
+    this.typesTable[identifier] = type
+  }
+
   public keys (): string[] {
     return Object.keys(this.table)
   }
@@ -40,11 +47,20 @@ export default class SymbolTable {
     return node
   }
 
+  public getType (identifier: string): QualquerFlorType {
+    let type: QualquerFlorType = null
+    this.searchIdentifier(identifier, (symbolTable): void => {
+      type = symbolTable.typesTable[identifier]
+    })
+    return type
+  }
+
   public rm (identifier: string): AstNode {
     let node: AstNode = null
     this.searchIdentifier(identifier, (symbolTable): void => {
       node = symbolTable.table[identifier]
       delete symbolTable.table[identifier]
+      delete symbolTable.typesTable[identifier]
     })
     return node
   }

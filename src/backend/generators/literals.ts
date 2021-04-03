@@ -8,8 +8,12 @@ export const numberCodeGen = {
 }
 
 export const stringCodeGen = {
-  enter (node: AstNode): void {
-    Env.get().codeOutput += `"${node.value}"`
+  enter (node: AstNode, parent: AstNode): void {
+    let value = node.value as string
+    if (parent.name === 'import-expression') {
+      value = value.startsWith('$') ? value.slice(1) : `./${value}`
+    }
+    Env.get().codeOutput += `"${value}"`
   }
 }
 
