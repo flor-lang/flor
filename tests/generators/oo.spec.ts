@@ -1,4 +1,4 @@
-import { ClassDeclaration, ClassInstantiation } from '../../src/parsers/oo'
+import { ClassDeclaration, ClassInstantiation, InterfaceDeclaration } from '../../src/parsers/oo'
 import { generatorTester, assignRhs } from '../utils'
 
 test('generate class declaration', (): void => {
@@ -58,3 +58,13 @@ test('generate class instantiation', (): void => {
     ['nova Pessoa(nome: "Godofredo", idade: 18)', 'new Pessoa("Godofredo",18)\n']
   ])
 })
+
+test('generate interfaces gen', (): void => {
+  const tryGenerateClassInstantiation = generatorTester(InterfaceDeclaration)
+
+  tryGenerateClassInstantiation([
+    ['definir interface IFoo Ibar fim', ''],
+    ['definir interface IFoo foo bar fim', ''],
+  ])
+})
+

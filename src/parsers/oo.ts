@@ -34,7 +34,7 @@ export const InterfaceDeclaration: InterfaceDeclarationParser = P
   )
   .map((ast: { properties: never[] }): {}[] => [
     ast.properties[0],
-    { name: 'members', value: ast.properties.splice(1) }
+    { name: 'interface-members', value: ast.properties.splice(1) }
   ])
   .node('interface-declaration')
 

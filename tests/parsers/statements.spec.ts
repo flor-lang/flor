@@ -67,7 +67,7 @@ test('if then else statement', (): void => {
     'se verdadeiro entao a = 5senao a = afim',
     'se igual a entao a=0 fim',
     'senao se teste entao faca_algo() fim',
-    // `se teste entao teste() senao_se !teste entao fim`,
+    // `se teste entao teste() senao_se ~teste entao fim`,
     'se teste entao teste() senao se eita() fim',
   ])
 })

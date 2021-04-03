@@ -1,6 +1,6 @@
 {
   "name": "@flor-lang/flor",
-  "version": "0.8.3",
+  "version": "0.8.41",
   "description": "Linguagem de Programação",
   "homepage": "https://flor-lang.org/",
   "main": "dist/main.js",
@@ -10,8 +10,7 @@
     "exec": "npm run build && node dist/main.js",
     "dev": "tsc -w",
     "build": "tsc",
-    "build-cli": "npm run build && npm i -g",
-    "postinstall": "flor --pdr-compilar"
+    "build-cli": "npm run build && npm i -g"
   },
   "keywords": [
     "language",

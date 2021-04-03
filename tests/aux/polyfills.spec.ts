@@ -1,4 +1,4 @@
-import { generatorTester } from "../utils"
+import { generatorTester, assignRhs } from "../utils"
 import { Program } from "../../src/parsers/program"
 import { Expression } from "../../src/parsers/expressions"
 
@@ -38,5 +38,17 @@ test('test expression and condional expression polyfills', (): void => {
     'const __nullish_coalesce__=(l,_=null)=>null==l?_:l;\n' + 
     'const __expr__=_=>__nullish_coalesce__(_);\n' +
     'const __cdt_expr__=(_,c,l,n)=>n?c?l:n:c?l:_||null;\n'
+  )
+})
+
+test('test expression wrapper polyfill in class property declaration', (): void => {
+  generatorTester(Program)(
+    [
+      ['definir classe Foo propriedades: bar = "bar" fim',
+      `class Foo{\nstatic __propertiesDeclarations__() {if (this) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
+      `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\n`],
+    ], 
+    'const __nullish_coalesce__=(l,_=null)=>null==l?_:l;\n' + 
+    'const __expr__=_=>__nullish_coalesce__(_);\n'
   )
 })

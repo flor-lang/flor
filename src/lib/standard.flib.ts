@@ -1,20 +1,23 @@
 import { AstNode } from '../backend/traverse'
 
 const emptyIndex = { column: 0, line: 0, offset: 0 }
-const emptyAstNode: AstNode = { name: '', value: '', start: emptyIndex, end: emptyIndex }
+export const EmptyAstNode: AstNode = { name: '', value: '', start: emptyIndex, end: emptyIndex }
 
 export const StandardLib: { [key: string]: AstNode } = {
-  Texto: emptyAstNode,
-  Numero: emptyAstNode,
-  Lista: emptyAstNode,
-  Math: emptyAstNode,
-  Matematica: emptyAstNode,
-  txt: emptyAstNode,
-  bool: emptyAstNode,
-  list: emptyAstNode,
-  dic: emptyAstNode,
-  num: emptyAstNode,
-  int: emptyAstNode,
-  real: emptyAstNode,
-  escrever: emptyAstNode
+  Texto: EmptyAstNode,
+  Numero: EmptyAstNode,
+  Lista: EmptyAstNode,
+  Fila: EmptyAstNode,
+  Pilha: EmptyAstNode,
+  Conjunto: EmptyAstNode,
+  Math: EmptyAstNode,
+  Matematica: EmptyAstNode,
+  txt: EmptyAstNode,
+  bool: EmptyAstNode,
+  list: EmptyAstNode,
+  dic: EmptyAstNode,
+  num: EmptyAstNode,
+  int: EmptyAstNode,
+  real: EmptyAstNode,
+  escrever: EmptyAstNode
 }

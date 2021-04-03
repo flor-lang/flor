@@ -10,7 +10,7 @@ test('generate basic expression code', (): void => {
     ['identificador["key"]', 'identificador["key"]'],
     ['identificador.chave["key"]', 'identificador.chave["key"]'],
     ['identificador', 'identificador'],
-    ['!booleano', '(!booleano)'],
+    ['~booleano', '(!booleano)'],
     ['-1', '(-1)'],
     ['1 + 1', '1+1'],
     ['2 - -1', '2-(-1)'],

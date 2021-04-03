@@ -6,7 +6,7 @@
 
 Flor tem como missão principal o ensino de programação,
 com a sintaxe pensada e construída para fácil compreensão de algoritmos e fluxos de programas,
-com a língua portuguesa servindo como base sintática e semântica da linguagem Flor.
+com a língua portuguesa servindo de base sintática e semântica para a linguagem Flor.
 
 Para mais informaçoes sobre o Flor,
 visite o [site da linguagem](https://flor-lang.org/)
