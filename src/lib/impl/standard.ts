@@ -156,7 +156,24 @@ Array.prototype.toString = function () {
 
 // Prototype Declarations
 Object.defineProperties(Object.prototype, {
-  possui: { value: Object.prototype.hasOwnProperty }
+  possui: { value: Object.prototype.hasOwnProperty },
+  chaves: {
+    value() {
+      return Object.keys(this)
+    }
+  },
+  valores: {
+    value() {
+      return Object.values(this)
+    }
+  },
+  pares: {
+    value() {
+      return Object.entries(this).map(entry => ({
+        "chave": entry[0], "valor": entry[1]
+      }))
+    }
+  }
 })
 
 // Prototype overrides
@@ -226,28 +243,28 @@ class Conjunto<T> {
 
 
   uniao(conjunto: Conjunto<T>): Conjunto<T> {
-    const novoConjunto = new Conjunto(this.valores());
-    conjunto.valores().forEach(valor => {
+    const novoConjunto = new Conjunto(this.obter_valores());
+    conjunto.obter_valores().forEach(valor => {
       novoConjunto.adicionar(valor)
     });
     return novoConjunto;
   }
 
   intercecao(conjunto: Conjunto<T>): Conjunto<T> {
-    const valores = conjunto.valores().filter(valor => this.contem(valor));
+    const valores = conjunto.obter_valores().filter(valor => this.contem(valor));
     return new Conjunto(valores);
   }
 
   diferenca(conjunto: Conjunto<T>): Conjunto<T> {
-    const valores = this.valores().filter(valor => !conjunto.contem(valor));
+    const valores = this.obter_valores().filter(valor => !conjunto.contem(valor));
     return new Conjunto(valores);
   }
 
   contem(elemento: T): boolean { return this._list.includes(elemento); }
   para_cada(callbackfn: (e: T, i?: number) => void) { this._list.forEach(callbackfn); }
   limpar() { this._list = []; }
-  valores() { return this._list; }
-  descricao() { return `Conjunto :: ${this.valores()}`; }
+  obter_valores() { return this._list; }
+  descricao() { return `Conjunto :: ${this.obter_valores()}`; }
 
 }
 
@@ -273,8 +290,8 @@ class Fila<T> {
   desenfileirar() { this._list.shift(); }
   contem(elemento: T): boolean { return this._list.includes(elemento); }
   para_cada(callbackfn: (e: T, i?: number) => void) { this._list.forEach(callbackfn) }
-  valores() { return this._list; }
-  descricao() { return `Fila :: ${this.valores()}` }
+  obter_valores() { return this._list; }
+  descricao() { return `Fila :: ${this.obter_valores()}` }
 }
 
 Object.defineProperty(_, 'Fila', {
@@ -299,8 +316,8 @@ class Pilha<T> {
   desempilhar() { this._list.pop(); }
   contem(elemento: T): boolean { return this._list.includes(elemento); }
   para_cada(callbackfn: (e: T, i?: number) => void) { this._list.forEach(callbackfn) }
-  valores() { return this._list; }
-  descricao() { return `Pilha :: ${this.valores()}` }
+  obter_valores() { return this._list; }
+  descricao() { return `Pilha :: ${this.obter_valores()}` }
 }
 
 Object.defineProperty(_, 'Pilha', {
@@ -400,6 +417,37 @@ class FlorJS {
 
 Object.defineProperty(_, 'FlorJS', {
   value: FlorJS,
+  writable: false 
+})
+
+/** **************************************************************************** */
+
+/**
+ * Erro Flor
+ */
+class ErroFlor extends Error {
+  readonly name = "ErroFlor"
+
+  private readonly titulo: string;
+  private readonly mensagem: string;
+  private readonly dado: any;
+
+  constructor (titulo="Erro Flor", mensagem="", dado: any=null) {
+    super(mensagem);
+    this.titulo = titulo;
+    this.mensagem = mensagem;
+    this.dado = dado;
+    Object.setPrototypeOf(this, ErroFlor.prototype);
+  }
+
+  descricao() {
+    return `ErroFlor :: titulo => ${this.titulo}, mensagem => ${this.mensagem}${
+      this.dado === null ? '' : `, dado => ${this.dado}`}`
+  }
+}
+
+Object.defineProperty(_, 'ErroFlor', {
+  value: ErroFlor,
   writable: false 
 })
 
@@ -510,13 +558,68 @@ const escrever = function (message: any) {
   console.log(log)
 }
 
+const lancar_erro = (mensagem="", dado: any=null, titulo="Erro Flor") => {
+  throw new ErroFlor(titulo, mensagem, dado);
+}
+
+const clsc = (l:any,_:any=null)=>null==l?_:l;
+
+const executar = (fn: () => any, d: any) => {
+  try {
+    const _ = fn();
+    if (typeof _ === 'undefined') {
+      throw new Error('Atributo não definido')
+    }
+    return clsc(_);
+  } catch (error) {
+    if (typeof d === 'undefined') {
+      return null;
+    }
+    if (typeof d === 'function') {
+      let erro = error
+      if (!(erro instanceof ErroFlor)) {
+        erro = new ErroFlor(
+          "Erro na execução",
+          FlorRuntimeErrorMessage(error).replace('\nErro na execução:\n', '')
+        )
+      }
+      return clsc(d(erro))
+    }
+    return clsc(d)
+  }
+}
+
+const __type_map__ = {
+  undefined: 'desconhecido',
+  boolean: 'booleano',
+  function: 'funcao',
+  number: 'numero',
+  object: 'dicionario/objeto',
+  string: 'texto',
+  bigint: 'numero',
+  symbol: '',
+}
+const tipo = (o: any): string => {
+  return __type_map__[typeof o];
+}
+
 const FlorRuntimeErrorMessage = (error: Error): string => {
-  let __florErrorMessage__ = error.message
+  let __florErrorMessage__ = clsc(error.message, "Erro não contém mensagem")
+
+  if (error instanceof ErroFlor) {
+    __florErrorMessage__ = error.descricao();
+  }
 
   if (error instanceof TypeError) {
     if (error.message.endsWith('is not a function')) {
       __florErrorMessage__ = error.message.replace(
         'is not a function', 'não é uma função'
+      )
+    }
+
+    if (error.message.endsWith('is not iterable')) {
+      __florErrorMessage__ = error.message.replace(
+        'is not iterable', 'não é iterável'
       )
     }
 
@@ -551,7 +654,7 @@ const FlorRuntimeErrorMessage = (error: Error): string => {
     )
   }
 
-  return `\nErro na execução:\n  ${__florErrorMessage__}`
+  return `\nErro na execução:\n${__florErrorMessage__}`
 }
 
 Object.defineProperties(_, {
@@ -563,6 +666,10 @@ Object.defineProperties(_, {
   int: { value: int, writable: false },
   real: { value: real, writable: false },
   escrever: { value: escrever, writable: false },
+  lancar_erro: { value: lancar_erro, writable: false },
+  executar: { value: executar, writable: false },
+  clsc: { value: clsc, writable: false },
+  tipo: { value: tipo, writable: false },
   FlorRuntimeErrorMessage: { value: FlorRuntimeErrorMessage, writable: false },
 })
 

@@ -5,6 +5,7 @@ import {
   expressionCodeGen,
   wrappedCodeGen,
   unaryCodeGen,
+  addCodeGen,
   blockFunctionCodeGen,
   argsCodeGen,
   inlineFunctionCodeGen,
@@ -45,6 +46,18 @@ const unary = {
   },
   exit (): void {
     unaryCodeGen.exit()
+  }
+}
+
+const add = {
+  enter (): void {
+    addCodeGen.enter()
+  },
+  between (node: AstNode , parent: AstNode, index: number): void {
+    addCodeGen.between(node, parent, index)
+  },
+  exit (): void {
+    addCodeGen.exit()
   }
 }
 
@@ -110,6 +123,7 @@ export default {
   expression,
   wrapped,
   unary,
+  add,
   exponential,
   blockFunction,
   args,

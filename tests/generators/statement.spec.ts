@@ -23,8 +23,8 @@ test('generate while statement', (): void => {
     ['idade = 10', `let idade = ${assignRhs('10')}`],
     ['exibir_mensagem_censura = ""', `let exibir_mensagem_censura = ${assignRhs('""')}`],
     ['treta = verdadeiro', `let treta = ${assignRhs('true')}`],
-    ['enquanto i > 0 faca i = i - 1 fim', `while(i>0){\ni = ${assignRhs('i-1')}}`],
-    ['enquanto i <= 10 faca soma = soma + i fim', `while(i<=10){\nsoma = ${assignRhs('soma+i')}}`],
+    ['enquanto i > 0 faca i = i - 1 fim', `while(i>0){\ni = ${assignRhs('__pf__.sum(i,\'-\',1)')}}`],
+    ['enquanto i <= 10 faca soma = soma + i fim', `while(i<=10){\nsoma = ${assignRhs('__pf__.sum(soma,\'+\',i)')}}`],
     ['enquanto idade < 18 faca exibir_mensagem_censura = verdadeiro fim',
      `while(idade<18){\nexibir_mensagem_censura = ${assignRhs('true')}}`],
     [`
@@ -42,8 +42,8 @@ test('generate do while statement', (): void => {
   const tryGenerateStatement = generatorTester(Statement)
 
   tryGenerateStatement([
-    ['faca i = i - 1 enquanto i > 0 fim', `do{\ni = ${assignRhs('i-1')}}while(i>0)`],
-    ['faca soma = soma + i enquanto i <= 10 fim', `do{\nsoma = ${assignRhs('soma+i')}}while(i<=10)`],
+    ['faca i = i - 1 enquanto i > 0 fim', `do{\ni = ${assignRhs('__pf__.sum(i,\'-\',1)')}}while(i>0)`],
+    ['faca soma = soma + i enquanto i <= 10 fim', `do{\nsoma = ${assignRhs('__pf__.sum(soma,\'+\',i)')}}while(i<=10)`],
     [`
       faca
         treta = verdadeiro
@@ -62,14 +62,14 @@ test('generate foreach statement', (): void => {
   tryGenerateStatement([
     ['total = 0', `let total = ${assignRhs('0')}`],
     ['para cada elemento de colecao faca soma=soma+elemento fim',
-     `for(const elemento of colecao){\nsoma = ${assignRhs('soma+elemento')}}`],
+     `for(const elemento of colecao){\nsoma = ${assignRhs('__pf__.sum(soma,\'+\',elemento)')}}`],
     [
     `para cada i de lista faca
       para cada j de lista faca
         total = i + j
       fim
     fim`,
-    `for(const i of lista){\nfor(const j of lista){\ntotal = ${assignRhs('i+j')}}}`
+    `for(const i of lista){\nfor(const j of lista){\ntotal = ${assignRhs('__pf__.sum(i,\'+\',j)')}}}`
     ]
   ])
 })

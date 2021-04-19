@@ -6,7 +6,7 @@ import { Polyfill } from '../../enviroment/polyfill'
 export const expressionCodeGen = {
   enter (node: AstNode, parent: AstNode): void {
     if (parent && parent.name === 'assignment') {
-      Env.get().codeOutput += '__expr__('
+      Env.get().codeOutput += '__pf__.expr('
     }
   },
   exit (node: AstNode, parent: AstNode): void {
@@ -32,6 +32,19 @@ export const unaryCodeGen = {
   },
   exit (): void {
     Env.get().codeOutput += ')'
+  }
+}
+
+export const addCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += '__pf__.sum('
+  },
+  between (node: AstNode , parent: AstNode, index: number): void {
+    Env.get().codeOutput += index === 0 ? ",'" : "',"
+  },
+  exit (): void {
+    Env.get().codeOutput += ')'
+    Env.get().injectPolyfill(Polyfill.SUM)
   }
 }
 
@@ -94,7 +107,7 @@ export const conditionalExpressionCodeGen = {
         variable = identifier
       }
     }
-    Env.get().codeOutput += `__cdt_expr__(${variable},`
+    Env.get().codeOutput += `__pf__.cdt_expr(${variable},`
   },
   between (): void {
     Env.get().codeOutput += ','

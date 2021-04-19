@@ -24,11 +24,11 @@ test('test assignment', () => {
     ['somar = nulo', `let somar = ${assignRhs('null')}`],
     ['variavel = 1', `variavel = ${assignRhs('1')}`],
     ['variavel = verdadeiro', `variavel = ${assignRhs('true')}`],
-    ['somar = (x) := x + y', `somar = ${assignRhs('(x=null) => x+y')}`],
-    ['somar = funcao(x, y) soma = x + y fim', `somar = ${assignRhs(`function(x=null,y=null){\nlet soma = ${assignRhs('x+y')}}`)}`],
-    ['somar = funcao(x, y) retornar x + y fim', `somar = ${assignRhs('function(x=null,y=null){\nreturn x+y}')}`],
-    ['somar = se 5 > 0 entao (x) := x + y', `somar = ${assignRhs('__cdt_expr__(somar,5>0,(x=null) => x+y,)')}`],
-    ['teste = se verdadeiro entao 1 senao -1', `teste = ${assignRhs('__cdt_expr__(teste,true,1,(-1))')}`],
+    ['somar = (x) := x + y', `somar = ${assignRhs('(x=null) => __pf__.sum(x,\'+\',y)')}`],
+    ['somar = funcao(x, y) soma = x + y fim', `somar = ${assignRhs(`function(x=null,y=null){\nlet soma = ${assignRhs('__pf__.sum(x,\'+\',y)')}}`)}`],
+    ['somar = funcao(x, y) retornar x + y fim', `somar = ${assignRhs('function(x=null,y=null){\nreturn __pf__.sum(x,\'+\',y)}')}`],
+    ['somar = se 5 > 0 entao (x) := x + y', `somar = ${assignRhs('__pf__.cdt_expr(somar,5>0,(x=null) => __pf__.sum(x,\'+\',y),)')}`],
+    ['teste = se verdadeiro entao 1 senao -1', `teste = ${assignRhs('__pf__.cdt_expr(teste,true,1,(-1))')}`],
   ])
 });
 

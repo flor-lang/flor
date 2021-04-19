@@ -13,6 +13,7 @@ export const StandardLib: { [key: string]: AstNode } = {
   Math: EmptyAstNode,
   Matematica: EmptyAstNode,
   FlorJS: EmptyAstNode,
+  ErroFlor: EmptyAstNode,
   Pagina: EmptyAstNode,
   Componente: EmptyAstNode,
   txt: EmptyAstNode,
@@ -22,5 +23,9 @@ export const StandardLib: { [key: string]: AstNode } = {
   num: EmptyAstNode,
   int: EmptyAstNode,
   real: EmptyAstNode,
-  escrever: EmptyAstNode
+  escrever: EmptyAstNode,
+  lancar_erro: EmptyAstNode,
+  executar: EmptyAstNode,
+  clsc: EmptyAstNode,
+  tipo: EmptyAstNode,
 }

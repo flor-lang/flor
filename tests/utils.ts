@@ -6,7 +6,7 @@ import { traverser } from '../src/backend/traverse'
 import { visitor } from '../src/backend/visitor'
 import Env from '../src/enviroment/env'
 
-export const assignRhs = (code: string): string => `__expr__(${code});`
+export const assignRhs = (code: string): string => `__pf__.expr(${code});`
 
 const parseStrings = (status: boolean) => (p: Parser<any>, log: boolean = false, index: number = undefined) => (a: string[]) => {
   a.map((s, i) => {
@@ -42,7 +42,7 @@ export const generatorTester = (p: Parser<any>, log: boolean = false, logIndex: 
       logAst(resultAst, true)
     }
 
-    expect(resultCode).toBe(`${polyfill}${i[1]}`)
+    expect(resultCode).toBe(`${polyfill ? `const __pf__ = {\n${polyfill}};\n` : ''}${i[1]}`)
   })
 }
 

@@ -111,7 +111,7 @@ export const propertyCodeGen = {
         Env.get().codeOutput += 'null'
       } else {
         Env.get().injectPolyfill(Polyfill.EXPR)
-        Env.get().codeOutput += '__expr__('
+        Env.get().codeOutput += '__pf__.expr('
       }
     }
   },

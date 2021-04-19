@@ -44,18 +44,18 @@ export default class Env {
   }
 
   public getCodeOutputPolyfilled (): string {
-    let output = this.codeOutput
+    let polyfillCode = 'const __pf__ = {\n'
     this.polyfills.forEach((polyfill: Polyfill): void => {
-      output = `${polyfill}\n${output}`
+      polyfillCode += `${polyfill},\n`
     })
-
-    return `${output}\n${this.getExportsPolyfillCall()}`
+    polyfillCode += '};';
+    return `${polyfillCode}\n${this.codeOutput}\n${this.getExportsPolyfillCall()}`
   }
 
   private getExportsPolyfillCall (): string {
     const std = Object.keys(StandardLib)
     const keys = this.symbolTable.keys().filter((key): boolean => !std.includes(key))
-    return `__exports__({${keys.join(',')}});`
+    return `__pf__.exports({${keys.join(',')}});`
   }
 
   public injectPolyfill (polyfill: Polyfill): void {
