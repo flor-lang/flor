@@ -1,4 +1,4 @@
-import { generatorTester } from "../utils"
+import { assignRhs, generatorTester } from "../utils"
 import { Program } from "../../src/parsers/program"
 import { Expression } from "../../src/parsers/expressions"
 import { Polyfill } from "../../src/enviroment/polyfill"
@@ -65,104 +65,104 @@ test('test term expression polyfill', (): void => {
   )
 })
 
-// test('test expression and condional expression polyfills', (): void => {
-//   generatorTester(Program)(
-//     [
-//       ['foo = se verdadeiro entao 1 senao 0', 'foo = __expr__(__cdt_expr__(foo,true,1,0));\n__exports__({foo,tru,bar,msg});'],
-//       ['tru = se nulo entao 1 senao 0', 'tru = __expr__(__cdt_expr__(tru,null,1,0));\n__exports__({foo,tru,bar,msg});'],
-//       ['bar = se 5 > 0 entao 1', 'bar = __expr__(__cdt_expr__(bar,5>0,1,));\n__exports__({foo,tru,bar,msg});'],
-//       ['msg = se 0 > 0 entao "hey"', 'msg = __expr__(__cdt_expr__(msg,0>0,"hey",));\n__exports__({foo,tru,bar,msg});'],
-//     ],
-//     `${Polyfill.NULL_CLSC}\n` +
-//     `${Polyfill.EXPR}\n` +
-//     `${Polyfill.CTD_EXPR}\n` +
-//     `${Polyfill.IS_BROWSER}\n` +
-//     `${Polyfill.EXPORTS}\n`
-//   )
-// })
+test('test expression and condional expression polyfills', (): void => {
+  generatorTester(Program)(
+    [
+      ['foo = se verdadeiro entao 1 senao 0', 'foo = __pf__.expr(__pf__.cdt_expr(foo,true,1,0));\n__pf__.exports({bar,msg,foo,tru});'],
+      ['tru = se nulo entao 1 senao 0', 'tru = __pf__.expr(__pf__.cdt_expr(tru,null,1,0));\n__pf__.exports({bar,msg,foo,tru});'],
+      ['bar = se 5 > 0 entao 1', 'bar = __pf__.expr(__pf__.cdt_expr(bar,5>0,1,));\n__pf__.exports({bar,msg,foo,tru});'],
+      ['msg = se 0 > 0 entao "hey"', 'msg = __pf__.expr(__pf__.cdt_expr(msg,0>0,"hey",));\n__pf__.exports({bar,msg,foo,tru});'],
+    ],
+    `${Polyfill.EXPORTS},\n` +
+    `${Polyfill.IS_BROWSER},\n` +
+    `${Polyfill.CTD_EXPR},\n` +
+    `${Polyfill.EXPR},\n` +
+    `${Polyfill.NULL_CLSC},\n`
+  )
+})
 
-// test('test expression wrapper polyfill in class property declaration', (): void => {
-//   generatorTester(Program)(
-//     [
-//       [
-//         'definir classe Foo propriedades: bar = "bar" fim',
-//         `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
-//         `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
-//         `\n__exports__({foo,tru,bar,msg,Foo});`
-//       ],
-//     ],
-//     `${Polyfill.NULL_CLSC}\n` +
-//     `${Polyfill.EXPR}\n` +
-//     `${Polyfill.IS_BROWSER}\n` +
-//     `${Polyfill.EXPORTS}\n`
-//   )
-// })
+test('test expression wrapper polyfill in class property declaration', (): void => {
+  generatorTester(Program)(
+    [
+      [
+        'definir classe Foo propriedades: bar = "bar" fim',
+        `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
+        `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
+        `\n__pf__.exports({bar,msg,foo,tru,Foo});`
+      ],
+    ],
+    `${Polyfill.EXPORTS},\n` +
+    `${Polyfill.IS_BROWSER},\n` +
+    `${Polyfill.EXPR},\n` +
+    `${Polyfill.NULL_CLSC},\n`
+  )
+})
 
-// test('test import polyfill', (): void => {
-//   generatorTester(Program)(
-//     [
-//       [
-//         'arquivo = importar "arquivo"',
-//         'let arquivo = __expr__(require("./arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
-//       ],
-//       [
-//         'arquivo = importar "diretorio/arquivo"',
-//         'arquivo = __expr__(require("./diretorio/arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
-//       ],
-//       [
-//         'arquivo = importar "../arquivo"',
-//         'arquivo = __expr__(require("./../arquivo"));\n__exports__({foo,tru,bar,msg,Foo,arquivo});'
-//       ],
-//     ],
-//     `${Polyfill.NULL_CLSC}\n` +
-//     `${Polyfill.EXPR}\n` +
-//     `${Polyfill.IS_BROWSER}\n` +
-//     `${Polyfill.EXPORTS}\n`
-//   )
-// })
+test('test import polyfill', (): void => {
+  generatorTester(Program)(
+    [
+      [
+        'arquivo = importar "arquivo"',
+        'let arquivo = __pf__.expr(require("./arquivo"));\n__pf__.exports({bar,msg,foo,tru,Foo,arquivo});'
+      ],
+      [
+        'arquivo = importar "diretorio/arquivo"',
+        'arquivo = __pf__.expr(require("./diretorio/arquivo"));\n__pf__.exports({bar,msg,foo,tru,Foo,arquivo});'
+      ],
+      [
+        'arquivo = importar "../arquivo"',
+        'arquivo = __pf__.expr(require("./../arquivo"));\n__pf__.exports({bar,msg,foo,tru,Foo,arquivo});'
+      ],
+    ],
+    `${Polyfill.EXPORTS},\n` +
+    `${Polyfill.IS_BROWSER},\n` +
+    `${Polyfill.EXPR},\n` +
+    `${Polyfill.NULL_CLSC},\n`
+  )
+})
 
-// test('test interface validation polyfill', (): void => {
-//   generatorTester(Program)(
-//     [
-//       [
-//         'definir interface IFoo bar fim ' +
-//         'definir classe Foo interfaces: IFoo propriedades: bar = "bar" fim',
-//         `let IFoo = { nome: 'IFoo', __props__: ['bar'] };\n` +
-//         `__validateInterface__(IFoo, 'IFoo')\n` +
-//         `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
-//         `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
-//         `__validateInterfaceImpl__('Foo', IFoo, Foo.__attr__)\n` +
-//         `\n__exports__({foo,tru,bar,msg,Foo,arquivo,IFoo});`
-//       ],
-//     ],
-//     `${Polyfill.INTERFACE_IMPL_VLDT}\n` +
-//     `${Polyfill.NULL_CLSC}\n` +
-//     `${Polyfill.EXPR}\n` +
-//     `${Polyfill.INTERFACE_VLDT}\n` +
-//     `${Polyfill.IS_BROWSER}\n` +
-//     `${Polyfill.EXPORTS}\n`
-//   )
-// })
+test('test interface validation polyfill', (): void => {
+  generatorTester(Program)(
+    [
+      [
+        'definir interface IFoo bar fim ' +
+        'definir classe Foo interfaces: IFoo propriedades: bar = "bar" fim',
+        `let IFoo = { nome: 'IFoo', __props__: ['bar'] };\n` +
+        `__pf__.validateInterface(IFoo, 'IFoo')\n` +
+        `class Foo{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
+        `constructor(){\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
+        `__pf__.validateInterfaceImpl('Foo', IFoo, Foo.__attr__)\n` +
+        `\n__pf__.exports({bar,msg,foo,tru,Foo,arquivo,IFoo});`
+      ],
+    ],
+    `${Polyfill.EXPORTS},\n` +
+    `${Polyfill.IS_BROWSER},\n` +
+    `${Polyfill.INTERFACE_VLDT},\n` +
+    `${Polyfill.EXPR},\n` +
+    `${Polyfill.NULL_CLSC},\n` +
+    `${Polyfill.INTERFACE_IMPL_VLDT},\n`
+  )
+})
 
-// test('test inheritance validation polyfill', (): void => {
-//   generatorTester(Program)(
-//     [
-//       [
-//         'definir classe Mae propriedades: boya fim ' +
-//         'definir classe Foo heranca: Mae propriedades: bar = "bar" fim',
-//         `class Mae{\nstatic __propertiesDeclarations__() {if (this && this.boya === undefined) {this.boya = null}\n}` +
-//         `constructor(){\nMae.__propertiesDeclarations__.bind(this)()\n}}\n` +
-//         `Mae.__propertiesDeclarations__.bind(null)()\nMae.__attr__ = ['boya']\n` +
-//         `__validateInheritance__(Mae, 'Mae')\n` +
-//         `class Foo extends Mae{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
-//         `constructor(){\nsuper();\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
-//         `\n__exports__({foo,tru,bar,msg,Foo,arquivo,IFoo,Mae});`
-//       ],
-//     ],
-//     `${Polyfill.NULL_CLSC}\n` +
-//     `${Polyfill.EXPR}\n` +
-//     `${Polyfill.INHERITANCE_VLDT}\n` +
-//     `${Polyfill.IS_BROWSER}\n` +
-//     `${Polyfill.EXPORTS}\n`
-//   )
-// })
+test('test inheritance validation polyfill', (): void => {
+  generatorTester(Program)(
+    [
+      [
+        'definir classe Mae propriedades: boya fim ' +
+        'definir classe Foo heranca: Mae propriedades: bar = "bar" fim',
+        `class Mae{\nstatic __propertiesDeclarations__() {if (this && this.boya === undefined) {this.boya = null}\n}` +
+        `constructor(){\nMae.__propertiesDeclarations__.bind(this)()\n}}\n` +
+        `Mae.__propertiesDeclarations__.bind(null)()\nMae.__attr__ = ['boya']\n` +
+        `__pf__.validateInheritance(Mae, 'Mae')\n` +
+        `class Foo extends Mae{\nstatic __propertiesDeclarations__() {if (this && this.bar === undefined) {this.bar = ${assignRhs('"bar"').slice(0, -1)}}\n}` +
+        `constructor(){\nsuper();\nFoo.__propertiesDeclarations__.bind(this)()\n}}\nFoo.__propertiesDeclarations__.bind(null)()\nFoo.__attr__ = ['bar']\n` +
+        `\n__pf__.exports({bar,msg,foo,tru,Foo,arquivo,IFoo,Mae});`
+      ],
+    ],
+    `${Polyfill.EXPORTS},\n` +
+    `${Polyfill.IS_BROWSER},\n` +
+    `${Polyfill.INHERITANCE_VLDT},\n` +
+    `${Polyfill.EXPR},\n` +
+    `${Polyfill.NULL_CLSC},\n`
+  )
+})

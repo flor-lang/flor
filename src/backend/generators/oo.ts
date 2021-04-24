@@ -23,7 +23,7 @@ export const classDeclarationCodeGen = {
     if (inheritanceNode.value) {
       Env.get().injectPolyfill(Polyfill.INHERITANCE_VLDT);
       const name = (inheritanceNode.value as AstNode).value
-      Env.get().codeOutput += `__validateInheritance__(${name}, '${name}')\n`
+      Env.get().codeOutput += `__pf__.validateInheritance(${name}, '${name}')\n`
     }
     const implementationsNode = (metaNode.value as AstNode[])[1]
     if (Array.isArray(implementationsNode.value) === false) {
@@ -31,7 +31,7 @@ export const classDeclarationCodeGen = {
       const interfaces = (implementationsNode.value as AstNode).value as AstNode[]
       const interfaceNames = interfaces.map((i) => i.value as string);
       interfaceNames.forEach(name => {
-        Env.get().codeOutput += `__validateInterface__(${name}, '${name}')\n`
+        Env.get().codeOutput += `__pf__.validateInterface(${name}, '${name}')\n`
       })
     }
     Env.get().codeOutput += 'class '
@@ -59,7 +59,7 @@ export const classDeclarationCodeGen = {
       const interfaces = (implementationsNode.value as AstNode).value as AstNode[]
       const interfaceNames = interfaces.map((i) => i.value as string);
       interfaceNames.forEach(name => {
-        Env.get().codeOutput += `__validateInterfaceImpl__('${className}', ${name}, ${className}.__attr__)\n`
+        Env.get().codeOutput += `__pf__.validateInterfaceImpl('${className}', ${name}, ${className}.__attr__)\n`
       })
     }
   }

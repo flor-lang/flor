@@ -90,7 +90,7 @@ if (fileArgs.length === 0) {
     files = [...files, ...newFiles]
   })
 }
-console.log(files)
+
 const filesContent = files
   .map((path): FileContent => {
     try {
@@ -217,7 +217,6 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
         }
       }`
     const fileOutput = beautify(code)
-    console.log(outputFilePath)
     fs.writeFileSync(outputFilePath, fileOutput)
     if (!rootExec && !noExec) {
       executeOutput(outputFilePath)
