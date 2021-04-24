@@ -11,7 +11,8 @@ import {
   inlineFunctionCodeGen,
   conditionalExpressionCodeGen,
   exponentialCodeGen,
-  importExpressionCodeGen
+  importExpressionCodeGen,
+  termCodeGen
 } from '../generators/expressions'
 import { Polyfill } from '../../enviroment/polyfill'
 
@@ -46,6 +47,18 @@ const unary = {
   },
   exit (): void {
     unaryCodeGen.exit()
+  }
+}
+
+const term = {
+  enter (): void {
+    termCodeGen.enter()
+  },
+  between (node: AstNode , parent: AstNode, index: number): void {
+    termCodeGen.between(node, parent, index)
+  },
+  exit (): void {
+    termCodeGen.exit()
   }
 }
 
@@ -123,6 +136,7 @@ export default {
   expression,
   wrapped,
   unary,
+  term,
   add,
   exponential,
   blockFunction,

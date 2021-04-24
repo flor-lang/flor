@@ -35,16 +35,29 @@ export const unaryCodeGen = {
   }
 }
 
-export const addCodeGen = {
+export const termCodeGen = {
   enter (): void {
-    Env.get().codeOutput += '__pf__.sum('
+    Env.get().codeOutput += '__pf__.term('
   },
   between (node: AstNode , parent: AstNode, index: number): void {
     Env.get().codeOutput += index === 0 ? ",'" : "',"
   },
   exit (): void {
     Env.get().codeOutput += ')'
-    Env.get().injectPolyfill(Polyfill.SUM)
+    Env.get().injectPolyfill(Polyfill.TERM)
+  }
+}
+
+export const addCodeGen = {
+  enter (): void {
+    Env.get().codeOutput += '__pf__.add('
+  },
+  between (node: AstNode , parent: AstNode, index: number): void {
+    Env.get().codeOutput += index === 0 ? ",'" : "',"
+  },
+  exit (): void {
+    Env.get().codeOutput += ')'
+    Env.get().injectPolyfill(Polyfill.ADD)
   }
 }
 

@@ -11,7 +11,7 @@ export enum Polyfill {
   VLD_NULL = "vld_null:(o,r,i)=>{if(null==o)throw new Error(`Lado esquerdo da operação '${r}' é um atributo indefinido ou é nulo`);if(null==i)throw new Error(`Lado direito da operação '${r}' é um atributo indefinido ou é nulo`)}",
   VLD_NUM_OP = 'vld_num_op:(o,e,r)=>{const n=__pf__.isBrowser()?window:process;if("number"!=typeof o||"number"!=typeof r)throw new Error(`Operador \'${e}\' não pode ser aplicado entre ${"function"==typeof n.tipo?`os tipos ${n.tipo(o)} e ${n.tipo(r)}`:"tipos não numéricos"}`)}',
   DSC_O = 'dsc_o:c=>"function"==typeof c.descricao?c.descricao():c.toString()',
-  SUM = 'sum:(_,o,s)=>(__pf__.vld_null(_,o,s),"+"!==o||"string"!=typeof _&&"string"!=typeof s?(__pf__.vld_num_op(_,o,s),"+"===o?_+s:_-s):__pf__.dsc_o(_)+__pf__.dsc_o(s))',
+  ADD = 'add:(_,o,s)=>(__pf__.vld_null(_,o,s),"+"!==o||"string"!=typeof _&&"string"!=typeof s?(__pf__.vld_num_op(_,o,s),"+"===o?_+s:_-s):__pf__.dsc_o(_)+__pf__.dsc_o(s))',
   TERM = 'term:(_,l,n)=>(__pf__.vld_null(_,l,n),__pf__.vld_num_op(_,l,n),"*"===l?_*n:_/n)'
 }
 
@@ -28,6 +28,6 @@ export const PolyfillDependenciesMap: [Polyfill, Polyfill[]][] = [
   [Polyfill.VLD_NULL, []],
   [Polyfill.VLD_NUM_OP, [Polyfill.IS_BROWSER]],
   [Polyfill.DSC_O, []],
-  [Polyfill.SUM, [Polyfill.VLD_NULL, Polyfill.DSC_O, Polyfill.VLD_NUM_OP]],
+  [Polyfill.ADD, [Polyfill.VLD_NULL, Polyfill.DSC_O, Polyfill.VLD_NUM_OP]],
   [Polyfill.TERM, [Polyfill.VLD_NULL, Polyfill.VLD_NUM_OP]],
 ]

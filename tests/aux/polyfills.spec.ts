@@ -1,4 +1,4 @@
-import { generatorTester, assignRhs } from "../utils"
+import { generatorTester } from "../utils"
 import { Program } from "../../src/parsers/program"
 import { Expression } from "../../src/parsers/expressions"
 import { Polyfill } from "../../src/enviroment/polyfill"
@@ -20,9 +20,8 @@ test('test conditional expression polyfill', (): void => {
 test('test expression wrapper polyfill', (): void => {
   generatorTester(Program)(
     [
-      ['tru = foo * bar', 'let tru = __pf__.expr(foo*bar);\n__pf__.exports({tru});'],
-      ['bar = cinco igual a 4', 'let bar = __pf__.expr(cinco==4);\n__pf__.exports({tru,bar});'],
-      ['msg ="druida louco"', 'let msg = __pf__.expr("druida louco");\n__pf__.exports({tru,bar,msg});'],
+      ['bar = cinco igual a 4', 'let bar = __pf__.expr(cinco==4);\n__pf__.exports({bar});'],
+      ['msg ="druida louco"', 'let msg = __pf__.expr("druida louco");\n__pf__.exports({bar,msg});'],
     ], 
     `${Polyfill.EXPORTS},\n` +
     `${Polyfill.IS_BROWSER},\n` +
@@ -34,15 +33,32 @@ test('test expression wrapper polyfill', (): void => {
 test('test sum expression polyfill', (): void => {
   generatorTester(Program)(
     [
-      ['foo = 5 + setentrional', 'let foo = __pf__.expr(__pf__.sum(5,\'+\',setentrional));\n__pf__.exports({tru,bar,msg,foo});'],
-      ['tru = foo + bar', 'tru = __pf__.expr(__pf__.sum(foo,\'+\',bar));\n__pf__.exports({tru,bar,msg,foo});'],
-      ['bar = cinco - 4', 'bar = __pf__.expr(__pf__.sum(cinco,\'-\',4));\n__pf__.exports({tru,bar,msg,foo});'],
+      ['foo = 5 + setentrional', 'let foo = __pf__.expr(__pf__.add(5,\'+\',setentrional));\n__pf__.exports({bar,msg,foo});'],
+      ['tru = foo + bar', 'let tru = __pf__.expr(__pf__.add(foo,\'+\',bar));\n__pf__.exports({bar,msg,foo,tru});'],
+      ['bar = cinco - 4', 'bar = __pf__.expr(__pf__.add(cinco,\'-\',4));\n__pf__.exports({bar,msg,foo,tru});'],
     ], 
     `${Polyfill.EXPORTS},\n` +
     `${Polyfill.IS_BROWSER},\n` +
-    `${Polyfill.SUM},\n` +
+    `${Polyfill.ADD},\n` +
     `${Polyfill.VLD_NULL},\n` +
     `${Polyfill.DSC_O},\n` +
+    `${Polyfill.VLD_NUM_OP},\n` +
+    `${Polyfill.EXPR},\n` +
+    `${Polyfill.NULL_CLSC},\n`
+  )
+})
+
+test('test term expression polyfill', (): void => {
+  generatorTester(Program)(
+    [
+      ['foo = 5 * setentrional', 'foo = __pf__.expr(__pf__.term(5,\'*\',setentrional));\n__pf__.exports({bar,msg,foo,tru});'],
+      ['tru = foo * bar', 'tru = __pf__.expr(__pf__.term(foo,\'*\',bar));\n__pf__.exports({bar,msg,foo,tru});'],
+      ['bar = cinco / 4', 'bar = __pf__.expr(__pf__.term(cinco,\'/\',4));\n__pf__.exports({bar,msg,foo,tru});'],
+    ], 
+    `${Polyfill.EXPORTS},\n` +
+    `${Polyfill.IS_BROWSER},\n` +
+    `${Polyfill.TERM},\n` +
+    `${Polyfill.VLD_NULL},\n` +
     `${Polyfill.VLD_NUM_OP},\n` +
     `${Polyfill.EXPR},\n` +
     `${Polyfill.NULL_CLSC},\n`
