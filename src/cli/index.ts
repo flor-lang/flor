@@ -50,6 +50,10 @@ Yargs
       type: 'boolean',
       describe: 'Executa o projeto definido pelo arquivo projeto.json'
     },
+    'diretorio-de-saida': {
+      type: 'string',
+      describe: 'Seleciona o diretório destino dos arquivos compilados'
+    },
     'empacotar': {
       type: 'boolean',
       describe: 'Empacota projeto em um único arquivo'
@@ -73,11 +77,20 @@ if (Yargs.argv.versao) {
   process.exit()
 }
 
-let files: string[] = Yargs.argv._
-const rootExec = files.length === 0
-if (files.length === 0) {
+let fileArgs: string[] = Yargs.argv._
+const rootExec = fileArgs.length === 0
+
+let files: string[] = []
+if (fileArgs.length === 0) {
   files = glob.sync('**/*.flor')
+} else {
+  fileArgs.forEach(fileArg => {
+    const newFiles = fs.lstatSync(fileArg).isDirectory()
+      ? glob.sync(`${fileArg}/**/*.flor`) : [fileArg]
+    files = [...files, ...newFiles]
+  })
 }
+console.log(files)
 const filesContent = files
   .map((path): FileContent => {
     try {
@@ -105,7 +118,7 @@ if (createProject !== null) {
     const projectFile: { [key: string]: string }  = {
       nome: projectName,
       arquivo_inicial: 'app.flor',
-      diretorio_da_saida: 'dist'
+      diretorio_de_saida: 'dist'
     }
     fs.writeFileSync(`${projectName.toLowerCase()}/projeto.json`, JSON.stringify(projectFile, null, 2))
     fs.writeFileSync(`${projectName.toLowerCase()}/app.flor`, `/*\nProjeto Flor: ${projectName}\n*/\n\nescrever("Olá Mundo!")\n`)
@@ -170,12 +183,14 @@ const executeOutput = (filePath: string): void => {
 }
 
 const handleOutputDirectory = (): string => {
-  let outputDirectory = project['diretorio_da_saida'] || ''
+  let outputDirectory = project['diretorio_de_saida']
+    || Yargs.argv['diretorio-de-saida'] as string
+    || ''
   if (outputDirectory.startsWith('/')) {
     outputDirectory = outputDirectory.replace('/', '')
   }
   if (outputDirectory && !fs.existsSync(outputDirectory)) {
-    fs.mkdirSync(outputDirectory)
+    fs.mkdirSync(outputDirectory, { recursive: true })
   }
   return outputDirectory
 }
@@ -185,7 +200,7 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
   const pathComponents = outputFilePath.split('/')
   const pathComponent = pathComponents.slice(0, pathComponents.length - 1).join('/')
   if (pathComponent && !fs.existsSync(pathComponent)) {
-    fs.mkdirSync(pathComponent)
+    fs.mkdirSync(pathComponent, { recursive: true })
   }
   const { success, result } = tryCompile(content, !noPdr)
   if (success) {
@@ -202,6 +217,7 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
         }
       }`
     const fileOutput = beautify(code)
+    console.log(outputFilePath)
     fs.writeFileSync(outputFilePath, fileOutput)
     if (!rootExec && !noExec) {
       executeOutput(outputFilePath)
@@ -215,9 +231,10 @@ const handleFileContent = (filePath: string, content: string, libPath: string): 
 if (outputFormat === 'js') {
   const compilationStartDate = new Date()
   requireLibPath((libPath): void => {
-    const outputDirectory = handleOutputDirectory()
+    let outputDirectory = handleOutputDirectory()
+    outputDirectory = outputDirectory ? `${outputDirectory}/` : ''
     filesContent.forEach(({ filePath, content }): void => {
-      handleFileContent(`${outputDirectory}/${filePath}`, content, libPath)
+      handleFileContent(`${outputDirectory}${filePath}`, content, libPath)
     })
     const mainFile = project['arquivo_inicial']
     const packageProject = Yargs.argv['empacotar'] !== null
@@ -227,7 +244,6 @@ if (outputFormat === 'js') {
       const execProject = Yargs.argv['executar-projeto'] || false
       const executeProject = () => {
         if (execProject) {
-          const outputDirectory = project['diretorio_da_saida'] ? project['diretorio_da_saida'] + '/' : ''
           const outputFilePath = `${outputDirectory}${mainFile.substring(0, mainFile.length - 4)}js`
           executeOutput(outputFilePath)
         } else {

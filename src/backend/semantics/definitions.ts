@@ -45,7 +45,7 @@ const locUse = (node: AstNode): void => {
 
 const functionCallUse = (node: AstNode): void => {
   const identifier = (node.value as AstNode[])[0].value as string
-  if (Env.get().symbolTable.get(identifier) === null) {
+  if (Env.get().symbolTable.get(identifier) === null && !identifier.startsWith('#')) {
     Analyser.throwError(`Função '${identifier}' não foi definida.`, node)
   }
 }
