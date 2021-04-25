@@ -154,6 +154,9 @@ if (haveConfig) {
 }
 
 const requireLibPath = (callbackfn: (libPath: string) => void): void => {
+  if ((process.env.FLOR_RUNTIME_ENV || '') === 'test') {
+    return callbackfn(`${__dirname}/../lib/impl`)
+  }
   const jsExec = spawn('npm', ['root', '-g'])
   createInterface({ input: jsExec.stdout }).on('line', (path: string): void => {
     callbackfn(`${path}/@flor-lang/flor/dist/lib/impl`)

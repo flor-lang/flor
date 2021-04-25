@@ -1,0 +1,8 @@
+definir classe Mae
+  propriedades:
+    atributo = "mae"
+fim
+
+definir classe Filha
+  heranca: Mae
+fim

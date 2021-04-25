@@ -1,3 +1,5 @@
+import { spawn } from "child_process"
+import { createInterface } from "readline"
 import { Parser } from 'parsimmon'
 import { logAst } from '../src/utils/logger'
 import { AstNode } from '../src/backend/traverse'
@@ -5,6 +7,7 @@ import { Program } from '../src/parsers/program'
 import { traverser } from '../src/backend/traverse'
 import { visitor } from '../src/backend/visitor'
 import Env from '../src/enviroment/env'
+import { unlink } from "fs"
 
 export const assignRhs = (code: string): string => `__pf__.expr(${code});`
 
@@ -106,3 +109,45 @@ export const getComplexProgramAst = (): AstNode => {
 
   return ast
 } 
+
+type InputFn = (input: string) => void
+type RunOutputOptions = {
+  debug?: boolean,
+  stdout?: InputFn,
+  stderr?: InputFn,
+  compile?: InputFn,
+  error?: (error: Error) => void
+}
+export const runFlorFile = (file: string, output: RunOutputOptions) => {
+  const filePath = `./tests/runtime/files/${file}`
+  const florExec = spawn('./dist/cli/index.js', [filePath], {
+    env: {
+      ...process.env,
+      FLOR_RUNTIME_ENV: 'test'
+    }
+  })
+  if (output.stdout) {
+    createInterface({ input: florExec.stdout }).on('line', output.stdout)
+  }
+  if (output.stderr) {
+    createInterface({ input: florExec.stderr }).on('line', output.stderr)
+  }
+  if (output.error) {
+    florExec.on('error', output.error)
+  }
+  if (output.debug) {
+    createInterface({ input: florExec.stdout }).on('line', console.log)
+    createInterface({ input: florExec.stderr }).on('line', console.error)
+    florExec.on('error', (error: Error): void => console.error(error.message))
+  }
+  florExec.on('exit', () => {
+    if (output.compile) {
+      output.compile(filePath.replace('/tests/runtime', '').replace('.flor', '.js'))
+    }
+    unlink(filePath.replace('.flor', '.js'), err => {
+      if (err) {
+        console.log(err.message)
+      }
+    })
+  })
+}

@@ -14,11 +14,11 @@ test('generate class declaration', (): void => {
         interfaces: Nomeavel Localizavel
       fim`  
     , 
-    `__validateInheritance__(Pessoa, 'Pessoa')\n` +
-    `__validateInterface__(Nomeavel, 'Nomeavel')\n` +
-    `__validateInterface__(Localizavel, 'Localizavel')\n` +
+    `__pf__.validateInheritance(Pessoa, 'Pessoa')\n` +
+    `__pf__.validateInterface(Nomeavel, 'Nomeavel')\n` +
+    `__pf__.validateInterface(Localizavel, 'Localizavel')\n` +
     'class PessoaFisica extends Pessoa{\nstatic __propertiesDeclarations__() {}constructor(){\nsuper();\nPessoaFisica.__propertiesDeclarations__.bind(this)()\n}}\nPessoaFisica.__propertiesDeclarations__.bind(null)()\n' +
-      `PessoaFisica.__attr__ = []\n__validateInterfaceImpl__('PessoaFisica', Nomeavel, PessoaFisica.__attr__)\n__validateInterfaceImpl__('PessoaFisica', Localizavel, PessoaFisica.__attr__)\n`
+      `PessoaFisica.__attr__ = []\n__pf__.validateInterfaceImpl('PessoaFisica', Nomeavel, PessoaFisica.__attr__)\n__pf__.validateInterfaceImpl('PessoaFisica', Localizavel, PessoaFisica.__attr__)\n`
     ],
     [
       `

@@ -1,0 +1,15 @@
+definir interface Nomeavel
+  nome apelido
+fim
+
+definir classe Professor
+  interfaces: Nomeavel
+  propriedades:
+    nome apelido
+fim
+
+definir classe Aluno
+  interfaces: Nomeavel
+  propriedades:
+    nome
+fim

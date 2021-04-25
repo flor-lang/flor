@@ -1,0 +1,7 @@
+Nomeavel = "Nomeavel"
+
+definir classe Professor
+  interfaces: Nomeavel
+  propriedades:
+    nome
+fim

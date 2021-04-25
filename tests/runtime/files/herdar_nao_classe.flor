@@ -1,0 +1,9 @@
+definir interface Nomeavel
+  nome apelido
+fim
+
+definir classe Aluno
+  heranca: Nomeavel
+  propriedades:
+    nome apelido
+fim
